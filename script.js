@@ -39,7 +39,7 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for øyer (500x800 px) - OPPDATERET MED NYE BILDER
+// Bakgrunnsbilder for øyer (500x800 px)
 const backgroundImages = {
     grass: baseURL + 'Bakgrunn1.png.PNG',
     desert: baseURL + 'Bakgrunn2.png.PNG',
@@ -53,7 +53,7 @@ const backgroundImages = {
     void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
-// Fiende-bilder - OPPDATERET MED NYE ØY-BILDER
+// Fiende-bilder - ØYER
 const enemyImages = {
     grass: baseURL + 'Gress%C3%B8y.png.PNG',
     desert: baseURL + '%C3%98rken%C3%B8y.png.PNG',
@@ -67,7 +67,7 @@ const enemyImages = {
     void: baseURL + 'Void%C3%B8y.png.PNG'
 };
 
-// Boss-bilder - OPPDATERET MED BOSS ØY-BILDER
+// Boss-bilder - ØYER
 const bossImages = {
     grass: baseURL + 'Gress%C3%B8yb.png.PNG',
     desert: baseURL + '%C3%98rken%C3%B8yb.png.PNG',
@@ -81,7 +81,7 @@ const bossImages = {
     void: baseURL + 'Void%C3%B8yb.png.PNG'
 };
 
-// UI Ikoner - OPPDATERET MED NYE BILDER
+// UI Ikoner - NYE BILDER
 const uiIcons = {
     coin: baseURL + 'Coin.png.PNG',
     gem: baseURL + 'Diamond.png.PNG',
@@ -90,7 +90,7 @@ const uiIcons = {
     crateOpen: baseURL + 'Basiccrate%C3%A5pen.png.PNG'
 };
 
-// Crate-bilder for forskjellige rarities - OPPDATERET MED NYE BILDER
+// Crate-bilder for forskjellige rarities
 const crateImages = {
     basic: {
         closed: baseURL + 'Basiccrate.png.PNG',
@@ -126,7 +126,7 @@ const crateImages = {
     }
 };
 
-// Items Database - OPPDATERET MED NYE BILDE-URL-ER
+// Items Database - NYE BILDER
 const items = {
     weapons: [
         { 
@@ -311,7 +311,7 @@ let inventory = {
     activePet: null
 };
 
-// Achievements System - MED BILDE-ICONS (beholdt gamle for nå)
+// Achievements System
 const achievements = [
     {
         id: 'first_kill',
@@ -496,7 +496,7 @@ const quests = {
     ]
 };
 
-// Biome System - OPPDATERET MED NYE BAKGRUNNSBILDER
+// Biome System - OPPDATERET MED BAKGRUNNSBILDER
 const biomes = [
     { 
         name: 'grass', 
@@ -560,7 +560,7 @@ const biomes = [
     }
 ];
 
-// Crate Probabilities - LAGT TIL godly_crate
+// Crate Probabilities
 const crateProbabilities = {
     basic: {
         common: 60,
@@ -631,17 +631,21 @@ function init() {
 
 function updateUIIcons() {
     // Oppdater top resources ikoner
-    const coinIcon = document.querySelector('.resource-icon[data-type="coin"]');
-    const gemIcon = document.querySelector('.resource-icon[data-type="gem"]');
-    const starIcon = document.querySelector('.resource-icon[data-type="star"]');
+    document.querySelectorAll('.resource-icon[data-type="coin"]').forEach(el => {
+        el.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
+    });
     
-    if (coinIcon) coinIcon.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
-    if (gemIcon) gemIcon.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
-    if (starIcon) starIcon.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
+    document.querySelectorAll('.resource-icon[data-type="gem"]').forEach(el => {
+        el.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
+    });
+    
+    document.querySelectorAll('.resource-icon[data-type="star"]').forEach(el => {
+        el.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
+    });
 }
 
 function setupEventListeners() {
-    // Navigation - KUN knappetrykk, ingen swipe
+    // Navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const page = btn.dataset.page;
@@ -705,7 +709,7 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - OPPDATERET MED NYE BILDER
+// COMBAT SYSTEM - OPPDATERET FOR ØYER
 // ======================================================
 
 function calculateDamage() {
@@ -931,20 +935,22 @@ function spawnEnemy() {
     // Update island background - NY KODE FOR BAKGRUNNSBILDE
     const islandBg = document.getElementById('islandBg');
     if (islandBg) {
+        // Bruk CSS background-image i stedet for <img> element
         islandBg.style.backgroundImage = `url('${biome.bgImage}')`;
         islandBg.style.backgroundSize = 'cover';
         islandBg.style.backgroundPosition = 'center';
+        islandBg.style.backgroundRepeat = 'no-repeat';
     }
     
-    // Update island
+    // Update island - TRANSPARENT
     const island = document.getElementById('island');
     if (island) {
         island.className = 'island ' + biome.name;
-        // Fjern gradient og bruk bakgrunnsbilde i stedet
+        // Fjern gradient og bruk transparent
         island.style.background = 'transparent';
     }
     
-    // Update enemy
+    // Update enemy - ØY-BILDET
     gameState.currentBiome = biome.name;
     const enemyImage = document.getElementById('enemyImage');
     if (enemyImage) {
@@ -1166,7 +1172,7 @@ function buyAutoUpgrade() {
 }
 
 // ======================================================
-// SHOP SYSTEM - OPPDATERET MED NYE CRATES
+// SHOP SYSTEM - MED GODLY CRATE
 // ======================================================
 
 function updateShop() {
@@ -1319,7 +1325,7 @@ function buyCrate(type) {
 }
 
 // ======================================================
-// ENKEL CRATE OPENING (uten animasjon)
+// ENKEL CRATE OPENING
 // ======================================================
 
 function showSimpleCrateOpening(crateType, source = 'shop') {
