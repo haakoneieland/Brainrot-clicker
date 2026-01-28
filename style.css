@@ -1,9 +1,7 @@
-/* Reset & Base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
     user-select: none;
     touch-action: manipulation;
 }
@@ -113,149 +111,85 @@ body {
     justify-content: center;
 }
 
+/* ====================================================== */
+/* ISLAND & BACKGROUND - OPPDATERET FOR ØYER */
+/* ====================================================== */
+
 .island-container {
     position: relative;
     width: 320px;
     height: 320px;
     margin-bottom: 20px;
+    /* FJERN border-radius - bruk bakgrunnsbildet fullstendig */
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
 }
 
-/* Island Background */
+/* Island Background - BAKGRUNNSBILDET */
 .island-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    /* FJERN border-radius - bakgrunn skal ikke være sirkel */
+    border-radius: 0;
     overflow: hidden;
     z-index: 1;
     pointer-events: none;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.island-bg img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* Island */
+/* Island - TRANSparent container for fienden */
 .island {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    /* FJERN border-radius - øyen er ikke en sirkel */
+    border-radius: 0;
     position: relative;
-    overflow: hidden;
-    box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        inset 0 -20px 40px rgba(0, 0, 0, 0.2),
-        0 0 100px rgba(255, 255, 255, 0.1);
+    overflow: visible;
+    box-shadow: none;
     transition: all 0.5s ease;
-    border: 8px solid rgba(255, 255, 255, 0.3);
+    border: none;
     z-index: 2;
     pointer-events: none;
+    /* BARE TRANSPARENT - ingen farge */
+    background: transparent !important;
 }
 
-/* Island Biomes */
-.island.grass {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
-.island.desert {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-}
-
-.island.snow {
-    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-}
-
-.island.lava {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-}
-
-.island.swamp {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.island.ocean {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-}
-
-.island.jungle {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-}
-
-.island.mountain {
-    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-}
-
-.island.ruins {
-    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-}
-
+/* FJERN ALLE BIOME-GRADIENTS - bruk bilder i stedet */
+.island.grass,
+.island.desert,
+.island.snow,
+.island.lava,
+.island.swamp,
+.island.ocean,
+.island.jungle,
+.island.mountain,
+.island.ruins,
 .island.void {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: transparent !important;
 }
 
-/* Clouds - DISABLED FOR CLICKS */
+/* FJERN CLOUDS - ikke nødvendig med nye bilder */
 .clouds {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 3;
+    display: none;
 }
 
-.cloud {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    pointer-events: none;
-}
+/* ====================================================== */
+/* ENEMY - DETTE ER ØY-BILDET */
+/* ====================================================== */
 
-.cloud-1 {
-    width: 80px;
-    height: 30px;
-    top: 30px;
-    left: 30px;
-    animation: floatCloud 25s infinite linear;
-}
-
-.cloud-2 {
-    width: 100px;
-    height: 35px;
-    top: 60px;
-    right: 40px;
-    animation: floatCloud 30s infinite linear reverse;
-}
-
-.cloud-3 {
-    width: 60px;
-    height: 25px;
-    bottom: 50px;
-    left: 50px;
-    animation: floatCloud 20s infinite linear;
-}
-
-@keyframes floatCloud {
-    0% { transform: translateX(0) translateY(0); }
-    25% { transform: translateX(50px) translateY(-10px); }
-    50% { transform: translateX(0) translateY(0); }
-    75% { transform: translateX(-50px) translateY(10px); }
-    100% { transform: translateX(0) translateY(0); }
-}
-
-/* Enemy */
 .enemy {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 140px;
-    height: 140px;
+    width: 200px; /* Øy størrelse */
+    height: 200px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -264,15 +198,14 @@ body {
     transition: transform 0.1s;
     pointer-events: auto !important;
     touch-action: manipulation;
-}
-
-.enemy:active {
-    -webkit-tap-highlight-color: transparent;
+    /* INGEN BAKGRUNNSFARGE - bare bildet */
+    background: transparent !important;
+    border-radius: 0 !important;
 }
 
 .enemy-image {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
     transition: transform 0.2s;
@@ -280,6 +213,7 @@ body {
     user-select: none;
     -webkit-user-drag: none;
     user-drag: none;
+    border-radius: 0 !important;
 }
 
 .enemy:active .enemy-image {
@@ -1547,6 +1481,11 @@ body {
     .island-container {
         width: 280px;
         height: 280px;
+    }
+    
+    .enemy {
+        width: 180px;
+        height: 180px;
     }
     
     .enemy-info {
