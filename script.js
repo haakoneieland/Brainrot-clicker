@@ -39,88 +39,100 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for øyer (500x800 px)
+// Bakgrunnsbilder for øyer (500x800 px) - OPPDATERET MED NYE BILDER
 const backgroundImages = {
-    grass: baseURL + 'grass_bg.png',
-    desert: baseURL + 'desert_bg.png',
-    snow: baseURL + 'snow_bg.png',
-    lava: baseURL + 'lava_bg.png',
-    swamp: baseURL + 'swamp_bg.png',
-    ocean: baseURL + 'ocean_bg.png',
-    jungle: baseURL + 'jungle_bg.png',
-    mountain: baseURL + 'mountain_bg.png',
-    ruins: baseURL + 'ruins_bg.png',
-    void: baseURL + 'void_bg.png'
+    grass: baseURL + 'Bakgrunn1.png.PNG',
+    desert: baseURL + 'Bakgrunn2.png.PNG',
+    snow: baseURL + 'Bakgrunn3.png.PNG',
+    lava: baseURL + 'Bakgrunn4.png.PNG',
+    swamp: baseURL + 'Bakgrunn5.png.PNG',
+    ocean: baseURL + 'Bakgrunn6.png.PNG',
+    jungle: baseURL + 'Bakgrunn7.png.PNG',
+    mountain: baseURL + 'Bakgrunn8.png.PNG',
+    ruins: baseURL + 'Bakgrunn9.png.PNG',
+    void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
-// Fiende-bilder
+// Fiende-bilder - OPPDATERET MED NYE ØY-BILDER
 const enemyImages = {
-    grass: baseURL + 'gressøy.png',
-    desert: baseURL + 'ørkenøy.png',
-    snow: baseURL + 'snøøy.png',
-    lava: baseURL + 'ildøy.png',
-    swamp: baseURL + 'myrøy.png',
-    ocean: baseURL + 'havøy.png',
-    jungle: baseURL + 'jungeløy.png',
-    mountain: baseURL + 'fjelløy.png',
-    ruins: baseURL + 'ruinøy.png',
-    void: baseURL + 'romøy.png'
+    grass: baseURL + 'Gress%C3%B8y.png.PNG',
+    desert: baseURL + '%C3%98rken%C3%B8y.png.PNG',
+    snow: baseURL + 'Sn%C3%B8%C3%B8y.png.PNG',
+    lava: baseURL + 'Flamme%C3%B8y.png.PNG',
+    swamp: baseURL + 'Svamp%C3%B8y.png.PNG',
+    ocean: baseURL + 'Hav%C3%B8y.png.PNG',
+    jungle: baseURL + 'Jungel%C3%B8y.png.PNG',
+    mountain: baseURL + 'Fjell%C3%B8y.png.PNG',
+    ruins: baseURL + 'Ruiner.png.PNG',
+    void: baseURL + 'Void%C3%B8y.png.PNG'
 };
 
-// Boss-bilder
+// Boss-bilder - OPPDATERET MED BOSS ØY-BILDER
 const bossImages = {
-    grass: baseURL + 'gressøyb.png',
-    desert: baseURL + 'ørkenøyb.png',
-    snow: baseURL + 'snøøyb.png',
-    lava: baseURL + 'ildøyb.png',
-    swamp: baseURL + 'myrøyb.png',
-    ocean: baseURL + 'havøyb.png',
-    jungle: baseURL + 'jungeløyb.png',
-    mountain: baseURL + 'fjelløyb.png',
-    ruins: baseURL + 'ruinøyb.png',
-    void: baseURL + 'romøyb.png'
+    grass: baseURL + 'Gress%C3%B8yb.png.PNG',
+    desert: baseURL + '%C3%98rken%C3%B8yb.png.PNG',
+    snow: baseURL + 'Sn%C3%B8%C3%B8yb.png.PNG',
+    lava: baseURL + 'Flamme%C3%B8yb.png.PNG',
+    swamp: baseURL + 'Svamp%C3%B8yb.png.PNG',
+    ocean: baseURL + 'Hav%C3%B8yb.png.PNG',
+    jungle: baseURL + 'Jungel%C3%B8yb.png.PNG',
+    mountain: baseURL + 'Fjell%C3%B8yb.png.PNG',
+    ruins: baseURL + 'Ruinerb.png.PNG',
+    void: baseURL + 'Void%C3%B8yb.png.PNG'
 };
 
-// UI Ikoner - DINE BILDER
+// UI Ikoner - OPPDATERET MED NYE BILDER
 const uiIcons = {
-    coin: baseURL + 'coin.png',
-    gem: baseURL + 'diamond.png',
-    star: baseURL + 'star.png',
-    crateClosed: baseURL + 'crate_closed.png',
-    crateOpen: baseURL + 'crate_open.png'
+    coin: baseURL + 'Coin.png.PNG',
+    gem: baseURL + 'Diamond.png.PNG',
+    star: baseURL + 'Star.png.PNG',
+    crateClosed: baseURL + 'Basiccrate.png.PNG',
+    crateOpen: baseURL + 'Basiccrate%C3%A5pen.png.PNG'
 };
 
-// Crate-bilder for forskjellige rarities
+// Crate-bilder for forskjellige rarities - OPPDATERET MED NYE BILDER
 const crateImages = {
     basic: {
-        closed: baseURL + 'crate_basic_closed.png',
-        open: baseURL + 'crate_basic_open.png'
+        closed: baseURL + 'Basiccrate.png.PNG',
+        open: baseURL + 'Basiccrate%C3%A5pen.png.PNG'
     },
     advanced: {
-        closed: baseURL + 'crate_advanced_closed.png',
-        open: baseURL + 'crate_advanced_open.png'
+        closed: baseURL + 'Advancedcrate.png.PNG',
+        open: baseURL + 'Advancedcrate%C3%A5pen.png.PNG'
     },
     premium: {
-        closed: baseURL + 'crate_premium_closed.png',
-        open: baseURL + 'crate_premium_open.png'
+        closed: baseURL + 'Premiumcrate.png.PNG',
+        open: baseURL + 'Premiumcrate%C3%A5pen.png.PNG'
     },
     pet: {
-        closed: baseURL + 'crate_pet_closed.png',
-        open: baseURL + 'crate_pet_open.png'
+        closed: baseURL + 'Petcrate.png.PNG',
+        open: baseURL + 'Petcrate%C3%A5pen.png.PNG'
     },
     godly: {
-        closed: baseURL + 'crate_godly_closed.png',
-        open: baseURL + 'crate_godly_open.png'
+        closed: baseURL + 'Godlycrate.png.PNG',
+        open: baseURL + 'Godlycrate%C3%A5pen.png.PNG'
+    },
+    pet_godly: {
+        closed: baseURL + 'Godlypetcrate.png.PNG',
+        open: baseURL + 'Godlypetcrate%C3%A5pen.png.PNG'
+    },
+    daily: {
+        closed: baseURL + 'Dailycrate.png.PNG',
+        open: baseURL + 'Dailycrate%C3%A5pen.png.PNG'
+    },
+    godly_crate: {
+        closed: baseURL + 'Godlycrate.png.PNG',
+        open: baseURL + 'Godlycrate%C3%A5pen.png.PNG'
     }
 };
 
-// Items Database - MED BILDE-URL-ER
+// Items Database - OPPDATERET MED NYE BILDE-URL-ER
 const items = {
     weapons: [
         { 
             id: 'wood_sword', 
             name: 'Wood Sword', 
-            icon: baseURL + 'wood_sword.png',
+            icon: baseURL + 'Woodensword.png.PNG',
             rarity: 'common', 
             damage: 1.1, 
             required: 2 
@@ -128,7 +140,7 @@ const items = {
         { 
             id: 'iron_sword', 
             name: 'Iron Sword', 
-            icon: baseURL + 'iron_sword.png',
+            icon: baseURL + 'Ironsword.png.PNG',
             rarity: 'rare', 
             damage: 1.3, 
             required: 3 
@@ -136,7 +148,7 @@ const items = {
         { 
             id: 'steel_sword', 
             name: 'Steel Sword', 
-            icon: baseURL + 'steel_sword.png',
+            icon: baseURL + 'Steelsword.png.PNG',
             rarity: 'epic', 
             damage: 1.6, 
             required: 4 
@@ -144,7 +156,7 @@ const items = {
         { 
             id: 'dragon_sword', 
             name: 'Dragon Sword', 
-            icon: baseURL + 'dragon_sword.png',
+            icon: baseURL + 'Dragonsword.png.PNG',
             rarity: 'legendary', 
             damage: 2.0, 
             required: 5 
@@ -152,7 +164,7 @@ const items = {
         { 
             id: 'excalibur', 
             name: 'Excalibur', 
-            icon: baseURL + 'excalibur.png',
+            icon: baseURL + 'Excalibur.png.PNG',
             rarity: 'ultimate', 
             damage: 3.0, 
             required: 6 
@@ -160,7 +172,7 @@ const items = {
         { 
             id: 'godslayer', 
             name: 'Godslayer', 
-            icon: baseURL + 'godslayer.png',
+            icon: baseURL + 'Godslayer.png.PNG',
             rarity: 'godly', 
             damage: 5.0, 
             required: 8 
@@ -170,7 +182,7 @@ const items = {
         { 
             id: 'leather_armor', 
             name: 'Leather Armor', 
-            icon: baseURL + 'wooden_armor.png', // Bruker wooden_armor.png som leather
+            icon: baseURL + 'Woodenarmour.png.PNG',
             rarity: 'common', 
             defense: 1.1, 
             required: 2 
@@ -178,7 +190,7 @@ const items = {
         { 
             id: 'chainmail', 
             name: 'Chainmail', 
-            icon: baseURL + 'chainmail.png',
+            icon: baseURL + 'Chainmail.png.PNG',
             rarity: 'rare', 
             defense: 1.2, 
             required: 3 
@@ -186,7 +198,7 @@ const items = {
         { 
             id: 'plate_armor', 
             name: 'Plate Armor', 
-            icon: baseURL + 'plate_armor.png',
+            icon: baseURL + 'Platearmour.png.PNG',
             rarity: 'epic', 
             defense: 1.4, 
             required: 4 
@@ -194,7 +206,7 @@ const items = {
         { 
             id: 'dragon_armor', 
             name: 'Dragon Armor', 
-            icon: baseURL + 'dragon_armor.png',
+            icon: baseURL + 'Dragonarmour.png.PNG',
             rarity: 'legendary', 
             defense: 1.8, 
             required: 5 
@@ -204,42 +216,42 @@ const items = {
         { 
             id: 'cat', 
             name: 'Lucky Cat', 
-            icon: baseURL + 'cat.png',
+            icon: baseURL + 'Luckycat.png.PNG',
             rarity: 'common', 
             bonus: { coins: 1.1 } 
         },
         { 
             id: 'dog', 
             name: 'Guard Dog', 
-            icon: baseURL + 'dog.png',
+            icon: baseURL + 'Guarddog.png.PNG',
             rarity: 'rare', 
             bonus: { damage: 1.1 } 
         },
         { 
             id: 'owl', 
             name: 'Wise Owl', 
-            icon: baseURL + 'owl.png',
+            icon: baseURL + 'Wiseowl.png.PNG',
             rarity: 'epic', 
             bonus: { crit: 5, auto: 1 } 
         },
         { 
             id: 'dragon', 
             name: 'Baby Dragon', 
-            icon: baseURL + 'baby_dragon.png',
+            icon: baseURL + 'Babydrage.png.PNG',
             rarity: 'legendary', 
             bonus: { damage: 1.3, crit: 10 } 
         },
         { 
             id: 'phoenix', 
             name: 'Phoenix', 
-            icon: baseURL + 'phoenix.png',
+            icon: baseURL + 'F%C3%B8nix.png.PNG',
             rarity: 'ultimate', 
             bonus: { damage: 1.5, auto: 5, gems: 1.2 } 
         },
         { 
             id: 'unicorn', 
             name: 'Unicorn', 
-            icon: baseURL + 'unicorn.png',
+            icon: baseURL + 'Uinicorn.png.PNG',
             rarity: 'godly', 
             bonus: { damage: 2.0, crit: 15, coins: 1.5, gems: 1.5 } 
         }
@@ -248,42 +260,42 @@ const items = {
         { 
             id: 'lucky_coin', 
             name: 'Lucky Coin', 
-            icon: baseURL + 'lucky_coin.png',
+            icon: baseURL + 'Luckycoin.png.PNG',
             rarity: 'common', 
             bonus: { coins: 1.05 } 
         },
         { 
             id: 'crit_gem', 
             name: 'Crit Gem', 
-            icon: baseURL + 'crit_gem.png',
+            icon: baseURL + 'Critgem.png.PNG',
             rarity: 'rare', 
             bonus: { crit: 3 } 
         },
         { 
             id: 'damage_orb', 
             name: 'Damage Orb', 
-            icon: baseURL + 'damage_orb.png',
+            icon: baseURL + 'Damageorb.png.PNG',
             rarity: 'epic', 
             bonus: { damage: 1.2 } 
         },
         { 
             id: 'auto_core', 
             name: 'Auto Core', 
-            icon: baseURL + 'auto_core.png',
+            icon: baseURL + 'Autocore.png.PNG',
             rarity: 'legendary', 
             bonus: { auto: 10 } 
         },
         { 
             id: 'boss_trophy', 
             name: 'Boss Trophy', 
-            icon: baseURL + 'boss_trophy.png',
+            icon: baseURL + 'Bosstropthy.png.PNG',
             rarity: 'ultimate', 
             bonus: { damage: 1.5, crit: 10 } 
         },
         { 
             id: 'divine_relic', 
             name: 'Divine Relic', 
-            icon: baseURL + 'divine_relic.png',
+            icon: baseURL + 'Divinerelic.png.PNG',
             rarity: 'godly', 
             bonus: { damage: 2.0, crit: 20, coins: 1.5, gems: 1.5 } 
         }
@@ -299,12 +311,12 @@ let inventory = {
     activePet: null
 };
 
-// Achievements System - MED BILDE-ICONS
+// Achievements System - MED BILDE-ICONS (beholdt gamle for nå)
 const achievements = [
     {
         id: 'first_kill',
         name: 'First Blood',
-        icon: baseURL + 'achievement_firstblood.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Defeat your first enemy',
         condition: () => gameState.totalEnemiesDefeated >= 1,
         progress: () => Math.min(gameState.totalEnemiesDefeated, 1),
@@ -315,7 +327,7 @@ const achievements = [
     {
         id: 'first_boss',
         name: 'Boss Slayer',
-        icon: baseURL + 'achievement_boss.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Defeat your first boss',
         condition: () => gameState.totalBossesDefeated >= 1,
         progress: () => Math.min(gameState.totalBossesDefeated, 1),
@@ -326,7 +338,7 @@ const achievements = [
     {
         id: 'boss_master',
         name: 'Boss Master',
-        icon: baseURL + 'achievement_bossmaster.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Defeat 10 bosses',
         condition: () => gameState.totalBossesDefeated >= 10,
         progress: () => Math.min(gameState.totalBossesDefeated, 10),
@@ -337,7 +349,7 @@ const achievements = [
     {
         id: 'millionaire',
         name: 'Millionaire',
-        icon: baseURL + 'achievement_millionaire.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Collect 1,000,000 coins',
         condition: () => gameState.coins >= 1000000,
         progress: () => Math.min(gameState.coins, 1000000),
@@ -348,7 +360,7 @@ const achievements = [
     {
         id: 'crate_collector',
         name: 'Crate Collector',
-        icon: baseURL + 'achievement_crate.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Open 50 crates',
         condition: () => gameState.totalCratesOpened >= 50,
         progress: () => Math.min(gameState.totalCratesOpened, 50),
@@ -359,7 +371,7 @@ const achievements = [
     {
         id: 'damage_dealer',
         name: 'Damage Dealer',
-        icon: baseURL + 'achievement_damage.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Deal 1,000,000 total damage',
         condition: () => gameState.totalDamageDealt >= 1000000,
         progress: () => Math.min(gameState.totalDamageDealt, 1000000),
@@ -370,7 +382,7 @@ const achievements = [
     {
         id: 'first_prestige',
         name: 'Ascension',
-        icon: baseURL + 'achievement_prestige.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Reach your first prestige',
         condition: () => gameState.prestigePoints >= 1,
         progress: () => Math.min(gameState.prestigePoints, 1),
@@ -381,7 +393,7 @@ const achievements = [
     {
         id: 'prestige_master',
         name: 'Prestige Master',
-        icon: baseURL + 'achievement_prestigemaster.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Reach 5 prestige levels',
         condition: () => gameState.prestigePoints >= 5,
         progress: () => Math.min(gameState.prestigePoints, 5),
@@ -392,7 +404,7 @@ const achievements = [
     {
         id: 'prestige_legend',
         name: 'Prestige Legend',
-        icon: baseURL + 'achievement_prestigelegend.png',
+        icon: baseURL + 'Star.png.PNG',
         desc: 'Reach 10 prestige levels',
         condition: () => gameState.prestigePoints >= 10,
         progress: () => Math.min(gameState.prestigePoints, 10),
@@ -484,7 +496,7 @@ const quests = {
     ]
 };
 
-// Biome System
+// Biome System - OPPDATERET MED NYE BAKGRUNNSBILDER
 const biomes = [
     { 
         name: 'grass', 
@@ -548,7 +560,7 @@ const biomes = [
     }
 ];
 
-// Crate Probabilities
+// Crate Probabilities - LAGT TIL godly_crate
 const crateProbabilities = {
     basic: {
         common: 60,
@@ -693,7 +705,7 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM
+// COMBAT SYSTEM - OPPDATERET MED NYE BILDER
 // ======================================================
 
 function calculateDamage() {
@@ -916,17 +928,20 @@ function spawnEnemy() {
     const biomeIndex = (gameState.level - 1) % biomes.length;
     const biome = biomes[biomeIndex];
     
-    // Update island background
+    // Update island background - NY KODE FOR BAKGRUNNSBILDE
     const islandBg = document.getElementById('islandBg');
     if (islandBg) {
-        islandBg.innerHTML = `<img src="${biome.bgImage}" style="width:100%;height:100%;object-fit:cover;">`;
+        islandBg.style.backgroundImage = `url('${biome.bgImage}')`;
+        islandBg.style.backgroundSize = 'cover';
+        islandBg.style.backgroundPosition = 'center';
     }
     
     // Update island
     const island = document.getElementById('island');
     if (island) {
         island.className = 'island ' + biome.name;
-        island.style.background = `linear-gradient(135deg, ${biome.color} 0%, ${darkenColor(biome.color, 20)} 100%)`;
+        // Fjern gradient og bruk bakgrunnsbilde i stedet
+        island.style.background = 'transparent';
     }
     
     // Update enemy
@@ -1151,7 +1166,7 @@ function buyAutoUpgrade() {
 }
 
 // ======================================================
-// SHOP SYSTEM
+// SHOP SYSTEM - OPPDATERET MED NYE CRATES
 // ======================================================
 
 function updateShop() {
@@ -1214,7 +1229,7 @@ function renderCrates() {
         {
             type: 'pet_godly',
             name: 'Godly Pet Crate',
-            icon: crateImages.godly.closed,
+            icon: crateImages.pet_godly.closed,
             desc: 'Epic - Godly pets',
             price: 75,
             odds: crateProbabilities.pet_godly,
@@ -1232,7 +1247,7 @@ function renderCrates() {
         {
             type: 'daily',
             name: 'Daily Crate',
-            icon: crateImages.basic.closed,
+            icon: crateImages.daily.closed,
             desc: 'Free daily reward',
             price: 0,
             odds: crateProbabilities.daily,
@@ -1356,17 +1371,26 @@ function openCrate(type, isBossDrop = false) {
     let itemPool;
     if (type === 'pet' || type === 'pet_godly') {
         itemPool = items.pets.filter(item => item.rarity === selectedRarity);
+    } else if (type === 'godly_crate') {
+        // Godly crate gir bare ultimate og godly items
+        const allItems = [...items.weapons, ...items.armor, ...items.artifacts];
+        itemPool = allItems.filter(item => item.rarity === selectedRarity && 
+            (item.rarity === 'ultimate' || item.rarity === 'godly'));
     } else {
-        itemPool = [
-            ...items.weapons.filter(item => item.rarity === selectedRarity),
-            ...items.armor.filter(item => item.rarity === selectedRarity),
-            ...items.artifacts.filter(item => item.rarity === selectedRarity)
-        ];
+        const allItems = [...items.weapons, ...items.armor, ...items.artifacts];
+        itemPool = allItems.filter(item => item.rarity === selectedRarity);
     }
     
     if (itemPool.length === 0) {
+        // Fallback hvis ingen items av den rarity
         if (type === 'pet' || type === 'pet_godly') {
             itemPool = items.pets.filter(i => i.rarity === 'common');
+        } else if (type === 'godly_crate') {
+            const allItems = [...items.weapons, ...items.armor, ...items.artifacts];
+            itemPool = allItems.filter(item => item.rarity === 'ultimate' || item.rarity === 'godly');
+            if (itemPool.length === 0) {
+                itemPool = items.weapons.filter(i => i.rarity === 'ultimate');
+            }
         } else {
             itemPool = items.weapons.filter(i => i.rarity === 'common');
         }
