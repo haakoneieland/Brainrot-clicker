@@ -39,7 +39,7 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES - MED RIKTIG .png.PNG FILENDELSE
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for hele scenen - MED .png.PNG
+// Bakgrunnsbilder for øyer - MED .png.PNG
 const backgroundImages = {
     grass: baseURL + 'Bakgrunn1.png.PNG',
     desert: baseURL + 'Bakgrunn2.png.PNG',
@@ -53,7 +53,7 @@ const backgroundImages = {
     void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
-// Øy-bilder (svevende øyer) - MED .png.PNG
+// Øy-bilder - MED .png.PNG
 const islandImages = {
     grass: baseURL + 'Øy1.png.PNG',
     desert: baseURL + 'Øy2.png.PNG',
@@ -67,7 +67,7 @@ const islandImages = {
     void: baseURL + 'Øy10.png.PNG'
 };
 
-// Fiende-bilder (på øyene) - MED .png.PNG
+// Fiende-bilder - MED .png.PNG
 const enemyImages = {
     grass: baseURL + 'Gressøy.png.PNG',
     desert: baseURL + 'Ørkenøy.png.PNG',
@@ -81,7 +81,7 @@ const enemyImages = {
     void: baseURL + 'Voidøy.png.PNG'
 };
 
-// Boss-bilder (på øyene) - MED .png.PNG
+// Boss-bilder - MED .png.PNG
 const bossImages = {
     grass: baseURL + 'Gressøyb.png.PNG',
     desert: baseURL + 'Ørkenøyb.png.PNG',
@@ -422,7 +422,7 @@ const quests = {
     ]
 };
 
-// Biome System - NÅ MED ISLAND BILDER
+// Biome System - MED ISLAND BILDER
 const biomes = [
     { 
         name: 'grass', 
@@ -556,7 +556,7 @@ function init() {
     renderCrates();
     updatePrestigeButton();
     
-    console.log('Game initialized with new layout');
+    console.log('Game initialized - Fixed layout');
     
     // Start auto attack if enabled
     if (gameState.autoAttack) {
@@ -627,7 +627,7 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - NYTT LAYOUT
+// COMBAT SYSTEM - FIXED
 // ======================================================
 
 function calculateDamage() {
@@ -685,12 +685,12 @@ function showDamageNumber(damage, isCrit) {
         position: absolute;
         color: ${isCrit ? '#FFD700' : '#fff'};
         font-weight: bold;
-        font-size: ${isCrit ? '24px' : '20px'};
+        font-size: ${isCrit ? '20px' : '16px'};
         text-shadow: 0 0 5px ${isCrit ? 'rgba(255,215,0,0.8)' : 'rgba(255,0,0,0.8)'};
         z-index: 1000;
         pointer-events: none;
         animation: floatUp 1s ease-out forwards;
-        top: 30%;
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
     `;
@@ -707,7 +707,7 @@ function showDamageNumber(damage, isCrit) {
 function showCritEffect() {
     const enemy = document.getElementById('enemy');
     if (enemy) {
-        enemy.style.filter = 'brightness(1.5) drop-shadow(0 0 15px gold)';
+        enemy.style.filter = 'brightness(1.5) drop-shadow(0 0 10px gold)';
         setTimeout(() => {
             enemy.style.filter = '';
         }, 300);
@@ -817,110 +817,91 @@ function spawnEnemy() {
     console.log(`Background: ${biome.bgImage}`);
     console.log(`Island: ${biome.islandImage}`);
     
-    // Update main background (bakgrunn for hele scenen)
-    const gameContainer = document.querySelector('.game-container');
-    if (gameContainer) {
-        gameContainer.style.backgroundImage = `url('${biome.bgImage}')`;
-        gameContainer.style.backgroundSize = 'cover';
-        gameContainer.style.backgroundPosition = 'center';
-        gameContainer.style.backgroundRepeat = 'no-repeat';
+    // Update island background (den lilla bakgrunnen)
+    const islandBg = document.getElementById('islandBg');
+    if (islandBg) {
+        islandBg.innerHTML = `<img src="${biome.bgImage}" style="width:100%;height:100%;object-fit:cover;">`;
+        
+        // Legg til error handler
+        const bgImg = islandBg.querySelector('img');
+        if (bgImg) {
+            bgImg.onload = function() {
+                console.log(`Background image loaded: ${this.src}`);
+            };
+            bgImg.onerror = function() {
+                console.error(`Failed to load background: ${this.src}`);
+                islandBg.style.backgroundColor = biome.color;
+                islandBg.innerHTML = `<div style="color:white;text-align:center;padding:20px;">${biome.enemyType} Background</div>`;
+            };
+        }
     }
     
-    // Update island container (svevende øy)
-    const islandContainer = document.getElementById('islandContainer');
-    if (islandContainer) {
-        // Fjern eksisterende øy hvis den finnes
-        const existingIsland = islandContainer.querySelector('.island-image');
-        if (existingIsland) {
-            existingIsland.remove();
+    // Update island (sirkelen bak fienden)
+    const island = document.getElementById('island');
+    if (island) {
+        island.className = 'island ' + biome.name;
+        
+        // Fjern eksisterende øy-bilde
+        const existingIslandImg = island.querySelector('.island-img');
+        if (existingIslandImg) {
+            existingIslandImg.remove();
         }
         
-        // Lag ny øy
+        // Legg til øy-bilde INNI sirkelen
         const islandImg = document.createElement('img');
-        islandImg.className = 'island-image';
+        islandImg.className = 'island-img';
         islandImg.src = biome.islandImage;
         islandImg.alt = `${biome.enemyType} Island`;
         islandImg.style.cssText = `
-            width: 350px;
-            height: 350px;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
             z-index: 1;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
-            transition: transform 0.3s ease;
         `;
         
-        // Lagre øy-referanse for animasjoner
-        window.currentIsland = islandImg;
-        
-        islandContainer.appendChild(islandImg);
+        island.appendChild(islandImg);
         
         // Legg til error handler
         islandImg.onload = function() {
             console.log(`Island image loaded: ${this.src}`);
-            this.style.opacity = '1';
         };
-        
         islandImg.onerror = function() {
-            console.error(`Failed to load island image: ${this.src}`);
+            console.error(`Failed to load island: ${this.src}`);
             this.style.display = 'none';
-            islandContainer.innerHTML = `
-                <div style="color: white; text-align: center; padding: 20px;">
-                    <div>${biome.enemyType} Island</div>
-                    <div>(Image failed to load)</div>
-                </div>
-            `;
+            island.style.background = `linear-gradient(135deg, ${biome.color} 0%, ${darkenColor(biome.color, 20)} 100%)`;
         };
     }
     
-    // Update enemy (fiende på øyen)
+    // Update enemy (på toppen av øyen)
     gameState.currentBiome = biome.name;
-    const enemy = document.getElementById('enemy');
-    if (enemy) {
+    const enemyImage = document.getElementById('enemyImage');
+    if (enemyImage) {
         const isBoss = gameState.enemyNumber === 9;
         
-        // Fjern eksisterende fiende-bilde
-        const existingEnemyImg = enemy.querySelector('img');
-        if (existingEnemyImg) {
-            existingEnemyImg.remove();
-        }
-        
-        // Lag ny fiende
-        const enemyImg = document.createElement('img');
-        enemyImg.id = 'enemyImage';
-        enemyImg.className = 'enemy-image';
-        enemyImg.style.cssText = `
-            width: 180px;
-            height: 180px;
-            object-fit: contain;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
-        `;
-        
         if (isBoss) {
-            enemyImg.src = bossImages[biome.name];
-            enemyImg.alt = `${biome.enemyType} Boss`;
-            enemyImg.style.width = '220px';
-            enemyImg.style.height = '220px';
-            enemyImg.style.filter = 'drop-shadow(0 0 20px #ff4444) brightness(1.1)';
+            enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
+            enemyImage.alt = `${biome.enemyType} Boss`;
             
-            enemy.classList.add('boss-indicator');
+            const enemy = document.getElementById('enemy');
+            if (enemy) {
+                enemy.classList.add('boss-indicator', 'boss-enhanced');
+            }
             
             gameState.bossTimer = 60;
             const bossTimerContainer = document.getElementById('bossTimerContainer');
             if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
             startBossTimer();
         } else {
-            enemyImg.src = enemyImages[biome.name];
-            enemyImg.alt = `${biome.enemyType} Enemy`;
+            enemyImage.src = enemyImages[biome.name];
+            enemyImage.alt = `${biome.enemyType} Enemy`;
             
-            enemy.classList.remove('boss-indicator');
+            const enemy = document.getElementById('enemy');
+            if (enemy) {
+                enemy.classList.remove('boss-indicator', 'boss-enhanced');
+            }
             
             const bossTimerContainer = document.getElementById('bossTimerContainer');
             if (bossTimerContainer) bossTimerContainer.style.display = 'none';
@@ -930,33 +911,40 @@ function spawnEnemy() {
             }
         }
         
-        enemy.appendChild(enemyImg);
+        // Gjør fienden større og mer fremtredende
+        enemyImage.style.cssText = `
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.2s ease;
+        `;
         
-        // Legg til hover effect
-        enemyImg.onmouseenter = function() {
-            this.style.transform = 'translate(-50%, -50%) scale(1.05)';
-        };
-        
-        enemyImg.onmouseleave = function() {
-            this.style.transform = 'translate(-50%, -50%) scale(1)';
-        };
+        // Boss skal være enda større
+        if (isBoss) {
+            enemyImage.style.width = '220px';
+            enemyImage.style.height = '220px';
+            enemyImage.style.filter = 'drop-shadow(0 0 15px #ff4444)';
+        }
         
         // Legg til error handler
-        enemyImg.onload = function() {
+        enemyImage.onload = function() {
             console.log(`Enemy image loaded: ${this.src}`);
-            this.style.opacity = '1';
         };
-        
-        enemyImg.onerror = function() {
-            console.error(`Failed to load enemy image: ${this.src}`);
+        enemyImage.onerror = function() {
+            console.error(`Failed to load enemy: ${this.src}`);
             this.style.display = 'none';
-            enemy.innerHTML = `
-                <div style="color: white; text-align: center; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 10px;">
-                    <div style="font-size: 24px; font-weight: bold;">${biome.enemyType} ${isBoss ? 'BOSS' : 'Enemy'}</div>
-                    <div style="font-size: 18px;">Level ${gameState.level}</div>
-                    <div style="margin-top: 10px;">Click to attack!</div>
-                </div>
-            `;
+            const enemyContainer = document.getElementById('enemy');
+            if (enemyContainer) {
+                enemyContainer.innerHTML = `
+                    <div style="color: white; text-align: center; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 10px;">
+                        <div style="font-size: 24px;">${biome.enemyType} ${isBoss ? 'BOSS' : 'Enemy'}</div>
+                        <div>Click to attack!</div>
+                    </div>
+                `;
+            }
         };
     }
     
@@ -1055,15 +1043,12 @@ function updateBossTimer() {
     if (gameState.bossTimer <= 10) {
         timerElement.style.color = '#ff4444';
         timerElement.style.animation = 'pulse 0.5s infinite';
-        timerElement.style.fontWeight = 'bold';
     } else if (gameState.bossTimer <= 30) {
         timerElement.style.color = '#ffaa00';
         timerElement.style.animation = 'none';
-        timerElement.style.fontWeight = 'bold';
     } else {
         timerElement.style.color = '#ffd700';
         timerElement.style.animation = 'none';
-        timerElement.style.fontWeight = 'bold';
     }
 }
 
