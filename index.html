@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Island Clicker</title>
+    <title>Brainrot Clicker</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -104,19 +104,17 @@
             <div class="page fight-page active" data-page="fight">
                 <!-- Island Container -->
                 <div class="island-container" id="islandContainer">
-                    <!-- Island with Background -->
-                    <div class="island" id="island">
-                        <!-- Enemy -->
-                        <div class="enemy" id="enemy" onclick="attack()">
-                            <img class="enemy-image" id="enemyImage" src="" alt="Enemy">
-                        </div>
+                    <!-- Island Background -->
+                    <div class="island-bg" id="islandBg">
+                        <!-- Background image will be set by JS -->
                     </div>
                     
-                    <!-- Clouds for grassy biomes -->
-                    <div class="clouds" id="clouds">
-                        <div class="cloud cloud-1"></div>
-                        <div class="cloud cloud-2"></div>
-                        <div class="cloud cloud-3"></div>
+                    <!-- Island -->
+                    <div class="island" id="island">
+                        <!-- Enemy -->
+                        <div class="enemy" id="enemy" onclick="attack()" ontouchstart="attack()">
+                            <img class="enemy-image" id="enemyImage" src="" alt="Enemy">
+                        </div>
                     </div>
                 </div>
 
@@ -367,6 +365,6 @@
         </div>
     </div>
 
-    <script src="game.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
