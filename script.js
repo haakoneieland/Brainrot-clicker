@@ -645,6 +645,7 @@ function spawnEnemy() {
         mainBg.style.backgroundImage = `url('${biome.bgImage}')`;
         mainBg.style.backgroundSize = 'cover';
         mainBg.style.backgroundPosition = 'center';
+        mainBg.style.backgroundRepeat = 'no-repeat';
         
         // Error handling
         const bgImg = new Image();
@@ -658,11 +659,33 @@ function spawnEnemy() {
         bgImg.src = biome.bgImage;
     }
     
-    // LAG 2: Øyen (erstatter ringen)
+    // LAG 2: Øyen (erstatter ringen) - STØRRE VERSJON
     const islandContainer = document.getElementById('island');
     if (islandContainer) {
         // Fjern gammelt innhold
         islandContainer.innerHTML = '';
+        
+        // STØRRE ØY: Sett størrelse og posisjon
+        islandContainer.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 85vmin;
+            height: 85vmin;
+            min-width: 300px;
+            min-height: 300px;
+            max-width: 600px;
+            max-height: 600px;
+            border-radius: 50%;
+            overflow: visible;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.7),
+                        0 0 40px rgba(255, 255, 255, 0.1) inset;
+        `;
         
         // Opprett øy-bilde
         const islandImg = document.createElement('img');
@@ -672,7 +695,8 @@ function spawnEnemy() {
         islandImg.style.cssText = `
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+            border-radius: 50%;
             position: absolute;
             top: 0;
             left: 0;
@@ -689,7 +713,7 @@ function spawnEnemy() {
             console.error(`Failed to load island: ${biome.islandImage}`);
             this.style.display = 'none';
             islandContainer.style.background = `radial-gradient(circle, ${biome.color} 0%, ${darkenColor(biome.color, 40)} 100%)`;
-            islandContainer.style.boxShadow = `0 0 40px ${biome.color}`;
+            islandContainer.style.boxShadow = `0 0 60px ${biome.color}, 0 0 30px rgba(255, 255, 255, 0.1) inset`;
         };
         
         // LAG 3: Fienden (på toppen av øyen)
@@ -706,6 +730,7 @@ function spawnEnemy() {
             align-items: center;
             cursor: pointer;
             z-index: 2;
+            border-radius: 50%;
         `;
         
         const enemyImg = document.createElement('img');
@@ -713,10 +738,12 @@ function spawnEnemy() {
         enemyImg.src = isBoss ? bossImages[biome.name] : enemyImages[biome.name];
         enemyImg.alt = `${biome.enemyType} ${isBoss ? 'Boss' : 'Enemy'}`;
         enemyImg.style.cssText = `
-            width: ${isBoss ? '220px' : '180px'};
-            height: ${isBoss ? '220px' : '180px'};
+            width: ${isBoss ? '75%' : '65%'};
+            height: ${isBoss ? '75%' : '65%'};
             object-fit: contain;
             transition: transform 0.2s ease;
+            position: relative;
+            z-index: 2;
         `;
         
         enemyContainer.appendChild(enemyImg);
@@ -732,7 +759,18 @@ function spawnEnemy() {
         // Boss effekter
         if (isBoss) {
             enemyContainer.classList.add('boss-indicator', 'boss-enhanced');
-            enemyImg.style.filter = 'drop-shadow(0 0 25px #ff4444) brightness(1.1)';
+            enemyImg.style.filter = 'drop-shadow(0 0 30px #ff4444) brightness(1.1) saturate(1.3)';
+            
+            // Legg til ekstra boss-effekter
+            islandContainer.style.boxShadow = `0 0 100px rgba(255, 68, 68, 0.8),
+                                               0 0 50px rgba(255, 68, 68, 0.5) inset`;
+            
+            // Pulsing effect for boss
+            islandContainer.style.animation = 'bossPulse 2s infinite';
+        } else {
+            islandContainer.style.boxShadow = `0 0 80px rgba(0, 0, 0, 0.7),
+                                               0 0 40px rgba(255, 255, 255, 0.1) inset`;
+            islandContainer.style.animation = 'none';
         }
         
         // Error handling for fiende
@@ -750,6 +788,12 @@ function spawnEnemy() {
                     background: rgba(0,0,0,0.7); 
                     border-radius: 10px;
                     font-size: 16px;
+                    z-index: 3;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 80%;
                 ">
                     <div style="font-size: 24px; margin-bottom: 10px;">${biome.enemyType}</div>
                     <div style="font-size: 32px;">${isBoss ? '👹 BOSS' : '⚔️'}</div>
@@ -866,14 +910,15 @@ function showDamageNumber(damage, isCrit) {
         position: absolute;
         color: ${isCrit ? '#FFD700' : '#fff'};
         font-weight: bold;
-        font-size: ${isCrit ? '24px' : '20px'};
+        font-size: ${isCrit ? '28px' : '22px'};
         text-shadow: 0 0 10px ${isCrit ? 'rgba(255,215,0,0.9)' : 'rgba(255,0,0,0.9)'};
         z-index: 1000;
         pointer-events: none;
         animation: floatUp 1s ease-out forwards;
-        top: 30%;
+        top: 20%;
         left: 50%;
         transform: translate(-50%, -50%);
+        font-family: 'Arial Black', sans-serif;
     `;
     
     enemyContainer.appendChild(damageText);
@@ -888,9 +933,20 @@ function showDamageNumber(damage, isCrit) {
 function showCritEffect() {
     const enemyImage = document.getElementById('enemyImage');
     if (enemyImage) {
-        enemyImage.style.filter = 'brightness(1.8) drop-shadow(0 0 20px gold)';
+        enemyImage.style.filter = 'brightness(1.8) drop-shadow(0 0 25px gold) saturate(2)';
         setTimeout(() => {
             enemyImage.style.filter = '';
+        }, 300);
+    }
+    
+    const island = document.getElementById('island');
+    if (island) {
+        island.style.boxShadow = `0 0 100px gold, 0 0 50px rgba(255, 215, 0, 0.3) inset`;
+        setTimeout(() => {
+            const isBoss = gameState.enemyNumber === 9;
+            island.style.boxShadow = isBoss ? 
+                `0 0 100px rgba(255, 68, 68, 0.8), 0 0 50px rgba(255, 68, 68, 0.5) inset` :
+                `0 0 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 255, 255, 0.1) inset`;
         }, 300);
     }
 }
