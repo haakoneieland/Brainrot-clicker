@@ -39,7 +39,7 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES - MED RIKTIG .png.PNG FILENDELSE
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for øyer - MED .png.PNG
+// Bakgrunnsbilder for hele scenen - MED .png.PNG
 const backgroundImages = {
     grass: baseURL + 'Bakgrunn1.png.PNG',
     desert: baseURL + 'Bakgrunn2.png.PNG',
@@ -53,7 +53,21 @@ const backgroundImages = {
     void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
-// Fiende-bilder - MED .png.PNG
+// Øy-bilder (svevende øyer) - MED .png.PNG
+const islandImages = {
+    grass: baseURL + 'Øy1.png.PNG',
+    desert: baseURL + 'Øy2.png.PNG',
+    snow: baseURL + 'Øy3.png.PNG',
+    lava: baseURL + 'Øy4.png.PNG',
+    swamp: baseURL + 'Øy5.png.PNG',
+    ocean: baseURL + 'Øy6.png.PNG',
+    jungle: baseURL + 'Øy7.png.PNG',
+    mountain: baseURL + 'Øy8.png.PNG',
+    ruins: baseURL + 'Øy9.png.PNG',
+    void: baseURL + 'Øy10.png.PNG'
+};
+
+// Fiende-bilder (på øyene) - MED .png.PNG
 const enemyImages = {
     grass: baseURL + 'Gressøy.png.PNG',
     desert: baseURL + 'Ørkenøy.png.PNG',
@@ -67,7 +81,7 @@ const enemyImages = {
     void: baseURL + 'Voidøy.png.PNG'
 };
 
-// Boss-bilder - MED .png.PNG
+// Boss-bilder (på øyene) - MED .png.PNG
 const bossImages = {
     grass: baseURL + 'Gressøyb.png.PNG',
     desert: baseURL + 'Ørkenøyb.png.PNG',
@@ -305,12 +319,12 @@ let inventory = {
     activePet: null
 };
 
-// Achievements System (bruker emojis som fallback)
+// Achievements System
 const achievements = [
     {
         id: 'first_kill',
         name: 'First Blood',
-        icon: uiIcons.coin,  // Bruker Coin bilde
+        icon: uiIcons.coin,
         desc: 'Defeat your first enemy',
         condition: () => gameState.totalEnemiesDefeated >= 1,
         progress: () => Math.min(gameState.totalEnemiesDefeated, 1),
@@ -321,7 +335,7 @@ const achievements = [
     {
         id: 'first_boss',
         name: 'Boss Slayer',
-        icon: uiIcons.gem,  // Bruker Diamond bilde
+        icon: uiIcons.gem,
         desc: 'Defeat your first boss',
         condition: () => gameState.totalBossesDefeated >= 1,
         progress: () => Math.min(gameState.totalBossesDefeated, 1),
@@ -332,7 +346,7 @@ const achievements = [
     {
         id: 'boss_master',
         name: 'Boss Master',
-        icon: crateImages.premium.closed,  // Bruker Premium crate bilde
+        icon: crateImages.premium.closed,
         desc: 'Defeat 10 bosses',
         condition: () => gameState.totalBossesDefeated >= 10,
         progress: () => Math.min(gameState.totalBossesDefeated, 10),
@@ -343,7 +357,7 @@ const achievements = [
     {
         id: 'millionaire',
         name: 'Millionaire',
-        icon: uiIcons.coin,  // Bruker Coin bilde
+        icon: uiIcons.coin,
         desc: 'Collect 1,000,000 coins',
         condition: () => gameState.coins >= 1000000,
         progress: () => Math.min(gameState.coins, 1000000),
@@ -354,7 +368,7 @@ const achievements = [
     {
         id: 'crate_collector',
         name: 'Crate Collector',
-        icon: crateImages.basic.closed,  // Bruker Basic crate bilde
+        icon: crateImages.basic.closed,
         desc: 'Open 50 crates',
         condition: () => gameState.totalCratesOpened >= 50,
         progress: () => Math.min(gameState.totalCratesOpened, 50),
@@ -408,67 +422,77 @@ const quests = {
     ]
 };
 
-// Biome System
+// Biome System - NÅ MED ISLAND BILDER
 const biomes = [
     { 
         name: 'grass', 
         color: '#43e97b',
         enemyType: 'Grass',
-        bgImage: backgroundImages.grass
+        bgImage: backgroundImages.grass,
+        islandImage: islandImages.grass
     },
     { 
         name: 'desert', 
         color: '#f6d365',
         enemyType: 'Desert',
-        bgImage: backgroundImages.desert
+        bgImage: backgroundImages.desert,
+        islandImage: islandImages.desert
     },
     { 
         name: 'snow', 
         color: '#a1c4fd',
         enemyType: 'Snow',
-        bgImage: backgroundImages.snow
+        bgImage: backgroundImages.snow,
+        islandImage: islandImages.snow
     },
     { 
         name: 'lava', 
         color: '#ff9a9e',
         enemyType: 'Lava',
-        bgImage: backgroundImages.lava
+        bgImage: backgroundImages.lava,
+        islandImage: islandImages.lava
     },
     { 
         name: 'swamp', 
         color: '#4facfe',
         enemyType: 'Swamp',
-        bgImage: backgroundImages.swamp
+        bgImage: backgroundImages.swamp,
+        islandImage: islandImages.swamp
     },
     { 
         name: 'ocean', 
         color: '#4facfe',
         enemyType: 'Ocean',
-        bgImage: backgroundImages.ocean
+        bgImage: backgroundImages.ocean,
+        islandImage: islandImages.ocean
     },
     { 
         name: 'jungle', 
         color: '#43e97b',
         enemyType: 'Jungle',
-        bgImage: backgroundImages.jungle
+        bgImage: backgroundImages.jungle,
+        islandImage: islandImages.jungle
     },
     { 
         name: 'mountain', 
         color: '#a1c4fd',
         enemyType: 'Mountain',
-        bgImage: backgroundImages.mountain
+        bgImage: backgroundImages.mountain,
+        islandImage: islandImages.mountain
     },
     { 
         name: 'ruins', 
         color: '#f6d365',
         enemyType: 'Ruins',
-        bgImage: backgroundImages.ruins
+        bgImage: backgroundImages.ruins,
+        islandImage: islandImages.ruins
     },
     { 
         name: 'void', 
         color: '#667eea',
         enemyType: 'Void',
-        bgImage: backgroundImages.void
+        bgImage: backgroundImages.void,
+        islandImage: islandImages.void
     }
 ];
 
@@ -532,11 +556,7 @@ function init() {
     renderCrates();
     updatePrestigeButton();
     
-    // Legg til debug logging
-    console.log('Game initialized');
-    console.log('First enemy image URL:', enemyImages.grass);
-    console.log('First background image URL:', backgroundImages.grass);
-    console.log('First UI icon URL:', uiIcons.coin);
+    console.log('Game initialized with new layout');
     
     // Start auto attack if enabled
     if (gameState.autoAttack) {
@@ -573,7 +593,6 @@ function setupEventListeners() {
             attack();
         }, { passive: false });
         
-        // Legg til vanlig klikk også
         enemy.addEventListener('click', attack);
     }
 }
@@ -608,7 +627,7 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - MED DEBUGGING FOR BILDER
+// COMBAT SYSTEM - NYTT LAYOUT
 // ======================================================
 
 function calculateDamage() {
@@ -666,12 +685,12 @@ function showDamageNumber(damage, isCrit) {
         position: absolute;
         color: ${isCrit ? '#FFD700' : '#fff'};
         font-weight: bold;
-        font-size: ${isCrit ? '20px' : '16px'};
+        font-size: ${isCrit ? '24px' : '20px'};
         text-shadow: 0 0 5px ${isCrit ? 'rgba(255,215,0,0.8)' : 'rgba(255,0,0,0.8)'};
         z-index: 1000;
         pointer-events: none;
         animation: floatUp 1s ease-out forwards;
-        top: 50%;
+        top: 30%;
         left: 50%;
         transform: translate(-50%, -50%);
     `;
@@ -688,7 +707,7 @@ function showDamageNumber(damage, isCrit) {
 function showCritEffect() {
     const enemy = document.getElementById('enemy');
     if (enemy) {
-        enemy.style.filter = 'brightness(1.5) drop-shadow(0 0 10px gold)';
+        enemy.style.filter = 'brightness(1.5) drop-shadow(0 0 15px gold)';
         setTimeout(() => {
             enemy.style.filter = '';
         }, 300);
@@ -794,101 +813,154 @@ function spawnEnemy() {
     const biomeIndex = (gameState.level - 1) % biomes.length;
     const biome = biomes[biomeIndex];
     
-    console.log(`Spawning enemy: Biome=${biome.name}, Level=${gameState.level}, EnemyNumber=${gameState.enemyNumber}`);
-    console.log(`Background image URL: ${biome.bgImage}`);
-    console.log(`Enemy image URL: ${enemyImages[biome.name]}`);
+    console.log(`Spawning enemy: Biome=${biome.name}, Level=${gameState.level}`);
+    console.log(`Background: ${biome.bgImage}`);
+    console.log(`Island: ${biome.islandImage}`);
     
-    // Update island background - BEDRE METODE
-    const islandBg = document.getElementById('islandBg');
-    if (islandBg) {
-        // Fjern eksisterende bakgrunn
-        islandBg.style.backgroundImage = '';
-        islandBg.style.backgroundColor = '';
+    // Update main background (bakgrunn for hele scenen)
+    const gameContainer = document.querySelector('.game-container');
+    if (gameContainer) {
+        gameContainer.style.backgroundImage = `url('${biome.bgImage}')`;
+        gameContainer.style.backgroundSize = 'cover';
+        gameContainer.style.backgroundPosition = 'center';
+        gameContainer.style.backgroundRepeat = 'no-repeat';
+    }
+    
+    // Update island container (svevende øy)
+    const islandContainer = document.getElementById('islandContainer');
+    if (islandContainer) {
+        // Fjern eksisterende øy hvis den finnes
+        const existingIsland = islandContainer.querySelector('.island-image');
+        if (existingIsland) {
+            existingIsland.remove();
+        }
         
-        // Sett ny bakgrunn med setTimeout for å tvinge reload
-        setTimeout(() => {
-            islandBg.style.backgroundImage = `url('${biome.bgImage}')`;
-            islandBg.style.backgroundSize = 'cover';
-            islandBg.style.backgroundPosition = 'center';
-            islandBg.style.backgroundRepeat = 'no-repeat';
-        }, 10);
+        // Lag ny øy
+        const islandImg = document.createElement('img');
+        islandImg.className = 'island-image';
+        islandImg.src = biome.islandImage;
+        islandImg.alt = `${biome.enemyType} Island`;
+        islandImg.style.cssText = `
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        `;
+        
+        // Lagre øy-referanse for animasjoner
+        window.currentIsland = islandImg;
+        
+        islandContainer.appendChild(islandImg);
+        
+        // Legg til error handler
+        islandImg.onload = function() {
+            console.log(`Island image loaded: ${this.src}`);
+            this.style.opacity = '1';
+        };
+        
+        islandImg.onerror = function() {
+            console.error(`Failed to load island image: ${this.src}`);
+            this.style.display = 'none';
+            islandContainer.innerHTML = `
+                <div style="color: white; text-align: center; padding: 20px;">
+                    <div>${biome.enemyType} Island</div>
+                    <div>(Image failed to load)</div>
+                </div>
+            `;
+        };
     }
     
-    // Update island
-    const island = document.getElementById('island');
-    if (island) {
-        island.className = 'island ' + biome.name;
-        island.style.background = `linear-gradient(135deg, ${biome.color} 0%, ${darkenColor(biome.color, 20)} 100%)`;
-    }
-    
-    // Update enemy
+    // Update enemy (fiende på øyen)
     gameState.currentBiome = biome.name;
-    const enemyImage = document.getElementById('enemyImage');
-    if (enemyImage) {
+    const enemy = document.getElementById('enemy');
+    if (enemy) {
         const isBoss = gameState.enemyNumber === 9;
         
-        // Sett en placeholder først
-        enemyImage.style.opacity = '0';
+        // Fjern eksisterende fiende-bilde
+        const existingEnemyImg = enemy.querySelector('img');
+        if (existingEnemyImg) {
+            existingEnemyImg.remove();
+        }
         
-        setTimeout(() => {
-            if (isBoss) {
-                enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
-                enemyImage.alt = `${biome.enemyType} Boss`;
-                console.log(`Loading boss image: ${bossImages[biome.name]}`);
-                
-                const enemy = document.getElementById('enemy');
-                if (enemy) {
-                    enemy.classList.add('boss-indicator', 'boss-enhanced');
-                }
-                
-                gameState.bossTimer = 60;
-                const bossTimerContainer = document.getElementById('bossTimerContainer');
-                if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
-                startBossTimer();
-            } else {
-                enemyImage.src = enemyImages[biome.name];
-                enemyImage.alt = `${biome.enemyType} Enemy`;
-                console.log(`Loading enemy image: ${enemyImages[biome.name]}`);
-                
-                const enemy = document.getElementById('enemy');
-                if (enemy) {
-                    enemy.classList.remove('boss-indicator', 'boss-enhanced');
-                }
-                
-                const bossTimerContainer = document.getElementById('bossTimerContainer');
-                if (bossTimerContainer) bossTimerContainer.style.display = 'none';
-                if (gameState.bossTimerInterval) {
-                    clearInterval(gameState.bossTimerInterval);
-                    gameState.bossTimerInterval = null;
-                }
+        // Lag ny fiende
+        const enemyImg = document.createElement('img');
+        enemyImg.id = 'enemyImage';
+        enemyImg.className = 'enemy-image';
+        enemyImg.style.cssText = `
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+        `;
+        
+        if (isBoss) {
+            enemyImg.src = bossImages[biome.name];
+            enemyImg.alt = `${biome.enemyType} Boss`;
+            enemyImg.style.width = '220px';
+            enemyImg.style.height = '220px';
+            enemyImg.style.filter = 'drop-shadow(0 0 20px #ff4444) brightness(1.1)';
+            
+            enemy.classList.add('boss-indicator');
+            
+            gameState.bossTimer = 60;
+            const bossTimerContainer = document.getElementById('bossTimerContainer');
+            if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
+            startBossTimer();
+        } else {
+            enemyImg.src = enemyImages[biome.name];
+            enemyImg.alt = `${biome.enemyType} Enemy`;
+            
+            enemy.classList.remove('boss-indicator');
+            
+            const bossTimerContainer = document.getElementById('bossTimerContainer');
+            if (bossTimerContainer) bossTimerContainer.style.display = 'none';
+            if (gameState.bossTimerInterval) {
+                clearInterval(gameState.bossTimerInterval);
+                gameState.bossTimerInterval = null;
             }
-            
-            // Fade inn bildet når det er lastet
-            enemyImage.onload = function() {
-                console.log(`Image loaded successfully: ${this.src}`);
-                this.style.opacity = '1';
-                this.style.transition = 'opacity 0.3s';
-            };
-            
-            enemyImage.onerror = function() {
-                console.error(`Failed to load image: ${this.src}`);
-                this.style.opacity = '1';
-                // Vis en fallback tekst
-                this.alt = 'Image failed to load';
-                const enemyContainer = document.getElementById('enemy');
-                if (enemyContainer) {
-                    enemyContainer.innerHTML = `
-                        <div style="color: white; text-align: center; padding: 20px;">
-                            <div>${biome.enemyType} ${isBoss ? 'Boss' : 'Enemy'}</div>
-                            <div>Level ${gameState.level}</div>
-                            <div>Click to attack!</div>
-                        </div>
-                    `;
-                }
-            };
-        }, 50);
+        }
+        
+        enemy.appendChild(enemyImg);
+        
+        // Legg til hover effect
+        enemyImg.onmouseenter = function() {
+            this.style.transform = 'translate(-50%, -50%) scale(1.05)';
+        };
+        
+        enemyImg.onmouseleave = function() {
+            this.style.transform = 'translate(-50%, -50%) scale(1)';
+        };
+        
+        // Legg til error handler
+        enemyImg.onload = function() {
+            console.log(`Enemy image loaded: ${this.src}`);
+            this.style.opacity = '1';
+        };
+        
+        enemyImg.onerror = function() {
+            console.error(`Failed to load enemy image: ${this.src}`);
+            this.style.display = 'none';
+            enemy.innerHTML = `
+                <div style="color: white; text-align: center; padding: 20px; background: rgba(0,0,0,0.7); border-radius: 10px;">
+                    <div style="font-size: 24px; font-weight: bold;">${biome.enemyType} ${isBoss ? 'BOSS' : 'Enemy'}</div>
+                    <div style="font-size: 18px;">Level ${gameState.level}</div>
+                    <div style="margin-top: 10px;">Click to attack!</div>
+                </div>
+            `;
+        };
     }
     
+    // Update text info
     const enemyTypeEl = document.getElementById('enemyType');
     if (enemyTypeEl) enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '');
     
@@ -983,12 +1055,15 @@ function updateBossTimer() {
     if (gameState.bossTimer <= 10) {
         timerElement.style.color = '#ff4444';
         timerElement.style.animation = 'pulse 0.5s infinite';
+        timerElement.style.fontWeight = 'bold';
     } else if (gameState.bossTimer <= 30) {
         timerElement.style.color = '#ffaa00';
         timerElement.style.animation = 'none';
+        timerElement.style.fontWeight = 'bold';
     } else {
         timerElement.style.color = '#ffd700';
         timerElement.style.animation = 'none';
+        timerElement.style.fontWeight = 'bold';
     }
 }
 
@@ -1062,7 +1137,7 @@ function buyAutoUpgrade() {
 }
 
 // ======================================================
-// SHOP SYSTEM - MED BILDE DEBUGGING
+// SHOP SYSTEM
 // ======================================================
 
 function updateShop() {
@@ -1146,14 +1221,9 @@ function renderCrates() {
         const crateCard = document.createElement('div');
         crateCard.className = `crate-card ${crate.class}`;
         
-        const iconUrl = crate.icon;
-        console.log(`Rendering crate: ${crate.name}, Icon URL: ${iconUrl}`);
-        
         crateCard.innerHTML = `
             <div class="crate-header">
-                <img src="${iconUrl}" 
-                     style="width:32px;height:32px;" 
-                     onerror="console.error('Failed to load crate icon: ${iconUrl}'); this.style.display='none';">
+                <img src="${crate.icon}" style="width:32px;height:32px;">
                 <span class="crate-name">${crate.name}</span>
             </div>
             <div class="crate-info">
@@ -1169,9 +1239,7 @@ function renderCrates() {
             </div>
             <button class="crate-btn" onclick="buyCrate('${crate.type}')">
                 <span class="crate-price">${crate.price}</span>
-                <img src="${uiIcons.gem}" 
-                     style="width:16px;height:16px;"
-                     onerror="console.error('Failed to load gem icon: ${uiIcons.gem}');">
+                <img src="${uiIcons.gem}" style="width:16px;height:16px;">
             </button>
         `;
         
@@ -1207,31 +1275,16 @@ function buyCrate(type) {
 function showSimpleCrateOpening(crateType, source = 'shop') {
     const item = openCrate(crateType, source === 'boss');
     
-    const crateOpenImage = crateImages[crateType]?.open || crateImages.basic.open;
-    const itemIcon = item.icon;
-    
-    console.log(`Opening crate: ${crateType}, Item: ${item.name}`);
-    console.log(`Crate open image: ${crateOpenImage}`);
-    console.log(`Item icon: ${itemIcon}`);
-    
-    showMessage(`<img src="${crateOpenImage}" 
-                     style="width:64px;height:64px;" 
-                     onerror="console.error('Failed to load crate open image: ${crateOpenImage}'); this.src='${uiIcons.gem}';"> CRATE OPENED!`, 
+    showMessage(`<img src="${crateImages[crateType]?.open || crateImages.basic.open}" style="width:64px;height:64px;"> CRATE OPENED!`, 
         `You got:<br>
-        <img src="${itemIcon}" 
-             style="width:32px;height:32px;vertical-align:middle;" 
-             onerror="console.error('Failed to load item icon: ${itemIcon}'); this.src='${uiIcons.coin}';"> 
-        <strong>${item.name}</strong><br>
+        <img src="${item.icon}" style="width:32px;height:32px;"> <strong>${item.name}</strong><br>
         <span class="rarity-badge ${item.rarity}" style="display:inline-block;padding:4px 8px;border-radius:10px;margin:5px 0;">
             ${item.rarity.toUpperCase()}
         </span><br><br>
         ${item.damage ? `<img src="${uiIcons.coin}" style="width:16px;height:16px;"> Damage: ${item.damage}x<br>` : ''}
         ${item.defense ? `<img src="${uiIcons.coin}" style="width:16px;height:16px;"> Defense: ${item.defense}x<br>` : ''}
         ${item.bonus ? Object.entries(item.bonus).map(([key, value]) => 
-            `<img src="${key === 'coins' ? uiIcons.coin : key === 'gems' ? uiIcons.gem : uiIcons.star}" 
-                  style="width:16px;height:16px;"
-                  onerror="console.error('Failed to load bonus icon for ${key}');"> 
-             ${key.charAt(0).toUpperCase() + key.slice(1)}: +${value}${key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%'}<br>`
+            `<img src="${key === 'coins' ? uiIcons.coin : key === 'gems' ? uiIcons.gem : uiIcons.star}" style="width:16px;height:16px;"> ${key.charAt(0).toUpperCase() + key.slice(1)}: +${value}${key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%'}<br>`
         ).join('') : ''}`
     );
     
@@ -1372,7 +1425,7 @@ function updatePrestigeButton() {
 }
 
 // ======================================================
-// INVENTORY SYSTEM - MED BILDE DEBUGGING
+// INVENTORY SYSTEM
 // ======================================================
 
 function addItemToInventory(item) {
@@ -1396,8 +1449,6 @@ function addItemToInventory(item) {
         inventory[category][item.id].count += 1;
     }
     
-    console.log(`Added item to inventory: ${item.name}, Category: ${category}, Icon: ${item.icon}`);
-    
     if (document.querySelector('.inventory-page.active')) {
         renderInventory();
     }
@@ -1419,13 +1470,9 @@ function renderInventory() {
     if (activePetElement) {
         if (inventory.activePet) {
             const pet = inventory.activePet;
-            console.log(`Rendering active pet: ${pet.name}, Icon: ${pet.icon}`);
-            
             activePetElement.innerHTML = `
                 <div class="pet-display">
-                    <img src="${pet.icon}" 
-                         style="width:48px;height:48px;" 
-                         onerror="console.error('Failed to load pet icon: ${pet.icon}'); this.src='${uiIcons.coin}';">
+                    <img src="${pet.icon}" style="width:48px;height:48px;">
                     <div class="pet-details">
                         <span class="pet-name">${pet.name}</span>
                         <span class="pet-rarity ${pet.rarity}">${pet.rarity.toUpperCase()}</span>
@@ -1465,8 +1512,6 @@ function renderInventory() {
         const div = document.createElement('div');
         div.className = `item-card ${item.rarity}`;
         
-        console.log(`Rendering inventory item: ${item.name}, Icon: ${item.icon}`);
-        
         let actionButton = '';
         let statsHtml = '';
         
@@ -1497,10 +1542,7 @@ function renderInventory() {
         
         div.innerHTML = `
             <div class="item-count">${itemData.count}/${itemData.level + 1}</div>
-            <img src="${item.icon}" 
-                 class="item-icon" 
-                 style="width:32px;height:32px;"
-                 onerror="console.error('Failed to load item icon: ${item.icon}'); this.src='${uiIcons.coin}';">
+            <img src="${item.icon}" class="item-icon" style="width:32px;height:32px;">
             <div class="item-name">${item.name}</div>
             <div class="item-level">Level ${itemData.level}</div>
             <div class="item-rarity ${item.rarity}">${item.rarity.toUpperCase()}</div>
@@ -1640,19 +1682,6 @@ function startAutoSave() {
     }, 30000);
 }
 
-function checkDailyReset() {
-    // Enkel implementering for nå
-    const dailyBtn = document.getElementById('dailyCrateBtn');
-    if (dailyBtn && !gameState.dailyCrateAvailable) {
-        dailyBtn.disabled = true;
-        dailyBtn.textContent = 'Claimed';
-    }
-}
-
-// ======================================================
-// SAVE SYSTEM
-// ======================================================
-
 function saveGame() {
     const saveData = {
         gameState,
@@ -1678,32 +1707,6 @@ function loadGame() {
             inventory = data.inventory || {
                 weapons: {}, armor: {}, pets: {}, artifacts: {}, activePet: null
             };
-            
-            // Load achievements progress
-            if (data.achievements) {
-                data.achievements.forEach(savedAchievement => {
-                    const achievement = achievements.find(a => a.id === savedAchievement.id);
-                    if (achievement) {
-                        achievement.claimed = savedAchievement.claimed || false;
-                    }
-                });
-            }
-            
-            // Load quests progress
-            if (data.quests) {
-                Object.keys(data.quests).forEach(questType => {
-                    if (quests[questType]) {
-                        data.quests[questType].forEach(savedQuest => {
-                            const quest = quests[questType].find(q => q.id === savedQuest.id);
-                            if (quest) {
-                                quest.progress = savedQuest.progress || 0;
-                                quest.completed = savedQuest.completed || false;
-                                quest.claimed = savedQuest.claimed || false;
-                            }
-                        });
-                    }
-                });
-            }
         } catch (e) {
             console.error('Failed to load save:', e);
         }
@@ -1730,221 +1733,6 @@ function closeMessage() {
 }
 
 // ======================================================
-// ACHIEVEMENTS & QUESTS FUNCTIONS
-// ======================================================
-
-function renderAchievements() {
-    const list = document.getElementById('achievementsList');
-    if (!list) return;
-    
-    list.innerHTML = '';
-    
-    achievements.forEach(achievement => {
-        const completed = achievement.condition();
-        const progress = achievement.progress();
-        const progressPercent = (progress / achievement.total) * 100;
-        
-        const div = document.createElement('div');
-        div.className = `achievement-card ${completed ? 'completed' : ''} ${achievement.claimed ? 'claimed' : ''}`;
-        
-        div.innerHTML = `
-            <img src="${achievement.icon}" class="achievement-icon" style="width:50px;height:50px;"
-                 onerror="console.error('Failed to load achievement icon: ${achievement.icon}'); this.src='${uiIcons.star}';">
-            <div class="achievement-info">
-                <div class="achievement-name">${achievement.name}</div>
-                <div class="achievement-desc">${achievement.desc}</div>
-                <div class="achievement-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                    </div>
-                    <span>${formatNumber(progress)}/${formatNumber(achievement.total)}</span>
-                </div>
-                <div class="achievement-rewards">
-                    ${achievement.reward.coins ? 
-                        `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${achievement.reward.coins}</div>` : ''}
-                    ${achievement.reward.gems ? 
-                        `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${achievement.reward.gems}</div>` : ''}
-                    ${achievement.reward.crate ? 
-                        `<div class="reward"><img src="${crateImages[achievement.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${achievement.reward.crate}</div>` : ''}
-                    ${achievement.reward.item ? 
-                        `<div class="reward"><img src="${items.weapons.find(i => i.id === achievement.reward.item)?.icon || items.pets.find(i => i.id === achievement.reward.item)?.icon}" style="width:16px;height:16px;"> ${achievement.reward.item}</div>` : ''}
-                </div>
-            </div>
-            <button class="achievement-claim" 
-                    onclick="claimAchievement('${achievement.id}')"
-                    ${completed && !achievement.claimed ? '' : 'disabled'}>
-                ${achievement.claimed ? '✅ Claimed' : completed ? 'Claim' : 'Locked'}
-            </button>
-        `;
-        
-        list.appendChild(div);
-    });
-}
-
-function updateAchievements() {
-    achievements.forEach(achievement => {
-        if (!achievement.claimed && achievement.condition()) {
-            // Achievement completed
-        }
-    });
-    
-    if (document.querySelector('.achievements-page.active')) {
-        renderAchievements();
-    }
-}
-
-function claimAchievement(achievementId) {
-    const achievement = achievements.find(a => a.id === achievementId);
-    if (!achievement || achievement.claimed || !achievement.condition()) {
-        return;
-    }
-    
-    // Give rewards
-    if (achievement.reward.coins) {
-        gameState.coins += achievement.reward.coins;
-    }
-    if (achievement.reward.gems) {
-        gameState.gems += achievement.reward.gems;
-    }
-    if (achievement.reward.crate) {
-        showSimpleCrateOpening(achievement.reward.crate, 'achievement');
-    }
-    if (achievement.reward.item) {
-        const item = [...items.weapons, ...items.armor, ...items.pets, ...items.artifacts]
-            .find(i => i.id === achievement.reward.item);
-        if (item) {
-            addItemToInventory(item);
-        }
-    }
-    
-    achievement.claimed = true;
-    
-    updateResources();
-    renderAchievements();
-    renderInventory();
-    saveGame();
-}
-
-function renderQuests() {
-    const dailyList = document.getElementById('dailyQuests');
-    const weeklyList = document.getElementById('weeklyQuests');
-    
-    if (dailyList) {
-        dailyList.innerHTML = '';
-        quests.daily.forEach(quest => {
-            const progressPercent = (quest.progress / quest.total) * 100;
-            dailyList.appendChild(createQuestCard(quest, progressPercent));
-        });
-    }
-    
-    if (weeklyList) {
-        weeklyList.innerHTML = '';
-        quests.weekly.forEach(quest => {
-            const progressPercent = (quest.progress / quest.total) * 100;
-            weeklyList.appendChild(createQuestCard(quest, progressPercent));
-        });
-    }
-}
-
-function createQuestCard(quest, progressPercent) {
-    const div = document.createElement('div');
-    div.className = `quest-card ${quest.difficulty}`;
-    
-    div.innerHTML = `
-        <div class="quest-header">
-            <div class="quest-title">${quest.title}</div>
-            <div class="quest-difficulty ${quest.difficulty}">${quest.difficulty}</div>
-        </div>
-        <div class="quest-desc">${quest.desc}</div>
-        <div class="quest-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${progressPercent}%"></div>
-            </div>
-            <div class="progress-text">
-                <span>${formatNumber(quest.progress)}</span>
-                <span>${formatNumber(quest.total)}</span>
-            </div>
-        </div>
-        <div class="quest-rewards">
-            ${quest.reward.coins ? 
-                `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${quest.reward.coins}</div>` : ''}
-            ${quest.reward.gems ? 
-                `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${quest.reward.gems}</div>` : ''}
-            ${quest.reward.crate ? 
-                `<div class="reward"><img src="${crateImages[quest.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${quest.reward.crate}</div>` : ''}
-        </div>
-        <button class="quest-claim" 
-                onclick="claimQuest('${quest.id}')"
-                ${quest.completed && !quest.claimed ? '' : 'disabled'}>
-            ${quest.claimed ? '✅ Claimed' : quest.completed ? 'Claim Reward' : 'In Progress'}
-        </button>
-    `;
-    
-    return div;
-}
-
-function updateQuestProgress(type, amount) {
-    let updated = false;
-    
-    // Update daily quests
-    quests.daily.forEach(quest => {
-        if (!quest.completed && quest.type === type) {
-            quest.progress = Math.min(quest.total, quest.progress + amount);
-            if (quest.progress >= quest.total) {
-                quest.completed = true;
-            }
-            updated = true;
-        }
-    });
-    
-    // Update weekly quests
-    quests.weekly.forEach(quest => {
-        if (!quest.completed && quest.type === type) {
-            quest.progress = Math.min(quest.total, quest.progress + amount);
-            if (quest.progress >= quest.total) {
-                quest.completed = true;
-            }
-            updated = true;
-        }
-    });
-    
-    if (updated && document.querySelector('.quests-page.active')) {
-        renderQuests();
-    }
-}
-
-function claimQuest(questId) {
-    let quest;
-    
-    // Find the quest
-    quest = quests.daily.find(q => q.id === questId);
-    if (!quest) {
-        quest = quests.weekly.find(q => q.id === questId);
-    }
-    
-    if (!quest || quest.claimed || !quest.completed) {
-        return;
-    }
-    
-    // Give rewards
-    if (quest.reward.coins) {
-        gameState.coins += quest.reward.coins;
-    }
-    if (quest.reward.gems) {
-        gameState.gems += quest.reward.gems;
-    }
-    if (quest.reward.crate) {
-        showSimpleCrateOpening(quest.reward.crate, 'quest');
-    }
-    
-    quest.claimed = true;
-    
-    updateResources();
-    renderQuests();
-    saveGame();
-}
-
-// ======================================================
 // INITIALIZE GAME
 // ======================================================
 
@@ -1960,21 +1748,3 @@ window.buyAutoUpgrade = buyAutoUpgrade;
 window.showPrestigeModal = showPrestigeModal;
 window.closeMessage = closeMessage;
 window.showSimpleCrateOpening = showSimpleCrateOpening;
-window.claimAchievement = claimAchievement;
-window.claimQuest = claimQuest;
-window.equipPet = equipPet;
-window.removePet = removePet;
-
-// Debug function
-window.debugImages = function() {
-    console.log('=== IMAGE DEBUG INFO ===');
-    console.log('Base URL:', baseURL);
-    console.log('First enemy image:', enemyImages.grass);
-    console.log('First boss image:', bossImages.grass);
-    console.log('First background:', backgroundImages.grass);
-    console.log('Coin icon:', uiIcons.coin);
-    console.log('Gem icon:', uiIcons.gem);
-    console.log('Star icon:', uiIcons.star);
-    console.log('Basic crate closed:', crateImages.basic.closed);
-    console.log('Basic crate open:', crateImages.basic.open);
-};
