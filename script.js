@@ -1,5 +1,5 @@
 // ======================================================
-// GAME STATE & DATA
+// GAME STATE & DATA - MED DINE BILDER
 // ======================================================
 
 let gameState = {
@@ -36,64 +36,257 @@ let gameState = {
     enteredCodes: []
 };
 
-// DINE BILDER - Oppdatert med dine filstier
+// DINE BILDE-URL-ER FOR GITHUB PAGES
+const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
+
+// Bakgrunnsbilder for øyer (500x800 px)
+const backgroundImages = {
+    grass: baseURL + 'grass_bg.png',
+    desert: baseURL + 'desert_bg.png',
+    snow: baseURL + 'snow_bg.png',
+    lava: baseURL + 'lava_bg.png',
+    swamp: baseURL + 'swamp_bg.png',
+    ocean: baseURL + 'ocean_bg.png',
+    jungle: baseURL + 'jungle_bg.png',
+    mountain: baseURL + 'mountain_bg.png',
+    ruins: baseURL + 'ruins_bg.png',
+    void: baseURL + 'void_bg.png'
+};
+
+// Fiende-bilder
 const enemyImages = {
-    grass: 'gressøy.png',
-    desert: 'ørkenøy.png',
-    snow: 'snøøy.png',
-    lava: 'ildøy.png',
-    swamp: 'myrøy.png',
-    ocean: 'havøy.png',
-    jungle: 'jungeløy.png',
-    mountain: 'fjelløy.png',
-    ruins: 'ruinøy.png',
-    void: 'romøy.png'
+    grass: baseURL + 'gressøy.png',
+    desert: baseURL + 'ørkenøy.png',
+    snow: baseURL + 'snøøy.png',
+    lava: baseURL + 'ildøy.png',
+    swamp: baseURL + 'myrøy.png',
+    ocean: baseURL + 'havøy.png',
+    jungle: baseURL + 'jungeløy.png',
+    mountain: baseURL + 'fjelløy.png',
+    ruins: baseURL + 'ruinøy.png',
+    void: baseURL + 'romøy.png'
 };
 
+// Boss-bilder
 const bossImages = {
-    grass: 'gressøyb.png',
-    desert: 'ørkenøyb.png',
-    snow: 'snøøyb.png',
-    lava: 'ildøyb.png',
-    swamp: 'myrøyb.png',
-    ocean: 'havøyb.png',
-    jungle: 'jungeløyb.png',
-    mountain: 'fjelløyb.png',
-    ruins: 'ruinøyb.png',
-    void: 'romøyb.png'
+    grass: baseURL + 'gressøyb.png',
+    desert: baseURL + 'ørkenøyb.png',
+    snow: baseURL + 'snøøyb.png',
+    lava: baseURL + 'ildøyb.png',
+    swamp: baseURL + 'myrøyb.png',
+    ocean: baseURL + 'havøyb.png',
+    jungle: baseURL + 'jungeløyb.png',
+    mountain: baseURL + 'fjelløyb.png',
+    ruins: baseURL + 'ruinøyb.png',
+    void: baseURL + 'romøyb.png'
 };
 
-// Items Database - Bruker emojis som placeholders
+// UI Ikoner - DINE BILDER
+const uiIcons = {
+    coin: baseURL + 'coin.png',
+    gem: baseURL + 'diamond.png',
+    star: baseURL + 'star.png',
+    crateClosed: baseURL + 'crate_closed.png',
+    crateOpen: baseURL + 'crate_open.png'
+};
+
+// Crate-bilder for forskjellige rarities
+const crateImages = {
+    basic: {
+        closed: baseURL + 'crate_basic_closed.png',
+        open: baseURL + 'crate_basic_open.png'
+    },
+    advanced: {
+        closed: baseURL + 'crate_advanced_closed.png',
+        open: baseURL + 'crate_advanced_open.png'
+    },
+    premium: {
+        closed: baseURL + 'crate_premium_closed.png',
+        open: baseURL + 'crate_premium_open.png'
+    },
+    pet: {
+        closed: baseURL + 'crate_pet_closed.png',
+        open: baseURL + 'crate_pet_open.png'
+    },
+    godly: {
+        closed: baseURL + 'crate_godly_closed.png',
+        open: baseURL + 'crate_godly_open.png'
+    }
+};
+
+// Items Database - MED BILDE-URL-ER
 const items = {
     weapons: [
-        { id: 'wood_sword', name: 'Wood Sword', icon: '🗡️', rarity: 'common', damage: 1.1, required: 2 },
-        { id: 'iron_sword', name: 'Iron Sword', icon: '⚔️', rarity: 'rare', damage: 1.3, required: 3 },
-        { id: 'steel_sword', name: 'Steel Sword', icon: '🔪', rarity: 'epic', damage: 1.6, required: 4 },
-        { id: 'dragon_sword', name: 'Dragon Sword', icon: '🐉🗡️', rarity: 'legendary', damage: 2.0, required: 5 },
-        { id: 'excalibur', name: 'Excalibur', icon: '👑🗡️', rarity: 'ultimate', damage: 3.0, required: 6 },
-        { id: 'godslayer', name: 'Godslayer', icon: '⚡🗡️', rarity: 'godly', damage: 5.0, required: 8 }
+        { 
+            id: 'wood_sword', 
+            name: 'Wood Sword', 
+            icon: baseURL + 'wood_sword.png',
+            rarity: 'common', 
+            damage: 1.1, 
+            required: 2 
+        },
+        { 
+            id: 'iron_sword', 
+            name: 'Iron Sword', 
+            icon: baseURL + 'iron_sword.png',
+            rarity: 'rare', 
+            damage: 1.3, 
+            required: 3 
+        },
+        { 
+            id: 'steel_sword', 
+            name: 'Steel Sword', 
+            icon: baseURL + 'steel_sword.png',
+            rarity: 'epic', 
+            damage: 1.6, 
+            required: 4 
+        },
+        { 
+            id: 'dragon_sword', 
+            name: 'Dragon Sword', 
+            icon: baseURL + 'dragon_sword.png',
+            rarity: 'legendary', 
+            damage: 2.0, 
+            required: 5 
+        },
+        { 
+            id: 'excalibur', 
+            name: 'Excalibur', 
+            icon: baseURL + 'excalibur.png',
+            rarity: 'ultimate', 
+            damage: 3.0, 
+            required: 6 
+        },
+        { 
+            id: 'godslayer', 
+            name: 'Godslayer', 
+            icon: baseURL + 'godslayer.png',
+            rarity: 'godly', 
+            damage: 5.0, 
+            required: 8 
+        }
     ],
     armor: [
-        { id: 'leather_armor', name: 'Leather Armor', icon: '🥋', rarity: 'common', defense: 1.1, required: 2 },
-        { id: 'chainmail', name: 'Chainmail', icon: '🔗', rarity: 'rare', defense: 1.2, required: 3 },
-        { id: 'plate_armor', name: 'Plate Armor', icon: '🛡️', rarity: 'epic', defense: 1.4, required: 4 },
-        { id: 'dragon_armor', name: 'Dragon Armor', icon: '🐉🛡️', rarity: 'legendary', defense: 1.8, required: 5 }
+        { 
+            id: 'leather_armor', 
+            name: 'Leather Armor', 
+            icon: baseURL + 'wooden_armor.png', // Bruker wooden_armor.png som leather
+            rarity: 'common', 
+            defense: 1.1, 
+            required: 2 
+        },
+        { 
+            id: 'chainmail', 
+            name: 'Chainmail', 
+            icon: baseURL + 'chainmail.png',
+            rarity: 'rare', 
+            defense: 1.2, 
+            required: 3 
+        },
+        { 
+            id: 'plate_armor', 
+            name: 'Plate Armor', 
+            icon: baseURL + 'plate_armor.png',
+            rarity: 'epic', 
+            defense: 1.4, 
+            required: 4 
+        },
+        { 
+            id: 'dragon_armor', 
+            name: 'Dragon Armor', 
+            icon: baseURL + 'dragon_armor.png',
+            rarity: 'legendary', 
+            defense: 1.8, 
+            required: 5 
+        }
     ],
     pets: [
-        { id: 'cat', name: 'Lucky Cat', icon: '🐱', rarity: 'common', bonus: { coins: 1.1 } },
-        { id: 'dog', name: 'Guard Dog', icon: '🐶', rarity: 'rare', bonus: { damage: 1.1 } },
-        { id: 'owl', name: 'Wise Owl', icon: '🦉', rarity: 'epic', bonus: { crit: 5, auto: 1 } },
-        { id: 'dragon', name: 'Baby Dragon', icon: '🐉', rarity: 'legendary', bonus: { damage: 1.3, crit: 10 } },
-        { id: 'phoenix', name: 'Phoenix', icon: '🔥', rarity: 'ultimate', bonus: { damage: 1.5, auto: 5, gems: 1.2 } },
-        { id: 'unicorn', name: 'Unicorn', icon: '🦄', rarity: 'godly', bonus: { damage: 2.0, crit: 15, coins: 1.5, gems: 1.5 } }
+        { 
+            id: 'cat', 
+            name: 'Lucky Cat', 
+            icon: baseURL + 'cat.png',
+            rarity: 'common', 
+            bonus: { coins: 1.1 } 
+        },
+        { 
+            id: 'dog', 
+            name: 'Guard Dog', 
+            icon: baseURL + 'dog.png',
+            rarity: 'rare', 
+            bonus: { damage: 1.1 } 
+        },
+        { 
+            id: 'owl', 
+            name: 'Wise Owl', 
+            icon: baseURL + 'owl.png',
+            rarity: 'epic', 
+            bonus: { crit: 5, auto: 1 } 
+        },
+        { 
+            id: 'dragon', 
+            name: 'Baby Dragon', 
+            icon: baseURL + 'baby_dragon.png',
+            rarity: 'legendary', 
+            bonus: { damage: 1.3, crit: 10 } 
+        },
+        { 
+            id: 'phoenix', 
+            name: 'Phoenix', 
+            icon: baseURL + 'phoenix.png',
+            rarity: 'ultimate', 
+            bonus: { damage: 1.5, auto: 5, gems: 1.2 } 
+        },
+        { 
+            id: 'unicorn', 
+            name: 'Unicorn', 
+            icon: baseURL + 'unicorn.png',
+            rarity: 'godly', 
+            bonus: { damage: 2.0, crit: 15, coins: 1.5, gems: 1.5 } 
+        }
     ],
     artifacts: [
-        { id: 'lucky_coin', name: 'Lucky Coin', icon: '🪙', rarity: 'common', bonus: { coins: 1.05 } },
-        { id: 'crit_gem', name: 'Crit Gem', icon: '💎', rarity: 'rare', bonus: { crit: 3 } },
-        { id: 'damage_orb', name: 'Damage Orb', icon: '🔮', rarity: 'epic', bonus: { damage: 1.2 } },
-        { id: 'auto_core', name: 'Auto Core', icon: '⚙️', rarity: 'legendary', bonus: { auto: 10 } },
-        { id: 'boss_trophy', name: 'Boss Trophy', icon: '🏆', rarity: 'ultimate', bonus: { damage: 1.5, crit: 10 } },
-        { id: 'divine_relic', name: 'Divine Relic', icon: '✨', rarity: 'godly', bonus: { damage: 2.0, crit: 20, coins: 1.5, gems: 1.5 } }
+        { 
+            id: 'lucky_coin', 
+            name: 'Lucky Coin', 
+            icon: baseURL + 'lucky_coin.png',
+            rarity: 'common', 
+            bonus: { coins: 1.05 } 
+        },
+        { 
+            id: 'crit_gem', 
+            name: 'Crit Gem', 
+            icon: baseURL + 'crit_gem.png',
+            rarity: 'rare', 
+            bonus: { crit: 3 } 
+        },
+        { 
+            id: 'damage_orb', 
+            name: 'Damage Orb', 
+            icon: baseURL + 'damage_orb.png',
+            rarity: 'epic', 
+            bonus: { damage: 1.2 } 
+        },
+        { 
+            id: 'auto_core', 
+            name: 'Auto Core', 
+            icon: baseURL + 'auto_core.png',
+            rarity: 'legendary', 
+            bonus: { auto: 10 } 
+        },
+        { 
+            id: 'boss_trophy', 
+            name: 'Boss Trophy', 
+            icon: baseURL + 'boss_trophy.png',
+            rarity: 'ultimate', 
+            bonus: { damage: 1.5, crit: 10 } 
+        },
+        { 
+            id: 'divine_relic', 
+            name: 'Divine Relic', 
+            icon: baseURL + 'divine_relic.png',
+            rarity: 'godly', 
+            bonus: { damage: 2.0, crit: 20, coins: 1.5, gems: 1.5 } 
+        }
     ]
 };
 
@@ -106,12 +299,12 @@ let inventory = {
     activePet: null
 };
 
-// Achievements System
+// Achievements System - MED BILDE-ICONS
 const achievements = [
     {
         id: 'first_kill',
         name: 'First Blood',
-        icon: '🩸',
+        icon: baseURL + 'achievement_firstblood.png',
         desc: 'Defeat your first enemy',
         condition: () => gameState.totalEnemiesDefeated >= 1,
         progress: () => Math.min(gameState.totalEnemiesDefeated, 1),
@@ -122,7 +315,7 @@ const achievements = [
     {
         id: 'first_boss',
         name: 'Boss Slayer',
-        icon: '👹',
+        icon: baseURL + 'achievement_boss.png',
         desc: 'Defeat your first boss',
         condition: () => gameState.totalBossesDefeated >= 1,
         progress: () => Math.min(gameState.totalBossesDefeated, 1),
@@ -133,7 +326,7 @@ const achievements = [
     {
         id: 'boss_master',
         name: 'Boss Master',
-        icon: '👑',
+        icon: baseURL + 'achievement_bossmaster.png',
         desc: 'Defeat 10 bosses',
         condition: () => gameState.totalBossesDefeated >= 10,
         progress: () => Math.min(gameState.totalBossesDefeated, 10),
@@ -144,7 +337,7 @@ const achievements = [
     {
         id: 'millionaire',
         name: 'Millionaire',
-        icon: '💰',
+        icon: baseURL + 'achievement_millionaire.png',
         desc: 'Collect 1,000,000 coins',
         condition: () => gameState.coins >= 1000000,
         progress: () => Math.min(gameState.coins, 1000000),
@@ -155,7 +348,7 @@ const achievements = [
     {
         id: 'crate_collector',
         name: 'Crate Collector',
-        icon: '🎁',
+        icon: baseURL + 'achievement_crate.png',
         desc: 'Open 50 crates',
         condition: () => gameState.totalCratesOpened >= 50,
         progress: () => Math.min(gameState.totalCratesOpened, 50),
@@ -166,7 +359,7 @@ const achievements = [
     {
         id: 'damage_dealer',
         name: 'Damage Dealer',
-        icon: '⚔️',
+        icon: baseURL + 'achievement_damage.png',
         desc: 'Deal 1,000,000 total damage',
         condition: () => gameState.totalDamageDealt >= 1000000,
         progress: () => Math.min(gameState.totalDamageDealt, 1000000),
@@ -177,7 +370,7 @@ const achievements = [
     {
         id: 'first_prestige',
         name: 'Ascension',
-        icon: '✨',
+        icon: baseURL + 'achievement_prestige.png',
         desc: 'Reach your first prestige',
         condition: () => gameState.prestigePoints >= 1,
         progress: () => Math.min(gameState.prestigePoints, 1),
@@ -188,7 +381,7 @@ const achievements = [
     {
         id: 'prestige_master',
         name: 'Prestige Master',
-        icon: '👑',
+        icon: baseURL + 'achievement_prestigemaster.png',
         desc: 'Reach 5 prestige levels',
         condition: () => gameState.prestigePoints >= 5,
         progress: () => Math.min(gameState.prestigePoints, 5),
@@ -199,7 +392,7 @@ const achievements = [
     {
         id: 'prestige_legend',
         name: 'Prestige Legend',
-        icon: '⚡',
+        icon: baseURL + 'achievement_prestigelegend.png',
         desc: 'Reach 10 prestige levels',
         condition: () => gameState.prestigePoints >= 10,
         progress: () => Math.min(gameState.prestigePoints, 10),
@@ -296,52 +489,62 @@ const biomes = [
     { 
         name: 'grass', 
         color: '#43e97b',
-        enemyType: 'Grass'
+        enemyType: 'Grass',
+        bgImage: backgroundImages.grass
     },
     { 
         name: 'desert', 
         color: '#f6d365',
-        enemyType: 'Desert'
+        enemyType: 'Desert',
+        bgImage: backgroundImages.desert
     },
     { 
         name: 'snow', 
         color: '#a1c4fd',
-        enemyType: 'Snow'
+        enemyType: 'Snow',
+        bgImage: backgroundImages.snow
     },
     { 
         name: 'lava', 
         color: '#ff9a9e',
-        enemyType: 'Lava'
+        enemyType: 'Lava',
+        bgImage: backgroundImages.lava
     },
     { 
         name: 'swamp', 
         color: '#4facfe',
-        enemyType: 'Swamp'
+        enemyType: 'Swamp',
+        bgImage: backgroundImages.swamp
     },
     { 
         name: 'ocean', 
         color: '#4facfe',
-        enemyType: 'Ocean'
+        enemyType: 'Ocean',
+        bgImage: backgroundImages.ocean
     },
     { 
         name: 'jungle', 
         color: '#43e97b',
-        enemyType: 'Jungle'
+        enemyType: 'Jungle',
+        bgImage: backgroundImages.jungle
     },
     { 
         name: 'mountain', 
         color: '#a1c4fd',
-        enemyType: 'Mountain'
+        enemyType: 'Mountain',
+        bgImage: backgroundImages.mountain
     },
     { 
         name: 'ruins', 
         color: '#f6d365',
-        enemyType: 'Ruins'
+        enemyType: 'Ruins',
+        bgImage: backgroundImages.ruins
     },
     { 
         name: 'void', 
         color: '#667eea',
-        enemyType: 'Void'
+        enemyType: 'Void',
+        bgImage: backgroundImages.void
     }
 ];
 
@@ -383,6 +586,10 @@ const crateProbabilities = {
         legendary: 10,
         ultimate: 4,
         godly: 1
+    },
+    godly_crate: {
+        ultimate: 30,
+        godly: 70
     }
 };
 
@@ -401,10 +608,24 @@ function init() {
     renderCrates();
     updatePrestigeButton();
     
+    // Oppdater UI ikoner
+    updateUIIcons();
+    
     // Start auto attack if enabled
     if (gameState.autoAttack) {
         startAutoAttack();
     }
+}
+
+function updateUIIcons() {
+    // Oppdater top resources ikoner
+    const coinIcon = document.querySelector('.resource-icon[data-type="coin"]');
+    const gemIcon = document.querySelector('.resource-icon[data-type="gem"]');
+    const starIcon = document.querySelector('.resource-icon[data-type="star"]');
+    
+    if (coinIcon) coinIcon.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
+    if (gemIcon) gemIcon.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
+    if (starIcon) starIcon.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
 }
 
 function setupEventListeners() {
@@ -629,9 +850,9 @@ function enemyDefeated() {
         
         // Vis boss loot
         showMessage('🏆 BOSS DEFEATED! 🏆', 
-            `Rewards:\n💰 +${formatNumber(coinReward)} Coins\n💎 +${gemReward} Gems` +
-            (crateReward ? `\n🎁 ${crateReward.charAt(0).toUpperCase() + crateReward.slice(1)} Crate` : '') +
-            (itemReward ? `\n✨ ${itemReward.icon} ${itemReward.name}` : '')
+            `Rewards:\n<img src="${uiIcons.coin}" style="width:16px;height:16px;"> +${formatNumber(coinReward)} Coins\n<img src="${uiIcons.gem}" style="width:16px;height:16px;"> +${gemReward} Gems` +
+            (crateReward ? `\n<img src="${crateImages[crateReward].closed}" style="width:16px;height:16px;"> ${crateReward.charAt(0).toUpperCase() + crateReward.slice(1)} Crate` : '') +
+            (itemReward ? `\n<img src="${itemReward.icon}" style="width:16px;height:16px;"> ${itemReward.name}` : '')
         );
     } else {
         // Vanlig enemy
@@ -698,8 +919,7 @@ function spawnEnemy() {
     // Update island background
     const islandBg = document.getElementById('islandBg');
     if (islandBg) {
-        // Her kan du legge til bakgrunnsbilder senere
-        // islandBg.innerHTML = `<img src="images/backgrounds/${biome.name}_bg.png">`;
+        islandBg.innerHTML = `<img src="${biome.bgImage}" style="width:100%;height:100%;object-fit:cover;">`;
     }
     
     // Update island
@@ -958,7 +1178,7 @@ function renderCrates() {
         {
             type: 'basic',
             name: 'Basic Crate',
-            icon: '📦',
+            icon: crateImages.basic.closed,
             desc: 'Common - Epic items',
             price: 10,
             odds: crateProbabilities.basic,
@@ -967,7 +1187,7 @@ function renderCrates() {
         {
             type: 'advanced',
             name: 'Advanced Crate',
-            icon: '🎁',
+            icon: crateImages.advanced.closed,
             desc: 'Rare - Legendary',
             price: 25,
             odds: crateProbabilities.advanced,
@@ -976,7 +1196,7 @@ function renderCrates() {
         {
             type: 'premium',
             name: 'Premium Crate',
-            icon: '💎',
+            icon: crateImages.premium.closed,
             desc: 'Epic - Godly',
             price: 50,
             odds: crateProbabilities.premium,
@@ -985,7 +1205,7 @@ function renderCrates() {
         {
             type: 'pet',
             name: 'Pet Crate',
-            icon: '🐾',
+            icon: crateImages.pet.closed,
             desc: 'Special pets only',
             price: 30,
             odds: crateProbabilities.pet,
@@ -994,16 +1214,25 @@ function renderCrates() {
         {
             type: 'pet_godly',
             name: 'Godly Pet Crate',
-            icon: '👑',
+            icon: crateImages.godly.closed,
             desc: 'Epic - Godly pets',
             price: 75,
             odds: crateProbabilities.pet_godly,
             class: 'pet-godly'
         },
         {
+            type: 'godly_crate',
+            name: 'Ultimate Godly Crate',
+            icon: crateImages.godly.closed,
+            desc: 'ONLY Ultimate & Godly items',
+            price: 500,
+            odds: crateProbabilities.godly_crate,
+            class: 'godly-crate'
+        },
+        {
             type: 'daily',
             name: 'Daily Crate',
-            icon: '📅',
+            icon: crateImages.basic.closed,
             desc: 'Free daily reward',
             price: 0,
             odds: crateProbabilities.daily,
@@ -1017,7 +1246,7 @@ function renderCrates() {
         
         crateCard.innerHTML = `
             <div class="crate-header">
-                <span class="crate-icon">${crate.icon}</span>
+                <img src="${crate.icon}" style="width:32px;height:32px;">
                 <span class="crate-name">${crate.name}</span>
             </div>
             <div class="crate-info">
@@ -1039,7 +1268,7 @@ function renderCrates() {
             ` : `
                 <button class="crate-btn" onclick="buyCrate('${crate.type}')">
                     <span class="crate-price">${crate.price}</span>
-                    <span class="crate-currency">💎</span>
+                    <img src="${uiIcons.gem}" style="width:16px;height:16px;vertical-align:middle;">
                 </button>
             `}
         `;
@@ -1056,6 +1285,7 @@ function buyCrate(type) {
         case 'premium': cost = 50; break;
         case 'pet': cost = 30; break;
         case 'pet_godly': cost = 75; break;
+        case 'godly_crate': cost = 500; break;
         default: return;
     }
     
@@ -1081,13 +1311,17 @@ function showSimpleCrateOpening(crateType, source = 'shop') {
     const item = openCrate(crateType, source === 'boss');
     
     // Vis enkel popup med reward
-    showMessage('🎁 CRATE OPENED!', 
-        `You got:\n${item.icon} ${item.name}\n${item.rarity.toUpperCase()}\n\n` +
-        `${item.damage ? `Damage: ${item.damage}x\n` : ''}` +
-        `${item.defense ? `Defense: ${item.defense}x\n` : ''}` +
-        `${item.bonus ? Object.entries(item.bonus).map(([key, value]) => 
-            `${key.charAt(0).toUpperCase() + key.slice(1)}: +${value}${key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%'}`
-        ).join('\n') : ''}`
+    showMessage(`<img src="${crateImages[crateType]?.open || crateImages.basic.open}" style="width:64px;height:64px;"> CRATE OPENED!`, 
+        `You got:<br>
+        <img src="${item.icon}" style="width:32px;height:32px;vertical-align:middle;"> <strong>${item.name}</strong><br>
+        <span class="rarity-badge ${item.rarity}" style="display:inline-block;padding:4px 8px;border-radius:10px;margin:5px 0;">
+            ${item.rarity.toUpperCase()}
+        </span><br><br>
+        ${item.damage ? `<img src="${uiIcons.coin}" style="width:16px;height:16px;"> Damage: ${item.damage}x<br>` : ''}
+        ${item.defense ? `<img src="${uiIcons.coin}" style="width:16px;height:16px;"> Defense: ${item.defense}x<br>` : ''}
+        ${item.bonus ? Object.entries(item.bonus).map(([key, value]) => 
+            `<img src="${key === 'coins' ? uiIcons.coin : key === 'gems' ? uiIcons.gem : uiIcons.star}" style="width:16px;height:16px;"> ${key.charAt(0).toUpperCase() + key.slice(1)}: +${value}${key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%'}<br>`
+        ).join('') : ''}`
     );
     
     // Legg til i inventory
@@ -1178,7 +1412,7 @@ function openDailyCrate() {
 function showPrestigeModal() {
     const canPrestige = gameState.level >= 10;
     if (!canPrestige) {
-        showMessage('Prestige Locked', `Reach Level 10 to prestige!\nCurrent Level: ${gameState.level}\nNeed: ${10 - gameState.level} more levels`);
+        showMessage('Prestige Locked', `Reach Level 10 to prestige!<br>Current Level: ${gameState.level}<br>Need: ${10 - gameState.level} more levels`);
         return;
     }
     
@@ -1186,22 +1420,19 @@ function showPrestigeModal() {
     const multiplierIncrease = prestigePoints * 0.1;
     const newMultiplier = 1 + multiplierIncrease;
     
-    const message = `🏆 PRESTIGE AVAILABLE! 🏆\n\n` +
-                   `Current Level: ${gameState.level}\n` +
-                   `Prestige Points: +${prestigePoints}\n` +
-                   `New Multiplier: ${newMultiplier.toFixed(1)}x\n\n` +
-                   `Prestiging will:\n` +
-                   `✓ Reset to level 1\n` +
-                   `✓ Keep Prestige Points\n` +
-                   `✓ Keep Permanent Upgrades\n` +
-                   `✓ Keep Items & Pets\n` +
-                   `✓ Keep Gems\n` +
-                   `✗ Reset Coins to 0\n` +
-                   `✗ Reset Enemies to 1\n` +
-                   `✗ Reset Difficulty\n\n` +
-                   `Do you want to prestige?`;
+    const message = `<img src="${uiIcons.star}" style="width:32px;height:32px;"> PRESTIGE AVAILABLE!<br><br>
+                   Current Level: ${gameState.level}<br>
+                   Prestige Points: +${prestigePoints}<br>
+                   New Multiplier: ${newMultiplier.toFixed(1)}x<br><br>
+                   Prestige Benefits:<br>
+                   <img src="${uiIcons.star}" style="width:16px;height:16px;"> Keep Prestige Points<br>
+                   <img src="${uiIcons.coin}" style="width:16px;height:16px;"> Keep Permanent Upgrades<br>
+                   <img src="${items.weapons[0].icon}" style="width:16px;height:16px;"> Keep Items & Pets<br>
+                   <img src="${uiIcons.gem}" style="width:16px;height:16px;"> Keep Gems<br><br>
+                   Reset: Coins to 1000, Enemies to 1<br><br>
+                   Prestige now?`;
     
-    if (confirm(message)) {
+    if (confirm(message.replace(/<br>/g, '\n'))) {
         prestige();
     }
 }
@@ -1240,11 +1471,11 @@ function prestige() {
     // Update quest progress
     updateQuestProgress('prestige', 1);
     
-    showMessage('✨ PRESTIGE COMPLETE! ✨', 
-        `You gained ${prestigePoints} Prestige Points!\n` +
-        `Total Prestige: ${gameState.prestigePoints}\n` +
-        `Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x\n\n` +
-        `Keep clicking to reach higher levels!`
+    showMessage(`<img src="${uiIcons.star}" style="width:48px;height:48px;"> PRESTIGE COMPLETE!`, 
+        `You gained ${prestigePoints} Prestige Points!<br>
+         <img src="${uiIcons.star}" style="width:24px;height:24px;"> Total Prestige: ${gameState.prestigePoints}<br>
+         Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x<br><br>
+         Keep clicking to reach higher levels!`
     );
     
     spawnEnemy();
@@ -1263,12 +1494,12 @@ function updatePrestigeButton() {
             prestigeBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
             prestigeBtn.style.animation = 'pulse 2s infinite';
             prestigeBtn.style.boxShadow = '0 0 15px gold';
-            prestigeBtn.innerHTML = `<span class="resource-icon">✨</span> PRESTIGE!`;
+            prestigeBtn.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> PRESTIGE!`;
         } else {
             prestigeBtn.style.background = 'linear-gradient(135deg, #888, #666)';
             prestigeBtn.style.animation = 'none';
             prestigeBtn.style.boxShadow = '';
-            prestigeBtn.innerHTML = `<span class="resource-icon">⭐</span> Prestige`;
+            prestigeBtn.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> Prestige`;
         }
     }
     
@@ -1289,15 +1520,15 @@ function updatePrestigeButton() {
     const prestigeRequirements = document.getElementById('prestigeRequirements');
     
     if (prestigeMultiplier) {
-        prestigeMultiplier.textContent = `Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x`;
+        prestigeMultiplier.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;"> Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x`;
     }
     
     if (prestigeRequirements) {
         if (canPrestige) {
-            prestigeRequirements.textContent = `READY! Level ${gameState.level} reached`;
+            prestigeRequirements.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> READY! Level ${gameState.level} reached`;
             prestigeRequirements.style.color = '#43e97b';
         } else {
-            prestigeRequirements.textContent = `Need Level ${10 - gameState.level} more to prestige`;
+            prestigeRequirements.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> Need Level ${10 - gameState.level} more to prestige`;
             prestigeRequirements.style.color = '#666';
         }
     }
@@ -1355,7 +1586,7 @@ function renderInventory() {
             const pet = inventory.activePet;
             activePetElement.innerHTML = `
                 <div class="pet-display">
-                    <span class="pet-icon">${pet.icon}</span>
+                    <img src="${pet.icon}" style="width:48px;height:48px;">
                     <div class="pet-details">
                         <span class="pet-name">${pet.name}</span>
                         <span class="pet-rarity ${pet.rarity}">${pet.rarity.toUpperCase()}</span>
@@ -1432,7 +1663,7 @@ function renderInventory() {
         
         div.innerHTML = `
             <div class="item-count">${itemData.count}/${itemData.level + 1}</div>
-            <div class="item-icon">${item.icon}</div>
+            <img src="${item.icon}" class="item-icon" style="width:32px;height:32px;">
             <div class="item-name">${item.name}</div>
             <div class="item-level">Level ${itemData.level}</div>
             <div class="item-rarity ${item.rarity}">${item.rarity.toUpperCase()}</div>
@@ -1546,7 +1777,7 @@ function renderAchievements() {
         div.className = `achievement-card ${completed ? 'completed' : ''} ${achievement.claimed ? 'claimed' : ''}`;
         
         div.innerHTML = `
-            <div class="achievement-icon">${achievement.icon}</div>
+            <img src="${achievement.icon}" class="achievement-icon" style="width:50px;height:50px;">
             <div class="achievement-info">
                 <div class="achievement-name">${achievement.name}</div>
                 <div class="achievement-desc">${achievement.desc}</div>
@@ -1558,15 +1789,15 @@ function renderAchievements() {
                 </div>
                 <div class="achievement-rewards">
                     ${achievement.reward.coins ? 
-                        `<div class="reward"><span>💰</span> ${achievement.reward.coins}</div>` : ''}
+                        `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${achievement.reward.coins}</div>` : ''}
                     ${achievement.reward.gems ? 
-                        `<div class="reward"><span>💎</span> ${achievement.reward.gems}</div>` : ''}
+                        `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${achievement.reward.gems}</div>` : ''}
                     ${achievement.reward.crate ? 
-                        `<div class="reward"><span>🎁</span> ${achievement.reward.crate}</div>` : ''}
+                        `<div class="reward"><img src="${crateImages[achievement.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${achievement.reward.crate}</div>` : ''}
                     ${achievement.reward.item ? 
-                        `<div class="reward"><span>✨</span> ${achievement.reward.item}</div>` : ''}
+                        `<div class="reward"><img src="${items.weapons.find(i => i.id === achievement.reward.item)?.icon || items.pets.find(i => i.id === achievement.reward.item)?.icon}" style="width:16px;height:16px;"> ${achievement.reward.item}</div>` : ''}
                     ${achievement.reward.prestige ? 
-                        `<div class="reward"><span>⭐</span> ${achievement.reward.prestige}</div>` : ''}
+                        `<div class="reward"><img src="${uiIcons.star}" style="width:16px;height:16px;"> ${achievement.reward.prestige}</div>` : ''}
                 </div>
             </div>
             <button class="achievement-claim" 
@@ -1689,15 +1920,15 @@ function createQuestCard(quest, progressPercent) {
         </div>
         <div class="quest-rewards">
             ${quest.reward.coins ? 
-                `<div class="reward"><span>💰</span> ${quest.reward.coins}</div>` : ''}
+                `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${quest.reward.coins}</div>` : ''}
             ${quest.reward.gems ? 
-                `<div class="reward"><span>💎</span> ${quest.reward.gems}</div>` : ''}
+                `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${quest.reward.gems}</div>` : ''}
             ${quest.reward.crate ? 
-                `<div class="reward"><span>🎁</span> ${quest.reward.crate}</div>` : ''}
+                `<div class="reward"><img src="${crateImages[quest.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${quest.reward.crate}</div>` : ''}
             ${quest.reward.item ? 
-                `<div class="reward"><span>✨</span> ${quest.reward.item}</div>` : ''}
+                `<div class="reward"><img src="${items.weapons.find(i => i.id === quest.reward.item)?.icon || items.pets.find(i => i.id === quest.reward.item)?.icon}" style="width:16px;height:16px;"> ${quest.reward.item}</div>` : ''}
             ${quest.reward.prestige ? 
-                `<div class="reward"><span>⭐</span> ${quest.reward.prestige}</div>` : ''}
+                `<div class="reward"><img src="${uiIcons.star}" style="width:16px;height:16px;"> ${quest.reward.prestige}</div>` : ''}
         </div>
         <button class="quest-claim" 
                 onclick="claimQuest('${quest.id}')"
@@ -1832,6 +2063,21 @@ function updateResources() {
     if (coinsEl) coinsEl.textContent = formatNumber(gameState.coins);
     if (gemsEl) gemsEl.textContent = formatNumber(gameState.gems);
     if (prestigeEl) prestigeEl.textContent = gameState.prestigePoints;
+    
+    // Oppdater ikoner
+    const coinIcon = document.querySelector('.resource-icon[data-type="coin"]');
+    const gemIcon = document.querySelector('.resource-icon[data-type="gem"]');
+    const starIcon = document.querySelector('.resource-icon[data-type="star"]');
+    
+    if (coinIcon && !coinIcon.querySelector('img')) {
+        coinIcon.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
+    }
+    if (gemIcon && !gemIcon.querySelector('img')) {
+        gemIcon.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
+    }
+    if (starIcon && !starIcon.querySelector('img')) {
+        starIcon.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
+    }
 }
 
 function formatNumber(num) {
@@ -2053,8 +2299,8 @@ function showMessage(title, text) {
     const messageText = document.getElementById('messageText');
     
     if (messageOverlay && messageTitle && messageText) {
-        messageTitle.textContent = title;
-        messageText.textContent = text;
+        messageTitle.innerHTML = title;
+        messageText.innerHTML = text;
         messageOverlay.classList.add('show');
     }
 }
