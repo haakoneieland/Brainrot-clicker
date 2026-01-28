@@ -36,34 +36,34 @@ let gameState = {
     enteredCodes: []
 };
 
-// Enemy Image URLs - Placeholder Images (Bruker Icons8 bilder)
+// DINE BILDER - Oppdatert med dine filstier
 const enemyImages = {
-    grass: 'https://img.icons8.com/color/96/000000/tree.png',
-    desert: 'https://img.icons8.com/color/96/000000/cactus.png',
-    snow: 'https://img.icons8.com/color/96/000000/snowman.png',
-    lava: 'https://img.icons8.com/color/96/000000/fire-element.png',
-    swamp: 'https://img.icons8.com/color/96/000000/frog.png',
-    ocean: 'https://img.icons8.com/color/96/000000/octopus.png',
-    jungle: 'https://img.icons8.com/color/96/000000/tiger.png',
-    mountain: 'https://img.icons8.com/color/96/000000/mountain.png',
-    ruins: 'https://img.icons8.com/color/96/000000/ancient-ruins.png',
-    void: 'https://img.icons8.com/color/96/000000/black-hole.png'
+    grass: 'gressøy.png',
+    desert: 'ørkenøy.png',
+    snow: 'snøøy.png',
+    lava: 'ildøy.png',
+    swamp: 'myrøy.png',
+    ocean: 'havøy.png',
+    jungle: 'jungeløy.png',
+    mountain: 'fjelløy.png',
+    ruins: 'ruinøy.png',
+    void: 'romøy.png'
 };
 
 const bossImages = {
-    grass: 'https://img.icons8.com/color/96/000000/dragon.png',
-    desert: 'https://img.icons8.com/color/96/000000/sand-worm.png',
-    snow: 'https://img.icons8.com/color/96/000000/yeti.png',
-    lava: 'https://img.icons8.com/color/96/000000/volcano.png',
-    swamp: 'https://img.icons8.com/color/96/000000/hydra.png',
-    ocean: 'https://img.icons8.com/color/96/000000/kraken.png',
-    jungle: 'https://img.icons8.com/color/96/000000/treant.png',
-    mountain: 'https://img.icons8.com/color/96/000000/rock-golem.png',
-    ruins: 'https://img.icons8.com/color/96/000000/mummy.png',
-    void: 'https://img.icons8.com/color/96/000000/cthulhu.png'
+    grass: 'gressøyb.png',
+    desert: 'ørkenøyb.png',
+    snow: 'snøøyb.png',
+    lava: 'ildøyb.png',
+    swamp: 'myrøyb.png',
+    ocean: 'havøyb.png',
+    jungle: 'jungeløyb.png',
+    mountain: 'fjelløyb.png',
+    ruins: 'ruinøyb.png',
+    void: 'romøyb.png'
 };
 
-// Items Database
+// Items Database - Bruker emojis som placeholders
 const items = {
     weapons: [
         { id: 'wood_sword', name: 'Wood Sword', icon: '🗡️', rarity: 'common', damage: 1.1, required: 2 },
@@ -393,7 +393,6 @@ const crateProbabilities = {
 function init() {
     loadGame();
     setupEventListeners();
-    setupSwipeNavigation();
     spawnEnemy();
     updateUI();
     startAutoSave();
@@ -409,7 +408,7 @@ function init() {
 }
 
 function setupEventListeners() {
-    // Navigation
+    // Navigation - KUN knappetrykk, ingen swipe
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const page = btn.dataset.page;
@@ -428,41 +427,19 @@ function setupEventListeners() {
     if (shopPrestigeBtn) {
         shopPrestigeBtn.addEventListener('click', showPrestigeModal);
     }
-}
-
-function setupSwipeNavigation() {
-    const pagesContainer = document.querySelector('.pages');
-    if (!pagesContainer) return;
     
-    let startX = 0;
-    let currentPage = 'fight';
-    const pageOrder = ['achievements', 'inventory', 'fight', 'shop', 'quests'];
-    
-    pagesContainer.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-    }, { passive: true });
-    
-    pagesContainer.addEventListener('touchend', (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diffX = startX - endX;
+    // Enemy touch events for mobile
+    const enemy = document.getElementById('enemy');
+    if (enemy) {
+        enemy.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            attack();
+        }, { passive: false });
         
-        if (Math.abs(diffX) > 50) {
-            const currentIndex = pageOrder.indexOf(currentPage);
-            let newIndex;
-            
-            if (diffX > 0) {
-                // Swipe left
-                newIndex = Math.min(currentIndex + 1, pageOrder.length - 1);
-            } else {
-                // Swipe right
-                newIndex = Math.max(currentIndex - 1, 0);
-            }
-            
-            if (newIndex !== currentIndex) {
-                navigateToPage(pageOrder[newIndex]);
-            }
-        }
-    }, { passive: true });
+        enemy.addEventListener('touchend', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    }
 }
 
 function navigateToPage(page) {
@@ -482,9 +459,6 @@ function navigateToPage(page) {
         }
     });
     
-    // Update current page
-    currentPage = page;
-    
     // Render specific page content
     if (page === 'achievements') {
         renderAchievements();
@@ -498,7 +472,7 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - EKSPONENSIELL VANNSKELIGHET
+// COMBAT SYSTEM
 // ======================================================
 
 function calculateDamage() {
@@ -558,7 +532,7 @@ function showDamageNumber(damage, isCrit) {
         font-weight: bold;
         font-size: ${isCrit ? '20px' : '16px'};
         text-shadow: 0 0 5px ${isCrit ? 'rgba(255,215,0,0.8)' : 'rgba(255,0,0,0.8)'};
-        z-index: 100;
+        z-index: 1000;
         pointer-events: none;
         animation: floatUp 1s ease-out forwards;
         top: 50%;
@@ -588,7 +562,7 @@ function showCritEffect() {
 function enemyDefeated() {
     const isBoss = gameState.enemyNumber === 9;
     
-    // Calculate rewards - EKSPONENSIELL ØKNING
+    // Calculate rewards
     const baseCoinReward = Math.floor(
         Math.pow(1.5, gameState.level) * 
         gameState.enemyNumber * 
@@ -603,7 +577,7 @@ function enemyDefeated() {
     
     if (isBoss) {
         // BOSS REWARDS
-        coinReward = Math.floor(coinReward * 5); // 5x mer enn vanlig
+        coinReward = Math.floor(coinReward * 5);
         gemReward = Math.floor(gameState.level * 2 * gameState.prestigeMultiplier);
         gameState.bossCleared[gameState.level] = true;
         gameState.totalBossesDefeated++;
@@ -678,7 +652,7 @@ function enemyDefeated() {
     // Legg til crate reward hvis boss ga en
     if (crateReward) {
         setTimeout(() => {
-            showCrateOpening(crateReward, 'boss');
+            showSimpleCrateOpening(crateReward, 'boss');
         }, 1500);
     }
     
@@ -707,7 +681,7 @@ function enemyDefeated() {
         gameState.enemyNumber = 1;
         gameState.maxEnemyReached = 1;
         gameState.level++;
-        // Øk difficulty EKSPONENSIELLT
+        // Øk difficulty
         gameState.difficultyMultiplier *= 1.3;
     }
     
@@ -720,6 +694,13 @@ function enemyDefeated() {
 function spawnEnemy() {
     const biomeIndex = (gameState.level - 1) % biomes.length;
     const biome = biomes[biomeIndex];
+    
+    // Update island background
+    const islandBg = document.getElementById('islandBg');
+    if (islandBg) {
+        // Her kan du legge til bakgrunnsbilder senere
+        // islandBg.innerHTML = `<img src="images/backgrounds/${biome.name}_bg.png">`;
+    }
     
     // Update island
     const island = document.getElementById('island');
@@ -775,14 +756,14 @@ function spawnEnemy() {
     const enemyCountEl = document.getElementById('enemyCount');
     if (enemyCountEl) enemyCountEl.textContent = `${gameState.enemyNumber}/9`;
     
-    // EKSPONENSIELL HP beregning
+    // HP beregning
     const baseHP = Math.pow(1.8, gameState.level) * 50 * (1 + gameState.prestigePoints * 0.2);
     const enemyMultiplier = 1 + ((gameState.enemyNumber - 1) * 0.7);
     let enemyHP = Math.floor(baseHP * enemyMultiplier * gameState.difficultyMultiplier);
     
     if (gameState.enemyNumber === 9) {
-        // BOSS - EKSPONENSIELLT vanskelig
-        enemyHP *= 8; // 8x HP for boss
+        // BOSS - ekstra HP
+        enemyHP *= 8;
     }
     
     gameState.currentEnemyHP = enemyHP;
@@ -1082,8 +1063,8 @@ function buyCrate(type) {
         gameState.gems -= cost;
         gameState.totalCratesOpened++;
         
-        // Vis crate opening animation
-        showCrateOpening(type, 'shop');
+        // Vis enkel crate opening
+        showSimpleCrateOpening(type, 'shop');
         
         updateResources();
         updateAchievements();
@@ -1093,11 +1074,108 @@ function buyCrate(type) {
 }
 
 // ======================================================
+// ENKEL CRATE OPENING (uten animasjon)
+// ======================================================
+
+function showSimpleCrateOpening(crateType, source = 'shop') {
+    const item = openCrate(crateType, source === 'boss');
+    
+    // Vis enkel popup med reward
+    showMessage('🎁 CRATE OPENED!', 
+        `You got:\n${item.icon} ${item.name}\n${item.rarity.toUpperCase()}\n\n` +
+        `${item.damage ? `Damage: ${item.damage}x\n` : ''}` +
+        `${item.defense ? `Defense: ${item.defense}x\n` : ''}` +
+        `${item.bonus ? Object.entries(item.bonus).map(([key, value]) => 
+            `${key.charAt(0).toUpperCase() + key.slice(1)}: +${value}${key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%'}`
+        ).join('\n') : ''}`
+    );
+    
+    // Legg til i inventory
+    addItemToInventory(item);
+}
+
+function openCrate(type, isBossDrop = false) {
+    const probabilities = crateProbabilities[type];
+    const roll = Math.random() * 100;
+    
+    let selectedRarity;
+    let cumulative = 0;
+    
+    for (const [rarity, chance] of Object.entries(probabilities)) {
+        cumulative += chance;
+        if (roll <= cumulative) {
+            selectedRarity = rarity;
+            break;
+        }
+    }
+    
+    // Boss drops har litt bedre odds
+    if (isBossDrop && Math.random() < 0.3) {
+        const rarities = ['common', 'rare', 'epic', 'legendary', 'ultimate', 'godly'];
+        const currentIndex = rarities.indexOf(selectedRarity);
+        if (currentIndex < rarities.length - 1) {
+            selectedRarity = rarities[currentIndex + 1];
+        }
+    }
+    
+    // Get items of selected rarity
+    let itemPool;
+    if (type === 'pet' || type === 'pet_godly') {
+        itemPool = items.pets.filter(item => item.rarity === selectedRarity);
+    } else {
+        itemPool = [
+            ...items.weapons.filter(item => item.rarity === selectedRarity),
+            ...items.armor.filter(item => item.rarity === selectedRarity),
+            ...items.artifacts.filter(item => item.rarity === selectedRarity)
+        ];
+    }
+    
+    if (itemPool.length === 0) {
+        if (type === 'pet' || type === 'pet_godly') {
+            itemPool = items.pets.filter(i => i.rarity === 'common');
+        } else {
+            itemPool = items.weapons.filter(i => i.rarity === 'common');
+        }
+    }
+    
+    return itemPool[Math.floor(Math.random() * itemPool.length)];
+}
+
+function openDailyCrate() {
+    if (!gameState.dailyCrateAvailable) {
+        return;
+    }
+    
+    gameState.dailyCrateAvailable = false;
+    gameState.lastDailyCrate = Date.now();
+    gameState.totalCratesOpened++;
+    
+    const dailyBtn = document.getElementById('dailyCrateBtn');
+    if (dailyBtn) {
+        dailyBtn.disabled = true;
+        dailyBtn.textContent = 'Claimed';
+        dailyBtn.style.opacity = '0.5';
+    }
+    
+    const dailyTimer = document.getElementById('dailyTimer');
+    if (dailyTimer) {
+        dailyTimer.textContent = 'Claimed';
+    }
+    
+    // Vis enkel crate opening
+    showSimpleCrateOpening('daily', 'daily');
+    
+    updateResources();
+    updateAchievements();
+    updateQuestProgress('crate', 1);
+    saveGame();
+}
+
+// ======================================================
 // PRESTIGE SYSTEM
 // ======================================================
 
 function showPrestigeModal() {
-    // Sjekk om spilleren kan prestiege
     const canPrestige = gameState.level >= 10;
     if (!canPrestige) {
         showMessage('Prestige Locked', `Reach Level 10 to prestige!\nCurrent Level: ${gameState.level}\nNeed: ${10 - gameState.level} more levels`);
@@ -1129,14 +1207,11 @@ function showPrestigeModal() {
 }
 
 function prestige() {
-    // Beregn prestige poeng
     const prestigePoints = Math.floor(gameState.level / 2);
     
-    // Øk prestige poeng
     gameState.prestigePoints += prestigePoints;
     gameState.prestigeMultiplier = 1 + (gameState.prestigePoints * 0.1);
     
-    // Reset spill progresjon (men behold oppgraderinger og items)
     const savedInventory = {...inventory};
     const savedDamageUpgrades = gameState.damageUpgrades;
     const savedCritUpgrades = gameState.critUpgrades;
@@ -1144,14 +1219,14 @@ function prestige() {
     const savedGems = gameState.gems;
     
     // Reset game state
-    gameState.coins = 1000; // Start med litt coins
-    gameState.gems = savedGems; // Behold gems
+    gameState.coins = 1000;
+    gameState.gems = savedGems;
     gameState.level = 1;
     gameState.enemyNumber = 1;
     gameState.maxEnemyReached = 1;
     gameState.currentEnemyHP = 100;
     gameState.maxEnemyHP = 100;
-    gameState.difficultyMultiplier = 1.0 + (gameState.prestigePoints * 0.1); // Prestige gir litt ekstra vanskelighet
+    gameState.difficultyMultiplier = 1.0 + (gameState.prestigePoints * 0.1);
     gameState.bossCleared = {};
     
     // Behold permanent upgrades
@@ -1165,7 +1240,6 @@ function prestige() {
     // Update quest progress
     updateQuestProgress('prestige', 1);
     
-    // Vis prestigemedding
     showMessage('✨ PRESTIGE COMPLETE! ✨', 
         `You gained ${prestigePoints} Prestige Points!\n` +
         `Total Prestige: ${gameState.prestigePoints}\n` +
@@ -1173,7 +1247,6 @@ function prestige() {
         `Keep clicking to reach higher levels!`
     );
     
-    // Restart spillet
     spawnEnemy();
     updateUI();
     saveGame();
@@ -1229,313 +1302,7 @@ function updatePrestigeButton() {
         }
     }
     
-    // Sjekk hvert 5. sekund
     setTimeout(updatePrestigeButton, 5000);
-}
-
-// ======================================================
-// CRATE OPENING ANIMATION SYSTEM
-// ======================================================
-
-let isCrateOpening = false;
-let currentCrateOpening = null;
-
-function showCrateOpening(crateType, source = 'shop') {
-    if (isCrateOpening) return;
-    
-    isCrateOpening = true;
-    currentCrateOpening = { type: crateType, source: source };
-    
-    const overlay = document.getElementById('crateOverlay');
-    const title = document.getElementById('crateTitle');
-    const openBtn = document.getElementById('openCrateBtn');
-    const skipBtn = document.getElementById('skipCrateBtn');
-    const resultDiv = document.getElementById('crateResult');
-    
-    if (!overlay || !title || !openBtn || !skipBtn || !resultDiv) {
-        isCrateOpening = false;
-        return;
-    }
-    
-    const crateNames = {
-        basic: 'Basic Crate',
-        advanced: 'Advanced Crate',
-        premium: 'Premium Crate',
-        pet: 'Pet Crate',
-        pet_godly: 'Godly Pet Crate',
-        daily: 'Daily Crate'
-    };
-    
-    title.textContent = crateNames[crateType] || 'Crate';
-    resultDiv.classList.remove('show');
-    resultDiv.style.display = 'none';
-    openBtn.style.display = 'block';
-    skipBtn.style.display = 'none';
-    openBtn.textContent = 'OPEN';
-    openBtn.disabled = false;
-    skipBtn.textContent = 'SKIP';
-    
-    // Setup animation
-    setupCrateAnimation(crateType);
-    
-    // Event listeners
-    openBtn.onclick = () => {
-        openCrateWithAnimation(crateType);
-    };
-    
-    skipBtn.onclick = skipCrateAnimation;
-    
-    // Show overlay
-    overlay.classList.add('show');
-}
-
-function setupCrateAnimation(crateType) {
-    const itemsScroll = document.getElementById('crateItemsScroll');
-    if (!itemsScroll) return;
-    
-    itemsScroll.innerHTML = '';
-    itemsScroll.style.transform = 'translateY(0)';
-    
-    // Create items for the animation
-    const probabilities = crateProbabilities[crateType];
-    const itemCount = 50;
-    
-    for (let i = 0; i < itemCount; i++) {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'crate-item';
-        
-        // Select a random rarity based on probabilities
-        let random = Math.random() * 100;
-        let selectedRarity = 'common';
-        
-        for (const [rarity, chance] of Object.entries(probabilities)) {
-            if (random <= chance) {
-                selectedRarity = rarity;
-                break;
-            }
-            random -= chance;
-        }
-        
-        // Get a sample item of this rarity
-        let sampleItem;
-        if (crateType === 'pet' || crateType === 'pet_godly') {
-            const rarityItems = items.pets.filter(item => item.rarity === selectedRarity);
-            sampleItem = rarityItems[Math.floor(Math.random() * rarityItems.length)] || items.pets[0];
-        } else {
-            const allItems = [...items.weapons, ...items.armor, ...items.artifacts];
-            const rarityItems = allItems.filter(item => item.rarity === selectedRarity);
-            sampleItem = rarityItems[Math.floor(Math.random() * rarityItems.length)] || allItems[0];
-        }
-        
-        itemDiv.innerHTML = `
-            <div style="font-size: 40px;">${sampleItem.icon}</div>
-            <div style="font-size: 12px; margin-top: 10px; color: ${getRarityColor(selectedRarity)}">
-                ${selectedRarity.toUpperCase()}
-            </div>
-        `;
-        itemDiv.style.color = getRarityColor(selectedRarity);
-        itemsScroll.appendChild(itemDiv);
-    }
-}
-
-function getRarityColor(rarity) {
-    const colors = {
-        common: '#888',
-        rare: '#2196F3',
-        epic: '#9C27B0',
-        legendary: '#FF9800',
-        ultimate: '#F44336',
-        godly: '#FFD700'
-    };
-    return colors[rarity] || '#888';
-}
-
-function openCrateWithAnimation(crateType) {
-    const openBtn = document.getElementById('openCrateBtn');
-    const skipBtn = document.getElementById('skipCrateBtn');
-    const itemsScroll = document.getElementById('crateItemsScroll');
-    
-    if (!openBtn || !skipBtn || !itemsScroll) return;
-    
-    openBtn.disabled = true;
-    openBtn.textContent = 'OPENING...';
-    
-    // Start animation
-    let speed = 5;
-    let position = 0;
-    let animationFrames = 0;
-    const totalFrames = 120;
-    const stopPosition = 180 * 30; // Stop at item 30 (0-indexed)
-    
-    const animate = () => {
-        position += speed;
-        itemsScroll.style.transform = `translateY(-${position}px)`;
-        
-        // Slow down gradually
-        if (animationFrames > 80) {
-            speed = Math.max(0.1, speed * 0.95);
-        }
-        
-        animationFrames++;
-        
-        if (animationFrames < totalFrames) {
-            requestAnimationFrame(animate);
-        } else {
-            // Snap to stop position
-            itemsScroll.style.transform = `translateY(-${stopPosition}px)`;
-            // Reveal result
-            revealCrateResult(crateType);
-        }
-    };
-    
-    animate();
-    
-    // Show skip button after a moment
-    setTimeout(() => {
-        skipBtn.style.display = 'block';
-    }, 800);
-}
-
-function revealCrateResult(crateType) {
-    const item = openCrate(crateType, currentCrateOpening.source === 'boss');
-    const resultDiv = document.getElementById('crateResult');
-    const openBtn = document.getElementById('openCrateBtn');
-    const skipBtn = document.getElementById('skipCrateBtn');
-    
-    if (!resultDiv || !openBtn || !skipBtn) return;
-    
-    // Skjul animation, vis resultat
-    resultDiv.style.display = 'block';
-    resultDiv.classList.add('show');
-    
-    document.getElementById('resultIcon').textContent = item.icon;
-    document.getElementById('resultName').textContent = item.name;
-    
-    const rarityElement = document.getElementById('resultRarity');
-    rarityElement.textContent = item.rarity.toUpperCase();
-    rarityElement.style.background = getRarityColor(item.rarity);
-    rarityElement.style.color = item.rarity === 'godly' ? '#000' : '#fff';
-    
-    // Beskrivelse
-    let description = '';
-    if (item.damage) description += `Damage: ${item.damage}x\n`;
-    if (item.defense) description += `Defense: ${item.defense}x\n`;
-    if (item.bonus) {
-        Object.entries(item.bonus).forEach(([key, value]) => {
-            const keyName = key.charAt(0).toUpperCase() + key.slice(1);
-            const suffix = key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%';
-            description += `${keyName}: +${value}${suffix}\n`;
-        });
-    }
-    
-    document.getElementById('resultDescription').textContent = description;
-    
-    // Oppdater knapper
-    openBtn.textContent = 'CLOSE';
-    openBtn.disabled = false;
-    openBtn.onclick = closeCrateOverlay;
-    skipBtn.style.display = 'none';
-}
-
-function openCrate(type, isBossDrop = false) {
-    const probabilities = crateProbabilities[type];
-    const roll = Math.random() * 100;
-    
-    let selectedRarity;
-    let cumulative = 0;
-    
-    for (const [rarity, chance] of Object.entries(probabilities)) {
-        cumulative += chance;
-        if (roll <= cumulative) {
-            selectedRarity = rarity;
-            break;
-        }
-    }
-    
-    // Boss drops har litt bedre odds
-    if (isBossDrop && Math.random() < 0.3) {
-        const rarities = ['common', 'rare', 'epic', 'legendary', 'ultimate', 'godly'];
-        const currentIndex = rarities.indexOf(selectedRarity);
-        if (currentIndex < rarities.length - 1) {
-            selectedRarity = rarities[currentIndex + 1];
-        }
-    }
-    
-    // Get items of selected rarity
-    let itemPool;
-    if (type === 'pet' || type === 'pet_godly') {
-        itemPool = items.pets.filter(item => item.rarity === selectedRarity);
-    } else {
-        itemPool = [
-            ...items.weapons.filter(item => item.rarity === selectedRarity),
-            ...items.armor.filter(item => item.rarity === selectedRarity),
-            ...items.artifacts.filter(item => item.rarity === selectedRarity)
-        ];
-    }
-    
-    if (itemPool.length === 0) {
-        if (type === 'pet' || type === 'pet_godly') {
-            itemPool = items.pets.filter(i => i.rarity === 'common');
-        } else {
-            itemPool = items.weapons.filter(i => i.rarity === 'common');
-        }
-    }
-    
-    const item = itemPool[Math.floor(Math.random() * itemPool.length)];
-    
-    // Add to inventory
-    addItemToInventory(item);
-    
-    return item;
-}
-
-function skipCrateAnimation() {
-    const crateType = currentCrateOpening.type;
-    revealCrateResult(crateType);
-}
-
-function closeCrateOverlay() {
-    const overlay = document.getElementById('crateOverlay');
-    if (overlay) {
-        overlay.classList.remove('show');
-    }
-    isCrateOpening = false;
-    currentCrateOpening = null;
-    
-    // Oppdater inventory hvis vi er på den siden
-    if (document.querySelector('.inventory-page.active')) {
-        renderInventory();
-    }
-}
-
-function openDailyCrate() {
-    if (!gameState.dailyCrateAvailable) {
-        return;
-    }
-    
-    gameState.dailyCrateAvailable = false;
-    gameState.lastDailyCrate = Date.now();
-    gameState.totalCratesOpened++;
-    
-    const dailyBtn = document.getElementById('dailyCrateBtn');
-    if (dailyBtn) {
-        dailyBtn.disabled = true;
-        dailyBtn.textContent = 'Claimed';
-        dailyBtn.style.opacity = '0.5';
-    }
-    
-    const dailyTimer = document.getElementById('dailyTimer');
-    if (dailyTimer) {
-        dailyTimer.textContent = 'Claimed';
-    }
-    
-    // Vis crate opening animation
-    showCrateOpening('daily', 'daily');
-    
-    updateResources();
-    updateAchievements();
-    updateQuestProgress('crate', 1);
-    saveGame();
 }
 
 // ======================================================
@@ -1724,7 +1491,6 @@ function removePet() {
 }
 
 function upgradeItem(itemId) {
-    // Find item in inventory
     let itemData;
     let category;
     
@@ -1815,7 +1581,6 @@ function renderAchievements() {
 }
 
 function updateAchievements() {
-    // Check for newly completed achievements
     let newlyCompleted = false;
     achievements.forEach(achievement => {
         if (!achievement.claimed && achievement.condition()) {
@@ -1823,7 +1588,6 @@ function updateAchievements() {
         }
     });
     
-    // Re-render if on achievements page
     if (document.querySelector('.achievements-page.active')) {
         renderAchievements();
     }
@@ -1847,7 +1611,7 @@ function claimAchievement(achievementId) {
         gameState.prestigeMultiplier = 1 + (gameState.prestigePoints * 0.1);
     }
     if (achievement.reward.crate) {
-        showCrateOpening(achievement.reward.crate, 'achievement');
+        showSimpleCrateOpening(achievement.reward.crate, 'achievement');
     }
     if (achievement.reward.item) {
         const item = [...items.weapons, ...items.armor, ...items.pets, ...items.artifacts]
@@ -2020,7 +1784,7 @@ function claimQuest(questId) {
         gameState.gems += quest.reward.gems;
     }
     if (quest.reward.crate) {
-        showCrateOpening(quest.reward.crate, 'quest');
+        showSimpleCrateOpening(quest.reward.crate, 'quest');
     }
     if (quest.reward.item) {
         const item = [...items.weapons, ...items.armor, ...items.pets, ...items.artifacts]
@@ -2051,12 +1815,10 @@ function updateUI() {
     updateEnemyHP();
     updatePrestigeButton();
     
-    // Update stats in inventory if active
     if (document.querySelector('.inventory-page.active')) {
         renderInventory();
     }
     
-    // Update shop if active
     if (document.querySelector('.shop-page.active')) {
         updateShop();
     }
@@ -2107,13 +1869,11 @@ function checkDailyReset() {
             dailyBtn.style.opacity = '1';
         }
         
-        // Reset timer display
         const timerElement = document.querySelector('.daily-timer');
         if (timerElement) {
             timerElement.textContent = 'Available';
         }
     } else {
-        // Calculate time until next daily
         const nextDaily = lastDaily + oneDay;
         const timeLeft = nextDaily - now;
         const hours = Math.floor(timeLeft / (60 * 60 * 1000));
@@ -2169,14 +1929,14 @@ function saveGame() {
     };
     
     try {
-        localStorage.setItem('islandClickerSave', JSON.stringify(saveData));
+        localStorage.setItem('brainrotClickerSave', JSON.stringify(saveData));
     } catch (e) {
         console.error('Failed to save game:', e);
     }
 }
 
 function loadGame() {
-    const saved = localStorage.getItem('islandClickerSave');
+    const saved = localStorage.getItem('brainrotClickerSave');
     if (saved) {
         try {
             const data = JSON.parse(saved);
@@ -2278,7 +2038,7 @@ function resetGame() {
             });
         });
         
-        localStorage.removeItem('islandClickerSave');
+        localStorage.removeItem('brainrotClickerSave');
         location.reload();
     }
 }
@@ -2305,26 +2065,6 @@ function closeMessage() {
         messageOverlay.classList.remove('show');
     }
 }
-
-// ======================================================
-// ANIMATIONS
-// ======================================================
-
-// Legg til floatUp animasjon i CSS
-const style = document.createElement('style');
-style.textContent = `
-@keyframes floatUp {
-    0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(-50%, -150%) scale(1);
-        opacity: 0;
-    }
-}
-`;
-document.head.appendChild(style);
 
 // ======================================================
 // INITIALIZE GAME
@@ -2356,3 +2096,4 @@ window.removePet = removePet;
 window.equipPet = equipPet;
 window.showPrestigeModal = showPrestigeModal;
 window.closeMessage = closeMessage;
+window.showSimpleCrateOpening = showSimpleCrateOpening;
