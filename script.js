@@ -39,88 +39,86 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for øyer (500x800 px)
+// Bakgrunnsbilder for øyer
 const backgroundImages = {
-    grass: baseURL + 'grass_bg.png',
-    desert: baseURL + 'desert_bg.png',
-    snow: baseURL + 'snow_bg.png',
-    lava: baseURL + 'lava_bg.png',
-    swamp: baseURL + 'swamp_bg.png',
-    ocean: baseURL + 'ocean_bg.png',
-    jungle: baseURL + 'jungle_bg.png',
-    mountain: baseURL + 'mountain_bg.png',
-    ruins: baseURL + 'ruins_bg.png',
-    void: baseURL + 'void_bg.png'
+    grass: baseURL + 'Bakgrunn1.png.PNG',
+    desert: baseURL + 'Bakgrunn2.png.PNG',
+    snow: baseURL + 'Bakgrunn3.png.PNG',
+    lava: baseURL + 'Bakgrunn4.png.PNG',
+    swamp: baseURL + 'Bakgrunn5.png.PNG',
+    ocean: baseURL + 'Bakgrunn6.png.PNG',
+    jungle: baseURL + 'Bakgrunn7.png.PNG',
+    mountain: baseURL + 'Bakgrunn8.png.PNG',
+    ruins: baseURL + 'Bakgrunn9.png.PNG',
+    void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
 // Fiende-bilder
 const enemyImages = {
-    grass: baseURL + 'gressøy.png',
-    desert: baseURL + 'ørkenøy.png',
-    snow: baseURL + 'snøøy.png',
-    lava: baseURL + 'ildøy.png',
-    swamp: baseURL + 'myrøy.png',
-    ocean: baseURL + 'havøy.png',
-    jungle: baseURL + 'jungeløy.png',
-    mountain: baseURL + 'fjelløy.png',
-    ruins: baseURL + 'ruinøy.png',
-    void: baseURL + 'romøy.png'
+    grass: baseURL + 'Gressøy.png.PNG',
+    desert: baseURL + 'Ørkenøy.png.PNG',
+    snow: baseURL + 'Snøøy.png.PNG',
+    lava: baseURL + 'Flammeøy.png.PNG',
+    swamp: baseURL + 'Svampøy.png.PNG',
+    ocean: baseURL + 'Havøy.png.PNG',
+    jungle: baseURL + 'Jungeløy.png.PNG',
+    mountain: baseURL + 'Fjelløy.png.PNG',
+    ruins: baseURL + 'Ruiner.png.PNG',
+    void: baseURL + 'Voidøy.png.PNG'
 };
 
 // Boss-bilder
 const bossImages = {
-    grass: baseURL + 'gressøyb.png',
-    desert: baseURL + 'ørkenøyb.png',
-    snow: baseURL + 'snøøyb.png',
-    lava: baseURL + 'ildøyb.png',
-    swamp: baseURL + 'myrøyb.png',
-    ocean: baseURL + 'havøyb.png',
-    jungle: baseURL + 'jungeløyb.png',
-    mountain: baseURL + 'fjelløyb.png',
-    ruins: baseURL + 'ruinøyb.png',
-    void: baseURL + 'romøyb.png'
+    grass: baseURL + 'Gressøyb.png.PNG',
+    desert: baseURL + 'Ørkenøyb.png.PNG',
+    snow: baseURL + 'Snøøyb.png.PNG',
+    lava: baseURL + 'Flammeøyb.png.PNG',
+    swamp: baseURL + 'Svampøyb.png.PNG',
+    ocean: baseURL + 'Havøyb.png.PNG',
+    jungle: baseURL + 'Jungeløyb.png.PNG',
+    mountain: baseURL + 'Fjelløyb.png.PNG',
+    ruins: baseURL + 'Ruinerb.png.PNG',
+    void: baseURL + 'Voidøyb.png.PNG'
 };
 
 // UI Ikoner - DINE BILDER
 const uiIcons = {
-    coin: baseURL + 'coin.png',
-    gem: baseURL + 'diamond.png',
-    star: baseURL + 'star.png',
-    crateClosed: baseURL + 'crate_closed.png',
-    crateOpen: baseURL + 'crate_open.png'
+    coin: baseURL + 'Coin.png.PNG',
+    gem: baseURL + 'Diamond.png.PNG',
+    star: baseURL + 'Star.png.PNG'
 };
 
-// Crate-bilder for forskjellige rarities
+// Crate-bilder
 const crateImages = {
     basic: {
-        closed: baseURL + 'crate_basic_closed.png',
-        open: baseURL + 'crate_basic_open.png'
+        closed: baseURL + 'Basiccrate.png.PNG',
+        open: baseURL + 'Basiccrateåpen.png.PNG'
     },
     advanced: {
-        closed: baseURL + 'crate_advanced_closed.png',
-        open: baseURL + 'crate_advanced_open.png'
+        closed: baseURL + 'Advancedcrate.png.PNG',
+        open: baseURL + 'Advancedcrateåpen.png.PNG'
     },
     premium: {
-        closed: baseURL + 'crate_premium_closed.png',
-        open: baseURL + 'crate_premium_open.png'
+        closed: baseURL + 'Premiumcrate.png.PNG',
+        open: baseURL + 'Premiumcrateåpen.png.PNG'
     },
     pet: {
-        closed: baseURL + 'crate_pet_closed.png',
-        open: baseURL + 'crate_pet_open.png'
+        closed: baseURL + 'Petcrate.png.PNG',
+        open: baseURL + 'Petcrateåpen.png.PNG'
     },
     godly: {
-        closed: baseURL + 'crate_godly_closed.png',
-        open: baseURL + 'crate_godly_open.png'
+        closed: baseURL + 'Godlycrate.png.PNG',
+        open: baseURL + 'Godlycrateåpen.png.PNG'
     }
 };
 
-// Items Database - MED BILDE-URL-ER
+// Items Database
 const items = {
     weapons: [
         { 
             id: 'wood_sword', 
             name: 'Wood Sword', 
-            icon: baseURL + 'wood_sword.png',
+            icon: baseURL + 'Woodensword.png.PNG',
             rarity: 'common', 
             damage: 1.1, 
             required: 2 
@@ -128,7 +126,7 @@ const items = {
         { 
             id: 'iron_sword', 
             name: 'Iron Sword', 
-            icon: baseURL + 'iron_sword.png',
+            icon: baseURL + 'Ironsword.png.PNG',
             rarity: 'rare', 
             damage: 1.3, 
             required: 3 
@@ -136,7 +134,7 @@ const items = {
         { 
             id: 'steel_sword', 
             name: 'Steel Sword', 
-            icon: baseURL + 'steel_sword.png',
+            icon: baseURL + 'Steelsword.png.PNG',
             rarity: 'epic', 
             damage: 1.6, 
             required: 4 
@@ -144,7 +142,7 @@ const items = {
         { 
             id: 'dragon_sword', 
             name: 'Dragon Sword', 
-            icon: baseURL + 'dragon_sword.png',
+            icon: baseURL + 'Dragonsword.png.PNG',
             rarity: 'legendary', 
             damage: 2.0, 
             required: 5 
@@ -152,7 +150,7 @@ const items = {
         { 
             id: 'excalibur', 
             name: 'Excalibur', 
-            icon: baseURL + 'excalibur.png',
+            icon: baseURL + 'Excalibur.png.PNG',
             rarity: 'ultimate', 
             damage: 3.0, 
             required: 6 
@@ -160,7 +158,7 @@ const items = {
         { 
             id: 'godslayer', 
             name: 'Godslayer', 
-            icon: baseURL + 'godslayer.png',
+            icon: baseURL + 'Godslayer.png.PNG',
             rarity: 'godly', 
             damage: 5.0, 
             required: 8 
@@ -170,7 +168,7 @@ const items = {
         { 
             id: 'leather_armor', 
             name: 'Leather Armor', 
-            icon: baseURL + 'wooden_armor.png', // Bruker wooden_armor.png som leather
+            icon: baseURL + 'Woodenarmour.png.PNG',
             rarity: 'common', 
             defense: 1.1, 
             required: 2 
@@ -178,7 +176,7 @@ const items = {
         { 
             id: 'chainmail', 
             name: 'Chainmail', 
-            icon: baseURL + 'chainmail.png',
+            icon: baseURL + 'Chainmail.png.PNG',
             rarity: 'rare', 
             defense: 1.2, 
             required: 3 
@@ -186,7 +184,7 @@ const items = {
         { 
             id: 'plate_armor', 
             name: 'Plate Armor', 
-            icon: baseURL + 'plate_armor.png',
+            icon: baseURL + 'Platearmour.png.PNG',
             rarity: 'epic', 
             defense: 1.4, 
             required: 4 
@@ -194,7 +192,7 @@ const items = {
         { 
             id: 'dragon_armor', 
             name: 'Dragon Armor', 
-            icon: baseURL + 'dragon_armor.png',
+            icon: baseURL + 'Dragonarmour.png.PNG',
             rarity: 'legendary', 
             defense: 1.8, 
             required: 5 
@@ -204,42 +202,42 @@ const items = {
         { 
             id: 'cat', 
             name: 'Lucky Cat', 
-            icon: baseURL + 'cat.png',
+            icon: baseURL + 'Luckycat.png.PNG',
             rarity: 'common', 
             bonus: { coins: 1.1 } 
         },
         { 
             id: 'dog', 
             name: 'Guard Dog', 
-            icon: baseURL + 'dog.png',
+            icon: baseURL + 'Guarddog.png.PNG',
             rarity: 'rare', 
             bonus: { damage: 1.1 } 
         },
         { 
             id: 'owl', 
             name: 'Wise Owl', 
-            icon: baseURL + 'owl.png',
+            icon: baseURL + 'Wiseowl.png.PNG',
             rarity: 'epic', 
             bonus: { crit: 5, auto: 1 } 
         },
         { 
             id: 'dragon', 
             name: 'Baby Dragon', 
-            icon: baseURL + 'baby_dragon.png',
+            icon: baseURL + 'Babydrage.png.PNG',
             rarity: 'legendary', 
             bonus: { damage: 1.3, crit: 10 } 
         },
         { 
             id: 'phoenix', 
             name: 'Phoenix', 
-            icon: baseURL + 'phoenix.png',
+            icon: baseURL + 'Fønix.png.PNG',
             rarity: 'ultimate', 
             bonus: { damage: 1.5, auto: 5, gems: 1.2 } 
         },
         { 
             id: 'unicorn', 
             name: 'Unicorn', 
-            icon: baseURL + 'unicorn.png',
+            icon: baseURL + 'Uinicorn.png.PNG',
             rarity: 'godly', 
             bonus: { damage: 2.0, crit: 15, coins: 1.5, gems: 1.5 } 
         }
@@ -248,42 +246,42 @@ const items = {
         { 
             id: 'lucky_coin', 
             name: 'Lucky Coin', 
-            icon: baseURL + 'lucky_coin.png',
+            icon: baseURL + 'Luckycoin.png.PNG',
             rarity: 'common', 
             bonus: { coins: 1.05 } 
         },
         { 
             id: 'crit_gem', 
             name: 'Crit Gem', 
-            icon: baseURL + 'crit_gem.png',
+            icon: baseURL + 'Critgem.png.PNG',
             rarity: 'rare', 
             bonus: { crit: 3 } 
         },
         { 
             id: 'damage_orb', 
             name: 'Damage Orb', 
-            icon: baseURL + 'damage_orb.png',
+            icon: baseURL + 'Damageorb.png.PNG',
             rarity: 'epic', 
             bonus: { damage: 1.2 } 
         },
         { 
             id: 'auto_core', 
             name: 'Auto Core', 
-            icon: baseURL + 'auto_core.png',
+            icon: baseURL + 'Autocore.png.PNG',
             rarity: 'legendary', 
             bonus: { auto: 10 } 
         },
         { 
             id: 'boss_trophy', 
             name: 'Boss Trophy', 
-            icon: baseURL + 'boss_trophy.png',
+            icon: baseURL + 'Bosstropthy.png.PNG',
             rarity: 'ultimate', 
             bonus: { damage: 1.5, crit: 10 } 
         },
         { 
             id: 'divine_relic', 
             name: 'Divine Relic', 
-            icon: baseURL + 'divine_relic.png',
+            icon: baseURL + 'Divinerelic.png.PNG',
             rarity: 'godly', 
             bonus: { damage: 2.0, crit: 20, coins: 1.5, gems: 1.5 } 
         }
@@ -299,12 +297,12 @@ let inventory = {
     activePet: null
 };
 
-// Achievements System - MED BILDE-ICONS
+// Achievements System
 const achievements = [
     {
         id: 'first_kill',
         name: 'First Blood',
-        icon: baseURL + 'achievement_firstblood.png',
+        icon: '🩸',
         desc: 'Defeat your first enemy',
         condition: () => gameState.totalEnemiesDefeated >= 1,
         progress: () => Math.min(gameState.totalEnemiesDefeated, 1),
@@ -315,7 +313,7 @@ const achievements = [
     {
         id: 'first_boss',
         name: 'Boss Slayer',
-        icon: baseURL + 'achievement_boss.png',
+        icon: '👹',
         desc: 'Defeat your first boss',
         condition: () => gameState.totalBossesDefeated >= 1,
         progress: () => Math.min(gameState.totalBossesDefeated, 1),
@@ -326,7 +324,7 @@ const achievements = [
     {
         id: 'boss_master',
         name: 'Boss Master',
-        icon: baseURL + 'achievement_bossmaster.png',
+        icon: '👑',
         desc: 'Defeat 10 bosses',
         condition: () => gameState.totalBossesDefeated >= 10,
         progress: () => Math.min(gameState.totalBossesDefeated, 10),
@@ -337,7 +335,7 @@ const achievements = [
     {
         id: 'millionaire',
         name: 'Millionaire',
-        icon: baseURL + 'achievement_millionaire.png',
+        icon: '💰',
         desc: 'Collect 1,000,000 coins',
         condition: () => gameState.coins >= 1000000,
         progress: () => Math.min(gameState.coins, 1000000),
@@ -348,56 +346,12 @@ const achievements = [
     {
         id: 'crate_collector',
         name: 'Crate Collector',
-        icon: baseURL + 'achievement_crate.png',
+        icon: '🎁',
         desc: 'Open 50 crates',
         condition: () => gameState.totalCratesOpened >= 50,
         progress: () => Math.min(gameState.totalCratesOpened, 50),
         total: 50,
         reward: { gems: 50, crate: 'pet_godly', item: 'phoenix' },
-        claimed: false
-    },
-    {
-        id: 'damage_dealer',
-        name: 'Damage Dealer',
-        icon: baseURL + 'achievement_damage.png',
-        desc: 'Deal 1,000,000 total damage',
-        condition: () => gameState.totalDamageDealt >= 1000000,
-        progress: () => Math.min(gameState.totalDamageDealt, 1000000),
-        total: 1000000,
-        reward: { coins: 5000, gems: 20, item: 'damage_orb' },
-        claimed: false
-    },
-    {
-        id: 'first_prestige',
-        name: 'Ascension',
-        icon: baseURL + 'achievement_prestige.png',
-        desc: 'Reach your first prestige',
-        condition: () => gameState.prestigePoints >= 1,
-        progress: () => Math.min(gameState.prestigePoints, 1),
-        total: 1,
-        reward: { gems: 50, crate: 'premium' },
-        claimed: false
-    },
-    {
-        id: 'prestige_master',
-        name: 'Prestige Master',
-        icon: baseURL + 'achievement_prestigemaster.png',
-        desc: 'Reach 5 prestige levels',
-        condition: () => gameState.prestigePoints >= 5,
-        progress: () => Math.min(gameState.prestigePoints, 5),
-        total: 5,
-        reward: { gems: 100, crate: 'pet_godly', item: 'divine_relic' },
-        claimed: false
-    },
-    {
-        id: 'prestige_legend',
-        name: 'Prestige Legend',
-        icon: baseURL + 'achievement_prestigelegend.png',
-        desc: 'Reach 10 prestige levels',
-        condition: () => gameState.prestigePoints >= 10,
-        progress: () => Math.min(gameState.prestigePoints, 10),
-        total: 10,
-        reward: { gems: 250, prestige: 1, crate: 'premium' },
         claimed: false
     }
 ];
@@ -428,18 +382,6 @@ const quests = {
             reward: { gems: 3, crate: 'basic' },
             completed: false,
             claimed: false
-        },
-        {
-            id: 'daily_crate_3',
-            title: 'Crate Opener',
-            desc: 'Open 3 crates',
-            difficulty: 'hard',
-            type: 'crate',
-            progress: 0,
-            total: 3,
-            reward: { coins: 1000, gems: 1 },
-            completed: false,
-            claimed: false
         }
     ],
     weekly: [
@@ -452,32 +394,6 @@ const quests = {
             progress: 0,
             total: 200,
             reward: { coins: 5000, gems: 10, crate: 'advanced' },
-            completed: false,
-            claimed: false
-        },
-        {
-            id: 'weekly_boss_5',
-            title: 'Boss Exterminator',
-            desc: 'Defeat 5 bosses',
-            difficulty: 'insane',
-            type: 'boss',
-            progress: 0,
-            total: 5,
-            reward: { coins: 10000, gems: 25, crate: 'premium' },
-            completed: false,
-            claimed: false
-        }
-    ],
-    special: [
-        {
-            id: 'special_prestige',
-            title: 'Ascension',
-            desc: 'Reach prestige level 5',
-            difficulty: 'insane',
-            type: 'prestige',
-            progress: 0,
-            total: 5,
-            reward: { coins: 50000, gems: 100, prestige: 5, crate: 'premium' },
             completed: false,
             claimed: false
         }
@@ -573,20 +489,6 @@ const crateProbabilities = {
         legendary: 4,
         ultimate: 1
     },
-    pet_godly: {
-        epic: 20,
-        legendary: 40,
-        ultimate: 30,
-        godly: 10
-    },
-    daily: {
-        common: 40,
-        rare: 25,
-        epic: 20,
-        legendary: 10,
-        ultimate: 4,
-        godly: 1
-    },
     godly_crate: {
         ultimate: 30,
         godly: 70
@@ -608,28 +510,14 @@ function init() {
     renderCrates();
     updatePrestigeButton();
     
-    // Oppdater UI ikoner
-    updateUIIcons();
-    
     // Start auto attack if enabled
     if (gameState.autoAttack) {
         startAutoAttack();
     }
 }
 
-function updateUIIcons() {
-    // Oppdater top resources ikoner
-    const coinIcon = document.querySelector('.resource-icon[data-type="coin"]');
-    const gemIcon = document.querySelector('.resource-icon[data-type="gem"]');
-    const starIcon = document.querySelector('.resource-icon[data-type="star"]');
-    
-    if (coinIcon) coinIcon.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
-    if (gemIcon) gemIcon.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
-    if (starIcon) starIcon.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
-}
-
 function setupEventListeners() {
-    // Navigation - KUN knappetrykk, ingen swipe
+    // Navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const page = btn.dataset.page;
@@ -649,16 +537,12 @@ function setupEventListeners() {
         shopPrestigeBtn.addEventListener('click', showPrestigeModal);
     }
     
-    // Enemy touch events for mobile
+    // Enemy touch events
     const enemy = document.getElementById('enemy');
     if (enemy) {
         enemy.addEventListener('touchstart', (e) => {
             e.preventDefault();
             attack();
-        }, { passive: false });
-        
-        enemy.addEventListener('touchend', (e) => {
-            e.preventDefault();
         }, { passive: false });
     }
 }
@@ -794,7 +678,6 @@ function enemyDefeated() {
     let coinReward = Math.floor(baseCoinReward / gameState.difficultyMultiplier);
     let gemReward = 0;
     let crateReward = null;
-    let itemReward = null;
     
     if (isBoss) {
         // BOSS REWARDS
@@ -805,36 +688,7 @@ function enemyDefeated() {
         
         // Boss har 50% sjanse for crate drop
         if (Math.random() < 0.5) {
-            const crateRoll = Math.random();
-            if (crateRoll < 0.6) {
-                crateReward = 'basic';
-            } else if (crateRoll < 0.85) {
-                crateReward = 'advanced';
-            } else {
-                crateReward = 'premium';
-            }
-        }
-        
-        // Boss har 15% sjanse for item drop
-        if (Math.random() < 0.15) {
-            const itemRoll = Math.random();
-            const allItems = [...items.weapons, ...items.armor, ...items.artifacts];
-            let rarity;
-            
-            if (itemRoll < 0.6) {
-                rarity = 'rare';
-            } else if (itemRoll < 0.85) {
-                rarity = 'epic';
-            } else if (itemRoll < 0.95) {
-                rarity = 'legendary';
-            } else {
-                rarity = 'ultimate';
-            }
-            
-            const rarityItems = allItems.filter(item => item.rarity === rarity);
-            if (rarityItems.length > 0) {
-                itemReward = rarityItems[Math.floor(Math.random() * rarityItems.length)];
-            }
+            crateReward = 'basic';
         }
         
         // Clear boss timer
@@ -850,9 +704,10 @@ function enemyDefeated() {
         
         // Vis boss loot
         showMessage('🏆 BOSS DEFEATED! 🏆', 
-            `Rewards:\n<img src="${uiIcons.coin}" style="width:16px;height:16px;"> +${formatNumber(coinReward)} Coins\n<img src="${uiIcons.gem}" style="width:16px;height:16px;"> +${gemReward} Gems` +
-            (crateReward ? `\n<img src="${crateImages[crateReward].closed}" style="width:16px;height:16px;"> ${crateReward.charAt(0).toUpperCase() + crateReward.slice(1)} Crate` : '') +
-            (itemReward ? `\n<img src="${itemReward.icon}" style="width:16px;height:16px;"> ${itemReward.name}` : '')
+            `Rewards:<br>
+            <img src="${uiIcons.coin}" style="width:16px;height:16px;"> +${formatNumber(coinReward)} Coins<br>
+            <img src="${uiIcons.gem}" style="width:16px;height:16px;"> +${gemReward} Gems` +
+            (crateReward ? `<br><img src="${crateImages[crateReward].closed}" style="width:16px;height:16px;"> ${crateReward} Crate` : '')
         );
     } else {
         // Vanlig enemy
@@ -877,13 +732,6 @@ function enemyDefeated() {
         }, 1500);
     }
     
-    // Legg til item reward hvis boss ga en
-    if (itemReward) {
-        setTimeout(() => {
-            addItemToInventory(itemReward);
-        }, 2000);
-    }
-    
     // Update quest progress
     updateQuestProgress('kill', 1);
     updateQuestProgress('coins', coinReward);
@@ -902,7 +750,6 @@ function enemyDefeated() {
         gameState.enemyNumber = 1;
         gameState.maxEnemyReached = 1;
         gameState.level++;
-        // Øk difficulty
         gameState.difficultyMultiplier *= 1.3;
     }
     
@@ -936,11 +783,9 @@ function spawnEnemy() {
         const isBoss = gameState.enemyNumber === 9;
         
         if (isBoss) {
-            // Bruk boss bilde
             enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Boss`;
             
-            // Legg til boss klasse
             const enemy = document.getElementById('enemy');
             if (enemy) {
                 enemy.classList.add('boss-indicator', 'boss-enhanced');
@@ -951,11 +796,9 @@ function spawnEnemy() {
             if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
             startBossTimer();
         } else {
-            // Bruk vanlig fiende bilde
             enemyImage.src = enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Enemy`;
             
-            // Fjern boss klasse
             const enemy = document.getElementById('enemy');
             if (enemy) {
                 enemy.classList.remove('boss-indicator', 'boss-enhanced');
@@ -982,7 +825,6 @@ function spawnEnemy() {
     let enemyHP = Math.floor(baseHP * enemyMultiplier * gameState.difficultyMultiplier);
     
     if (gameState.enemyNumber === 9) {
-        // BOSS - ekstra HP
         enemyHP *= 8;
     }
     
@@ -1024,7 +866,6 @@ function updateEnemyHP() {
     if (hpFill) hpFill.style.width = `${Math.max(0, hpPercent)}%`;
     if (hpText) hpText.textContent = `${formatNumber(gameState.currentEnemyHP)}/${formatNumber(gameState.maxEnemyHP)} (${Math.floor(hpPercent)}%)`;
     
-    // Endre farge basert på HP
     if (hpFill) {
         if (hpPercent > 50) {
             hpFill.style.background = 'linear-gradient(90deg, #43e97b, #38f9d7)';
@@ -1050,7 +891,6 @@ function startBossTimer() {
         if (gameState.bossTimer <= 0) {
             clearInterval(gameState.bossTimerInterval);
             gameState.bossTimerInterval = null;
-            // Boss timed out - reset to regular enemy
             gameState.enemyNumber = 1;
             spawnEnemy();
             showMessage('⏰ TIME\'S UP!', 'The boss escaped! Try again next time.');
@@ -1064,7 +904,6 @@ function updateBossTimer() {
     
     timerElement.textContent = `${gameState.bossTimer}s`;
     
-    // Change color based on time
     if (gameState.bossTimer <= 10) {
         timerElement.style.color = '#ff4444';
         timerElement.style.animation = 'pulse 0.5s infinite';
@@ -1082,7 +921,6 @@ function updateBossTimer() {
 // ======================================================
 
 function updateUpgradeCosts() {
-    // Damage upgrade cost
     const damageCost = Math.floor(100 * Math.pow(1.4, gameState.damageUpgrades));
     const damageCostEl = document.getElementById('damageCost');
     const currentDamageEl = document.getElementById('currentDamage');
@@ -1090,7 +928,6 @@ function updateUpgradeCosts() {
     if (damageCostEl) damageCostEl.textContent = formatNumber(damageCost);
     if (currentDamageEl) currentDamageEl.textContent = gameState.baseDamagePerClick + (gameState.damageUpgrades * 2);
     
-    // Crit upgrade cost
     const critCost = Math.floor(250 * Math.pow(1.5, gameState.critUpgrades));
     const critCostEl = document.getElementById('critCost');
     const currentCritEl = document.getElementById('currentCrit');
@@ -1098,7 +935,6 @@ function updateUpgradeCosts() {
     if (critCostEl) critCostEl.textContent = formatNumber(critCost);
     if (currentCritEl) currentCritEl.textContent = gameState.critChance + gameState.critUpgrades;
     
-    // Auto upgrade cost
     const autoCost = Math.floor(500 * Math.pow(1.6, gameState.autoUpgrades));
     const autoCostEl = document.getElementById('autoCost');
     const currentAutoEl = document.getElementById('currentAuto');
@@ -1141,7 +977,6 @@ function buyAutoUpgrade() {
         updateUpgradeCosts();
         updateResources();
         
-        // Start auto attack if not already running
         if (!gameState.autoAttackInterval) {
             startAutoAttack();
         }
@@ -1203,40 +1038,13 @@ function renderCrates() {
             class: 'premium'
         },
         {
-            type: 'pet',
-            name: 'Pet Crate',
-            icon: crateImages.pet.closed,
-            desc: 'Special pets only',
-            price: 30,
-            odds: crateProbabilities.pet,
-            class: 'pet'
-        },
-        {
-            type: 'pet_godly',
-            name: 'Godly Pet Crate',
-            icon: crateImages.godly.closed,
-            desc: 'Epic - Godly pets',
-            price: 75,
-            odds: crateProbabilities.pet_godly,
-            class: 'pet-godly'
-        },
-        {
             type: 'godly_crate',
-            name: 'Ultimate Godly Crate',
+            name: 'Godly Crate',
             icon: crateImages.godly.closed,
             desc: 'ONLY Ultimate & Godly items',
             price: 500,
             odds: crateProbabilities.godly_crate,
             class: 'godly-crate'
-        },
-        {
-            type: 'daily',
-            name: 'Daily Crate',
-            icon: crateImages.basic.closed,
-            desc: 'Free daily reward',
-            price: 0,
-            odds: crateProbabilities.daily,
-            class: 'daily'
         }
     ];
     
@@ -1260,17 +1068,10 @@ function renderCrates() {
                     `).join('')}
                 </div>
             </div>
-            ${crate.type === 'daily' ? `
-                <button class="crate-btn daily-btn" id="dailyCrateBtn" onclick="openDailyCrate()" ${!gameState.dailyCrateAvailable ? 'disabled' : ''}>
-                    <span class="crate-price">FREE</span>
-                </button>
-                <div class="daily-timer" id="dailyTimer">${gameState.dailyCrateAvailable ? 'Available' : 'Claimed'}</div>
-            ` : `
-                <button class="crate-btn" onclick="buyCrate('${crate.type}')">
-                    <span class="crate-price">${crate.price}</span>
-                    <img src="${uiIcons.gem}" style="width:16px;height:16px;vertical-align:middle;">
-                </button>
-            `}
+            <button class="crate-btn" onclick="buyCrate('${crate.type}')">
+                <span class="crate-price">${crate.price}</span>
+                <img src="${uiIcons.gem}" style="width:16px;height:16px;">
+            </button>
         `;
         
         cratesGrid.appendChild(crateCard);
@@ -1283,8 +1084,6 @@ function buyCrate(type) {
         case 'basic': cost = 10; break;
         case 'advanced': cost = 25; break;
         case 'premium': cost = 50; break;
-        case 'pet': cost = 30; break;
-        case 'pet_godly': cost = 75; break;
         case 'godly_crate': cost = 500; break;
         default: return;
     }
@@ -1293,7 +1092,6 @@ function buyCrate(type) {
         gameState.gems -= cost;
         gameState.totalCratesOpened++;
         
-        // Vis enkel crate opening
         showSimpleCrateOpening(type, 'shop');
         
         updateResources();
@@ -1303,17 +1101,12 @@ function buyCrate(type) {
     }
 }
 
-// ======================================================
-// ENKEL CRATE OPENING (uten animasjon)
-// ======================================================
-
 function showSimpleCrateOpening(crateType, source = 'shop') {
     const item = openCrate(crateType, source === 'boss');
     
-    // Vis enkel popup med reward
     showMessage(`<img src="${crateImages[crateType]?.open || crateImages.basic.open}" style="width:64px;height:64px;"> CRATE OPENED!`, 
         `You got:<br>
-        <img src="${item.icon}" style="width:32px;height:32px;vertical-align:middle;"> <strong>${item.name}</strong><br>
+        <img src="${item.icon}" style="width:32px;height:32px;"> <strong>${item.name}</strong><br>
         <span class="rarity-badge ${item.rarity}" style="display:inline-block;padding:4px 8px;border-radius:10px;margin:5px 0;">
             ${item.rarity.toUpperCase()}
         </span><br><br>
@@ -1324,7 +1117,6 @@ function showSimpleCrateOpening(crateType, source = 'shop') {
         ).join('') : ''}`
     );
     
-    // Legg til i inventory
     addItemToInventory(item);
 }
 
@@ -1343,7 +1135,6 @@ function openCrate(type, isBossDrop = false) {
         }
     }
     
-    // Boss drops har litt bedre odds
     if (isBossDrop && Math.random() < 0.3) {
         const rarities = ['common', 'rare', 'epic', 'legendary', 'ultimate', 'godly'];
         const currentIndex = rarities.indexOf(selectedRarity);
@@ -1352,7 +1143,6 @@ function openCrate(type, isBossDrop = false) {
         }
     }
     
-    // Get items of selected rarity
     let itemPool;
     if (type === 'pet' || type === 'pet_godly') {
         itemPool = items.pets.filter(item => item.rarity === selectedRarity);
@@ -1365,44 +1155,10 @@ function openCrate(type, isBossDrop = false) {
     }
     
     if (itemPool.length === 0) {
-        if (type === 'pet' || type === 'pet_godly') {
-            itemPool = items.pets.filter(i => i.rarity === 'common');
-        } else {
-            itemPool = items.weapons.filter(i => i.rarity === 'common');
-        }
+        itemPool = items.weapons.filter(i => i.rarity === 'common');
     }
     
     return itemPool[Math.floor(Math.random() * itemPool.length)];
-}
-
-function openDailyCrate() {
-    if (!gameState.dailyCrateAvailable) {
-        return;
-    }
-    
-    gameState.dailyCrateAvailable = false;
-    gameState.lastDailyCrate = Date.now();
-    gameState.totalCratesOpened++;
-    
-    const dailyBtn = document.getElementById('dailyCrateBtn');
-    if (dailyBtn) {
-        dailyBtn.disabled = true;
-        dailyBtn.textContent = 'Claimed';
-        dailyBtn.style.opacity = '0.5';
-    }
-    
-    const dailyTimer = document.getElementById('dailyTimer');
-    if (dailyTimer) {
-        dailyTimer.textContent = 'Claimed';
-    }
-    
-    // Vis enkel crate opening
-    showSimpleCrateOpening('daily', 'daily');
-    
-    updateResources();
-    updateAchievements();
-    updateQuestProgress('crate', 1);
-    saveGame();
 }
 
 // ======================================================
@@ -1424,12 +1180,6 @@ function showPrestigeModal() {
                    Current Level: ${gameState.level}<br>
                    Prestige Points: +${prestigePoints}<br>
                    New Multiplier: ${newMultiplier.toFixed(1)}x<br><br>
-                   Prestige Benefits:<br>
-                   <img src="${uiIcons.star}" style="width:16px;height:16px;"> Keep Prestige Points<br>
-                   <img src="${uiIcons.coin}" style="width:16px;height:16px;"> Keep Permanent Upgrades<br>
-                   <img src="${items.weapons[0].icon}" style="width:16px;height:16px;"> Keep Items & Pets<br>
-                   <img src="${uiIcons.gem}" style="width:16px;height:16px;"> Keep Gems<br><br>
-                   Reset: Coins to 1000, Enemies to 1<br><br>
                    Prestige now?`;
     
     if (confirm(message.replace(/<br>/g, '\n'))) {
@@ -1449,7 +1199,6 @@ function prestige() {
     const savedAutoUpgrades = gameState.autoUpgrades;
     const savedGems = gameState.gems;
     
-    // Reset game state
     gameState.coins = 1000;
     gameState.gems = savedGems;
     gameState.level = 1;
@@ -1460,22 +1209,18 @@ function prestige() {
     gameState.difficultyMultiplier = 1.0 + (gameState.prestigePoints * 0.1);
     gameState.bossCleared = {};
     
-    // Behold permanent upgrades
     gameState.damageUpgrades = savedDamageUpgrades;
     gameState.critUpgrades = savedCritUpgrades;
     gameState.autoUpgrades = savedAutoUpgrades;
     
-    // Behold inventory
     inventory = savedInventory;
     
-    // Update quest progress
     updateQuestProgress('prestige', 1);
     
     showMessage(`<img src="${uiIcons.star}" style="width:48px;height:48px;"> PRESTIGE COMPLETE!`, 
         `You gained ${prestigePoints} Prestige Points!<br>
          <img src="${uiIcons.star}" style="width:24px;height:24px;"> Total Prestige: ${gameState.prestigePoints}<br>
-         Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x<br><br>
-         Keep clicking to reach higher levels!`
+         Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x`
     );
     
     spawnEnemy();
@@ -1493,44 +1238,16 @@ function updatePrestigeButton() {
         if (canPrestige) {
             prestigeBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
             prestigeBtn.style.animation = 'pulse 2s infinite';
-            prestigeBtn.style.boxShadow = '0 0 15px gold';
             prestigeBtn.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> PRESTIGE!`;
         } else {
             prestigeBtn.style.background = 'linear-gradient(135deg, #888, #666)';
             prestigeBtn.style.animation = 'none';
-            prestigeBtn.style.boxShadow = '';
             prestigeBtn.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> Prestige`;
         }
     }
     
     if (shopPrestigeBtn) {
-        if (canPrestige) {
-            shopPrestigeBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
-            shopPrestigeBtn.style.color = '#333';
-            shopPrestigeBtn.style.animation = 'pulse 2s infinite';
-        } else {
-            shopPrestigeBtn.style.background = 'linear-gradient(135deg, #888, #666)';
-            shopPrestigeBtn.style.color = '#ccc';
-            shopPrestigeBtn.style.animation = 'none';
-        }
-    }
-    
-    // Oppdater prestige info
-    const prestigeMultiplier = document.getElementById('prestigeMultiplier');
-    const prestigeRequirements = document.getElementById('prestigeRequirements');
-    
-    if (prestigeMultiplier) {
-        prestigeMultiplier.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;"> Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x`;
-    }
-    
-    if (prestigeRequirements) {
-        if (canPrestige) {
-            prestigeRequirements.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> READY! Level ${gameState.level} reached`;
-            prestigeRequirements.style.color = '#43e97b';
-        } else {
-            prestigeRequirements.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> Need Level ${10 - gameState.level} more to prestige`;
-            prestigeRequirements.style.color = '#666';
-        }
+        shopPrestigeBtn.disabled = !canPrestige;
     }
     
     setTimeout(updatePrestigeButton, 5000);
@@ -1567,7 +1284,6 @@ function addItemToInventory(item) {
 }
 
 function renderInventory() {
-    // Update player stats
     const totalDamage = (gameState.baseDamagePerClick + (gameState.damageUpgrades * 2)) * gameState.itemDamageMultiplier * gameState.prestigeMultiplier;
     const statDamageEl = document.getElementById('statDamage');
     const statAutoEl = document.getElementById('statAuto');
@@ -1579,7 +1295,6 @@ function renderInventory() {
     if (statCritEl) statCritEl.textContent = `${gameState.critChance + gameState.critUpgrades}%`;
     if (statMultiEl) statMultiEl.textContent = `${gameState.prestigeMultiplier.toFixed(1)}x`;
     
-    // Update active pet
     const activePetElement = document.getElementById('activePet');
     if (activePetElement) {
         if (inventory.activePet) {
@@ -1607,13 +1322,11 @@ function renderInventory() {
         }
     }
     
-    // Render items grid
     const itemsGrid = document.getElementById('itemsGrid');
     if (!itemsGrid) return;
     
     itemsGrid.innerHTML = '';
     
-    // Combine all items
     const allItems = [];
     for (const category in inventory) {
         if (category === 'activePet') continue;
@@ -1622,7 +1335,6 @@ function renderInventory() {
         }
     }
     
-    // Display items
     allItems.forEach(itemData => {
         const item = itemData.item;
         const category = itemData.category;
@@ -1632,7 +1344,6 @@ function renderInventory() {
         let actionButton = '';
         let statsHtml = '';
         
-        // Generer stats for alle items
         if (item.damage) {
             statsHtml += `<div class="item-stat"><span class="stat-label">Damage:</span> <span class="stat-value">${item.damage}x</span></div>`;
         }
@@ -1645,9 +1356,6 @@ function renderInventory() {
                 const suffix = key === 'coins' || key === 'gems' || key === 'damage' ? 'x' : '%';
                 statsHtml += `<div class="item-stat"><span class="stat-label">${keyName}:</span> <span class="stat-value">+${value}${suffix}</span></div>`;
             });
-        }
-        if (item.required) {
-            statsHtml += `<div class="item-stat"><span class="stat-label">Req. for upgrade:</span> <span class="stat-value">${item.required}</span></div>`;
         }
         
         if (category === 'pets') {
@@ -1676,7 +1384,6 @@ function renderInventory() {
 
 function equipPet(petId) {
     if (inventory.pets[petId]) {
-        // Remove current pet bonuses if any
         if (inventory.activePet) {
             const currentPet = inventory.activePet;
             if (currentPet.bonus) {
@@ -1686,10 +1393,8 @@ function equipPet(petId) {
             }
         }
         
-        // Equip new pet
         inventory.activePet = inventory.pets[petId].item;
         
-        // Apply new pet bonuses
         const pet = inventory.activePet;
         if (pet.bonus) {
             if (pet.bonus.damage) gameState.itemDamageMultiplier *= pet.bonus.damage;
@@ -1707,7 +1412,6 @@ function removePet() {
     if (inventory.activePet) {
         const pet = inventory.activePet;
         
-        // Remove pet bonuses
         if (pet.bonus) {
             if (pet.bonus.damage) gameState.itemDamageMultiplier /= pet.bonus.damage;
             if (pet.bonus.crit) gameState.critChance -= pet.bonus.crit;
@@ -1719,322 +1423,6 @@ function removePet() {
         updateUI();
         saveGame();
     }
-}
-
-function upgradeItem(itemId) {
-    let itemData;
-    let category;
-    
-    for (const [cat, items] of Object.entries(inventory)) {
-        if (cat === 'activePet') continue;
-        if (items[itemId]) {
-            itemData = items[itemId];
-            category = cat;
-            break;
-        }
-    }
-    
-    if (!itemData) return;
-    
-    const required = itemData.level + 1;
-    if (itemData.count >= required) {
-        itemData.count -= required;
-        itemData.level++;
-        
-        // Apply upgrade effects
-        const item = itemData.item;
-        if (item.damage) {
-            gameState.itemDamageMultiplier *= (1 + (item.damage * 0.1));
-        }
-        
-        // If count becomes 0, remove from inventory
-        if (itemData.count <= 0) {
-            delete inventory[category][itemId];
-        }
-        
-        renderInventory();
-        updateUI();
-        saveGame();
-    }
-}
-
-// ======================================================
-// ACHIEVEMENTS SYSTEM
-// ======================================================
-
-function renderAchievements() {
-    const list = document.getElementById('achievementsList');
-    if (!list) return;
-    
-    list.innerHTML = '';
-    
-    achievements.forEach(achievement => {
-        const completed = achievement.condition();
-        const progress = achievement.progress();
-        const progressPercent = (progress / achievement.total) * 100;
-        
-        const div = document.createElement('div');
-        div.className = `achievement-card ${completed ? 'completed' : ''} ${achievement.claimed ? 'claimed' : ''}`;
-        
-        div.innerHTML = `
-            <img src="${achievement.icon}" class="achievement-icon" style="width:50px;height:50px;">
-            <div class="achievement-info">
-                <div class="achievement-name">${achievement.name}</div>
-                <div class="achievement-desc">${achievement.desc}</div>
-                <div class="achievement-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progressPercent}%"></div>
-                    </div>
-                    <span>${formatNumber(progress)}/${formatNumber(achievement.total)}</span>
-                </div>
-                <div class="achievement-rewards">
-                    ${achievement.reward.coins ? 
-                        `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${achievement.reward.coins}</div>` : ''}
-                    ${achievement.reward.gems ? 
-                        `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${achievement.reward.gems}</div>` : ''}
-                    ${achievement.reward.crate ? 
-                        `<div class="reward"><img src="${crateImages[achievement.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${achievement.reward.crate}</div>` : ''}
-                    ${achievement.reward.item ? 
-                        `<div class="reward"><img src="${items.weapons.find(i => i.id === achievement.reward.item)?.icon || items.pets.find(i => i.id === achievement.reward.item)?.icon}" style="width:16px;height:16px;"> ${achievement.reward.item}</div>` : ''}
-                    ${achievement.reward.prestige ? 
-                        `<div class="reward"><img src="${uiIcons.star}" style="width:16px;height:16px;"> ${achievement.reward.prestige}</div>` : ''}
-                </div>
-            </div>
-            <button class="achievement-claim" 
-                    onclick="claimAchievement('${achievement.id}')"
-                    ${completed && !achievement.claimed ? '' : 'disabled'}>
-                ${achievement.claimed ? '✅ Claimed' : completed ? 'Claim' : 'Locked'}
-            </button>
-        `;
-        
-        list.appendChild(div);
-    });
-}
-
-function updateAchievements() {
-    let newlyCompleted = false;
-    achievements.forEach(achievement => {
-        if (!achievement.claimed && achievement.condition()) {
-            newlyCompleted = true;
-        }
-    });
-    
-    if (document.querySelector('.achievements-page.active')) {
-        renderAchievements();
-    }
-}
-
-function claimAchievement(achievementId) {
-    const achievement = achievements.find(a => a.id === achievementId);
-    if (!achievement || achievement.claimed || !achievement.condition()) {
-        return;
-    }
-    
-    // Give rewards
-    if (achievement.reward.coins) {
-        gameState.coins += achievement.reward.coins;
-    }
-    if (achievement.reward.gems) {
-        gameState.gems += achievement.reward.gems;
-    }
-    if (achievement.reward.prestige) {
-        gameState.prestigePoints += achievement.reward.prestige;
-        gameState.prestigeMultiplier = 1 + (gameState.prestigePoints * 0.1);
-    }
-    if (achievement.reward.crate) {
-        showSimpleCrateOpening(achievement.reward.crate, 'achievement');
-    }
-    if (achievement.reward.item) {
-        const item = [...items.weapons, ...items.armor, ...items.pets, ...items.artifacts]
-            .find(i => i.id === achievement.reward.item);
-        if (item) {
-            addItemToInventory(item);
-        }
-    }
-    
-    achievement.claimed = true;
-    
-    updateResources();
-    renderAchievements();
-    renderInventory();
-    saveGame();
-}
-
-// ======================================================
-// QUESTS SYSTEM
-// ======================================================
-
-function renderQuests() {
-    // Daily Quests
-    const dailyList = document.getElementById('dailyQuests');
-    if (dailyList) {
-        dailyList.innerHTML = '';
-        quests.daily.forEach(quest => {
-            const progressPercent = (quest.progress / quest.total) * 100;
-            const div = createQuestCard(quest, progressPercent);
-            dailyList.appendChild(div);
-        });
-    }
-    
-    // Weekly Quests
-    const weeklyList = document.getElementById('weeklyQuests');
-    if (weeklyList) {
-        weeklyList.innerHTML = '';
-        quests.weekly.forEach(quest => {
-            const progressPercent = (quest.progress / quest.total) * 100;
-            const div = createQuestCard(quest, progressPercent);
-            weeklyList.appendChild(div);
-        });
-    }
-    
-    // Special Quests
-    const specialList = document.getElementById('specialQuests');
-    if (specialList) {
-        specialList.innerHTML = '';
-        quests.special.forEach(quest => {
-            const progressPercent = (quest.progress / quest.total) * 100;
-            const div = createQuestCard(quest, progressPercent);
-            specialList.appendChild(div);
-        });
-    }
-}
-
-function createQuestCard(quest, progressPercent) {
-    const div = document.createElement('div');
-    div.className = `quest-card ${quest.difficulty}`;
-    
-    div.innerHTML = `
-        <div class="quest-header">
-            <div class="quest-title">${quest.title}</div>
-            <div class="quest-difficulty ${quest.difficulty}">${quest.difficulty}</div>
-        </div>
-        <div class="quest-desc">${quest.desc}</div>
-        <div class="quest-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" style="width: ${progressPercent}%"></div>
-            </div>
-            <div class="progress-text">
-                <span>${formatNumber(quest.progress)}</span>
-                <span>${formatNumber(quest.total)}</span>
-            </div>
-        </div>
-        <div class="quest-rewards">
-            ${quest.reward.coins ? 
-                `<div class="reward"><img src="${uiIcons.coin}" style="width:16px;height:16px;"> ${quest.reward.coins}</div>` : ''}
-            ${quest.reward.gems ? 
-                `<div class="reward"><img src="${uiIcons.gem}" style="width:16px;height:16px;"> ${quest.reward.gems}</div>` : ''}
-            ${quest.reward.crate ? 
-                `<div class="reward"><img src="${crateImages[quest.reward.crate]?.closed || crateImages.basic.closed}" style="width:16px;height:16px;"> ${quest.reward.crate}</div>` : ''}
-            ${quest.reward.item ? 
-                `<div class="reward"><img src="${items.weapons.find(i => i.id === quest.reward.item)?.icon || items.pets.find(i => i.id === quest.reward.item)?.icon}" style="width:16px;height:16px;"> ${quest.reward.item}</div>` : ''}
-            ${quest.reward.prestige ? 
-                `<div class="reward"><img src="${uiIcons.star}" style="width:16px;height:16px;"> ${quest.reward.prestige}</div>` : ''}
-        </div>
-        <button class="quest-claim" 
-                onclick="claimQuest('${quest.id}')"
-                ${quest.completed && !quest.claimed ? '' : 'disabled'}>
-            ${quest.claimed ? '✅ Claimed' : quest.completed ? 'Claim Reward' : 'In Progress'}
-        </button>
-    `;
-    
-    return div;
-}
-
-function updateQuestProgress(type, amount) {
-    let updated = false;
-    
-    // Update daily quests
-    quests.daily.forEach(quest => {
-        if (!quest.completed && quest.type === type) {
-            quest.progress = Math.min(quest.total, quest.progress + amount);
-            if (quest.progress >= quest.total) {
-                quest.completed = true;
-            }
-            updated = true;
-        }
-    });
-    
-    // Update weekly quests
-    quests.weekly.forEach(quest => {
-        if (!quest.completed && quest.type === type) {
-            quest.progress = Math.min(quest.total, quest.progress + amount);
-            if (quest.progress >= quest.total) {
-                quest.completed = true;
-            }
-            updated = true;
-        }
-    });
-    
-    // Update special quests
-    quests.special.forEach(quest => {
-        if (!quest.completed && quest.type === type) {
-            if (type === 'prestige') {
-                quest.progress = Math.min(quest.total, gameState.prestigePoints);
-            } else {
-                quest.progress = Math.min(quest.total, quest.progress + amount);
-            }
-            if (quest.progress >= quest.total) {
-                quest.completed = true;
-            }
-            updated = true;
-        }
-    });
-    
-    if (updated && document.querySelector('.quests-page.active')) {
-        renderQuests();
-    }
-}
-
-function claimQuest(questId) {
-    let quest;
-    let questType;
-    
-    // Find the quest
-    quest = quests.daily.find(q => q.id === questId);
-    questType = 'daily';
-    
-    if (!quest) {
-        quest = quests.weekly.find(q => q.id === questId);
-        questType = 'weekly';
-    }
-    
-    if (!quest) {
-        quest = quests.special.find(q => q.id === questId);
-        questType = 'special';
-    }
-    
-    if (!quest || quest.claimed || !quest.completed) {
-        return;
-    }
-    
-    // Give rewards
-    if (quest.reward.coins) {
-        gameState.coins += quest.reward.coins;
-    }
-    if (quest.reward.gems) {
-        gameState.gems += quest.reward.gems;
-    }
-    if (quest.reward.crate) {
-        showSimpleCrateOpening(quest.reward.crate, 'quest');
-    }
-    if (quest.reward.item) {
-        const item = [...items.weapons, ...items.armor, ...items.pets, ...items.artifacts]
-            .find(i => i.id === quest.reward.item);
-        if (item) {
-            addItemToInventory(item);
-        }
-    }
-    if (quest.reward.prestige) {
-        gameState.prestigePoints += quest.reward.prestige;
-        gameState.prestigeMultiplier = 1 + (gameState.prestigePoints * 0.1);
-    }
-    
-    quest.claimed = true;
-    
-    updateResources();
-    renderQuests();
-    renderInventory();
-    saveGame();
 }
 
 // ======================================================
@@ -2063,21 +1451,6 @@ function updateResources() {
     if (coinsEl) coinsEl.textContent = formatNumber(gameState.coins);
     if (gemsEl) gemsEl.textContent = formatNumber(gameState.gems);
     if (prestigeEl) prestigeEl.textContent = gameState.prestigePoints;
-    
-    // Oppdater ikoner
-    const coinIcon = document.querySelector('.resource-icon[data-type="coin"]');
-    const gemIcon = document.querySelector('.resource-icon[data-type="gem"]');
-    const starIcon = document.querySelector('.resource-icon[data-type="star"]');
-    
-    if (coinIcon && !coinIcon.querySelector('img')) {
-        coinIcon.innerHTML = `<img src="${uiIcons.coin}" style="width:20px;height:20px;">`;
-    }
-    if (gemIcon && !gemIcon.querySelector('img')) {
-        gemIcon.innerHTML = `<img src="${uiIcons.gem}" style="width:20px;height:20px;">`;
-    }
-    if (starIcon && !starIcon.querySelector('img')) {
-        starIcon.innerHTML = `<img src="${uiIcons.star}" style="width:20px;height:20px;">`;
-    }
 }
 
 function formatNumber(num) {
@@ -2099,38 +1472,6 @@ function darkenColor(color, percent) {
         (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
         (B < 255 ? (B < 1 ? 0 : B) : 255)
     ).toString(16).slice(1);
-}
-
-function checkDailyReset() {
-    const now = Date.now();
-    const lastDaily = gameState.lastDailyCrate || 0;
-    const oneDay = 24 * 60 * 60 * 1000;
-    
-    if (now - lastDaily >= oneDay) {
-        gameState.dailyCrateAvailable = true;
-        const dailyBtn = document.getElementById('dailyCrateBtn');
-        if (dailyBtn) {
-            dailyBtn.disabled = false;
-            dailyBtn.textContent = 'FREE';
-            dailyBtn.style.opacity = '1';
-        }
-        
-        const timerElement = document.querySelector('.daily-timer');
-        if (timerElement) {
-            timerElement.textContent = 'Available';
-        }
-    } else {
-        const nextDaily = lastDaily + oneDay;
-        const timeLeft = nextDaily - now;
-        const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-        const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-        const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-        
-        const timerElement = document.querySelector('.daily-timer');
-        if (timerElement) {
-            timerElement.textContent = `Next: ${hours}h ${minutes}m ${seconds}s`;
-        }
-    }
 }
 
 function startAutoAttack() {
@@ -2155,16 +1496,6 @@ function startAutoAttack() {
     }, 1000);
 }
 
-function startAutoSave() {
-    setInterval(() => {
-        saveGame();
-    }, 30000);
-}
-
-// ======================================================
-// SAVE SYSTEM
-// ======================================================
-
 function saveGame() {
     const saveData = {
         gameState,
@@ -2186,112 +1517,15 @@ function loadGame() {
     if (saved) {
         try {
             const data = JSON.parse(saved);
-            
-            // Load game state
             Object.assign(gameState, data.gameState || {});
-            
-            // Load inventory
             inventory = data.inventory || {
-                weapons: {},
-                armor: {},
-                pets: {},
-                artifacts: {},
-                activePet: null
+                weapons: {}, armor: {}, pets: {}, artifacts: {}, activePet: null
             };
-            
-            // Load achievements
-            if (data.achievements) {
-                data.achievements.forEach(savedAchievement => {
-                    const achievement = achievements.find(a => a.id === savedAchievement.id);
-                    if (achievement) {
-                        achievement.claimed = savedAchievement.claimed || false;
-                    }
-                });
-            }
-            
-            // Load quests
-            if (data.quests) {
-                ['daily', 'weekly', 'special'].forEach(type => {
-                    if (data.quests[type]) {
-                        data.quests[type].forEach(savedQuest => {
-                            const quest = quests[type].find(q => q.id === savedQuest.id);
-                            if (quest) {
-                                quest.progress = savedQuest.progress || 0;
-                                quest.completed = savedQuest.completed || false;
-                                quest.claimed = savedQuest.claimed || false;
-                            }
-                        });
-                    }
-                });
-            }
         } catch (e) {
             console.error('Failed to load save:', e);
         }
     }
 }
-
-function resetGame() {
-    if (confirm('Are you sure you want to reset the game? All progress will be lost!')) {
-        gameState = {
-            coins: 0,
-            gems: 0,
-            prestigePoints: 0,
-            level: 1,
-            enemyNumber: 1,
-            maxEnemyReached: 1,
-            bossCleared: {},
-            baseDamagePerClick: 10,
-            damageUpgrades: 0,
-            autoDamage: 0,
-            critChance: 5,
-            critUpgrades: 0,
-            autoUpgrades: 0,
-            critMultiplier: 2.0,
-            itemDamageMultiplier: 1,
-            prestigeMultiplier: 1,
-            currentEnemyHP: 100,
-            maxEnemyHP: 100,
-            bossTimer: 60,
-            bossTimerInterval: null,
-            currentBiome: 'grass',
-            dailyCrateAvailable: true,
-            lastDailyCrate: null,
-            autoAttack: false,
-            autoAttackInterval: null,
-            totalDamageDealt: 0,
-            totalEnemiesDefeated: 0,
-            totalBossesDefeated: 0,
-            totalCratesOpened: 0,
-            difficultyMultiplier: 1.0,
-            enteredCodes: []
-        };
-        
-        inventory = {
-            weapons: {},
-            armor: {},
-            pets: {},
-            artifacts: {},
-            activePet: null
-        };
-        
-        achievements.forEach(a => a.claimed = false);
-        
-        ['daily', 'weekly', 'special'].forEach(type => {
-            quests[type].forEach(q => {
-                q.progress = 0;
-                q.completed = false;
-                q.claimed = false;
-            });
-        });
-        
-        localStorage.removeItem('brainrotClickerSave');
-        location.reload();
-    }
-}
-
-// ======================================================
-// MESSAGE OVERLAY FUNCTIONS
-// ======================================================
 
 function showMessage(title, text) {
     const messageOverlay = document.getElementById('messageOverlay');
@@ -2316,30 +1550,14 @@ function closeMessage() {
 // INITIALIZE GAME
 // ======================================================
 
-// Start the game when page loads
 window.addEventListener('DOMContentLoaded', init);
 
-// Export function for development
-window.debugGame = () => {
-    console.log('Game State:', gameState);
-    console.log('Inventory:', inventory);
-    console.log('Achievements:', achievements);
-    console.log('Quests:', quests);
-};
-
-// Legg til disse funksjonene i window scope
 window.attack = attack;
 window.buyCoins = buyCoins;
 window.buyCrate = buyCrate;
-window.openDailyCrate = openDailyCrate;
 window.buyDamageUpgrade = buyDamageUpgrade;
 window.buyCritUpgrade = buyCritUpgrade;
 window.buyAutoUpgrade = buyAutoUpgrade;
-window.claimAchievement = claimAchievement;
-window.claimQuest = claimQuest;
-window.upgradeItem = upgradeItem;
-window.removePet = removePet;
-window.equipPet = equipPet;
 window.showPrestigeModal = showPrestigeModal;
 window.closeMessage = closeMessage;
 window.showSimpleCrateOpening = showSimpleCrateOpening;
