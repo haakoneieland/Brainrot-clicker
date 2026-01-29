@@ -1,5 +1,5 @@
 // ======================================================
-// GAME STATE & DATA - MED DINE BILDER
+// GAME STATE & DATA - MED NYE BILDER
 // ======================================================
 
 let gameState = {
@@ -39,7 +39,7 @@ let gameState = {
 // DINE BILDE-URL-ER FOR GITHUB PAGES
 const baseURL = 'https://raw.githubusercontent.com/haakoneieland/Brainrot-clicker/main/';
 
-// Bakgrunnsbilder for øyer (500x800 px)
+// Bakgrunnsbilder for øyer (500x800 px) - NYE BAKGRUNNSBILDER
 const backgroundImages = {
     grass: baseURL + 'Bakgrunn1.png.PNG',
     desert: baseURL + 'Bakgrunn2.png.PNG',
@@ -53,32 +53,32 @@ const backgroundImages = {
     void: baseURL + 'Bakgrunn10.png.PNG'
 };
 
-// Fiende-bilder - ØYER
+// Fiende-bilder - NYE ØYER
 const enemyImages = {
-    grass: baseURL + 'Gress%C3%B8y.png.PNG',
-    desert: baseURL + '%C3%98rken%C3%B8y.png.PNG',
-    snow: baseURL + 'Sn%C3%B8%C3%B8y.png.PNG',
-    lava: baseURL + 'Flamme%C3%B8y.png.PNG',
-    swamp: baseURL + 'Svamp%C3%B8y.png.PNG',
-    ocean: baseURL + 'Hav%C3%B8y.png.PNG',
-    jungle: baseURL + 'Jungel%C3%B8y.png.PNG',
-    mountain: baseURL + 'Fjell%C3%B8y.png.PNG',
-    ruins: baseURL + 'Ruiner.png.PNG',
-    void: baseURL + 'Void%C3%B8y.png.PNG'
+    grass: baseURL + '%C3%98y1.png.PNG',
+    desert: baseURL + '%C3%98y2.png.PNG',
+    snow: baseURL + '%C3%98y3.png.PNG',
+    lava: baseURL + '%C3%98y4.png.PNG',
+    swamp: baseURL + '%C3%98y5.png.PNG',
+    ocean: baseURL + '%C3%98y6.png.PNG',
+    jungle: baseURL + '%C3%98y7.png.PNG',
+    mountain: baseURL + '%C3%98y8.png.PNG',
+    ruins: baseURL + '%C3%98y9.png.PNG',
+    void: baseURL + '%C3%98y10.png.PNG'
 };
 
-// Boss-bilder - ØYER
+// Boss-bilder - NYE ØYER med 'b'
 const bossImages = {
-    grass: baseURL + 'Gress%C3%B8yb.png.PNG',
-    desert: baseURL + '%C3%98rken%C3%B8yb.png.PNG',
-    snow: baseURL + 'Sn%C3%B8%C3%B8yb.png.PNG',
-    lava: baseURL + 'Flamme%C3%B8yb.png.PNG',
-    swamp: baseURL + 'Svamp%C3%B8yb.png.PNG',
-    ocean: baseURL + 'Hav%C3%B8yb.png.PNG',
-    jungle: baseURL + 'Jungel%C3%B8yb.png.PNG',
-    mountain: baseURL + 'Fjell%C3%B8yb.png.PNG',
-    ruins: baseURL + 'Ruinerb.png.PNG',
-    void: baseURL + 'Void%C3%B8yb.png.PNG'
+    grass: baseURL + '%C3%98y1b.png.PNG',
+    desert: baseURL + '%C3%98y2b.png.PNG',
+    snow: baseURL + '%C3%98y3b.png.PNG',
+    lava: baseURL + '%C3%98y4b.png.PNG',
+    swamp: baseURL + '%C3%98y5b.png.PNG',
+    ocean: baseURL + '%C3%98y6b.png.PNG',
+    jungle: baseURL + '%C3%98y7b.png.PNG',
+    mountain: baseURL + '%C3%98y8b.png.PNG',
+    ruins: baseURL + '%C3%98y9b.png.PNG',
+    void: baseURL + '%C3%98y10b.png.PNG'
 };
 
 // UI Ikoner - NYE BILDER
@@ -496,7 +496,7 @@ const quests = {
     ]
 };
 
-// Biome System - OPPDATERET MED BAKGRUNNSBILDER
+// Biome System - OPPDATERET MED NYE BAKGRUNNSBILDER
 const biomes = [
     { 
         name: 'grass', 
@@ -709,20 +709,51 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - OPPDATERET FOR ØYER
+// COMBAT SYSTEM - OPPDATERET FOR ØYER OG NY DAMAGE BEREGNING
 // ======================================================
 
 function calculateDamage() {
+    // Base damage fra permanent upgrades
     const baseDamage = gameState.baseDamagePerClick + (gameState.damageUpgrades * 2);
-    let damage = baseDamage * gameState.itemDamageMultiplier * gameState.prestigeMultiplier;
-    const isCrit = Math.random() * 100 < (gameState.critChance + (gameState.critUpgrades * 1));
+    
+    // Start med base damage
+    let totalDamage = baseDamage;
+    
+    // Samle alle damage multipliers fra items
+    let itemMultiplier = 1;
+    
+    // Hent alle aktive items og beregn total multiplier
+    if (inventory.activePet && inventory.activePet.bonus && inventory.activePet.bonus.damage) {
+        itemMultiplier *= inventory.activePet.bonus.damage;
+    }
+    
+    // Sjekk andre items (våpen, rustning, artifacts)
+    for (const category in inventory) {
+        if (category !== 'activePet') {
+            for (const itemId in inventory[category]) {
+                const itemData = inventory[category][itemId];
+                if (itemData.item.damage) {
+                    // For hvert nivå av item, multipliser med damage multiplier
+                    for (let i = 0; i < itemData.level; i++) {
+                        itemMultiplier *= itemData.item.damage;
+                    }
+                }
+            }
+        }
+    }
+    
+    // Beregn total damage med alle multipliers
+    totalDamage = baseDamage * itemMultiplier * gameState.prestigeMultiplier;
+    
+    // Sjekk crit
+    const isCrit = Math.random() * 100 < (gameState.critChance + gameState.critUpgrades);
     
     if (isCrit) {
-        damage *= gameState.critMultiplier;
+        totalDamage *= gameState.critMultiplier;
         showCritEffect();
     }
     
-    return { damage: Math.max(1, Math.floor(damage)), isCrit };
+    return { damage: Math.max(1, Math.floor(totalDamage)), isCrit };
 }
 
 function attack() {
@@ -950,16 +981,16 @@ function spawnEnemy() {
         island.style.background = 'transparent';
     }
     
-    // Update enemy - ØY-BILDET
+    // Update enemy - NYE ØY-BILDER
     gameState.currentBiome = biome.name;
     const enemyImage = document.getElementById('enemyImage');
     if (enemyImage) {
         const isBoss = gameState.enemyNumber === 9;
         
         if (isBoss) {
-            // Bruk boss bilde
+            // Bruk boss øy bilde
             enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
-            enemyImage.alt = `${biome.enemyType} Boss`;
+            enemyImage.alt = `${biome.enemyType} Boss Island`;
             
             // Legg til boss klasse
             const enemy = document.getElementById('enemy');
@@ -972,9 +1003,9 @@ function spawnEnemy() {
             if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
             startBossTimer();
         } else {
-            // Bruk vanlig fiende bilde
+            // Bruk vanlig øy bilde
             enemyImage.src = enemyImages[biome.name];
-            enemyImage.alt = `${biome.enemyType} Enemy`;
+            enemyImage.alt = `${biome.enemyType} Island`;
             
             // Fjern boss klasse
             const enemy = document.getElementById('enemy');
@@ -1771,10 +1802,10 @@ function upgradeItem(itemId) {
         itemData.count -= required;
         itemData.level++;
         
-        // Apply upgrade effects
+        // Apply upgrade effects - NY DAMAGE BEREGNING
         const item = itemData.item;
         if (item.damage) {
-            gameState.itemDamageMultiplier *= (1 + (item.damage * 0.1));
+            gameState.itemDamageMultiplier *= item.damage;
         }
         
         // If count becomes 0, remove from inventory
