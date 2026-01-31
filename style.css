@@ -111,23 +111,19 @@ body {
     justify-content: center;
 }
 
-/* ====================================================== */
-/* ISLAND & BACKGROUND - OPPDATERET FOR STØRRE SKJERM */
-/* ====================================================== */
-
+/* Island Container - FOR BAKGRUNNSBILDE */
 .island-container {
     position: relative;
-    width: 90vw;  /* Bruk viewport width i stedet for fast størrelse */
-    height: 50vh; /* Bruk viewport height */
-    max-width: 500px; /* Men begrens maks størrelse */
+    width: 90vw;
+    height: 50vh;
+    max-width: 500px;
     max-height: 500px;
     margin: 0 auto 20px;
     border-radius: 0;
     overflow: visible;
-    box-shadow: none;
 }
 
-/* Island Background - BAKGRUNNSBILDET */
+/* Island Background */
 .island-bg {
     position: absolute;
     top: 0;
@@ -143,7 +139,7 @@ body {
     background-repeat: no-repeat;
 }
 
-/* Island - TRANSparent container for fienden */
+/* Island - Transparent */
 .island {
     width: 100%;
     height: 100%;
@@ -158,7 +154,7 @@ body {
     background: transparent !important;
 }
 
-/* FJERN ALLE BIOME-GRADIENTS - bruk bilder i stedet */
+/* Fjern biome gradients */
 .island.grass,
 .island.desert,
 .island.snow,
@@ -172,7 +168,7 @@ body {
     background: transparent !important;
 }
 
-/* FJERN CLOUDS - ikke nødvendig med nye bilder */
+/* Fjern clouds */
 .clouds {
     display: none;
 }
@@ -197,17 +193,14 @@ body {
     }
 }
 
-/* ====================================================== */
-/* ENEMY - DETTE ER ØY-BILDET */
-/* ====================================================== */
-
+/* ENEMY - FIENDEN */
 .enemy {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px; /* Øy størrelse */
-    height: 200px;
+    width: 250px; /* Større fiende */
+    height: 250px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -247,13 +240,13 @@ body {
     animation: shake 0.15s ease;
 }
 
-/* Boss Indicator */
+/* Boss Indicator - UTEN DJEVEL EMOJI */
 .enemy.boss-indicator {
     position: relative;
 }
 
 .enemy.boss-indicator::after {
-    content: '👹';
+    content: ''; /* FJERNET EMOJI */
     position: absolute;
     top: -10px;
     right: -10px;
@@ -353,7 +346,7 @@ body {
     font-weight: 600;
 }
 
-/* Boss Timer */
+/* Boss Timer - UTEN DJEVEL EMOJI */
 .boss-timer-container {
     margin-top: 15px;
     background: linear-gradient(135deg, #ff416c, #ff4b2b);
@@ -369,11 +362,13 @@ body {
 .boss-timer {
     display: flex;
     align-items: center;
+    justify-content: center; /* Senterjustert */
     gap: 10px;
 }
 
 .boss-icon {
     font-size: 20px;
+    display: none; /* Skjult */
 }
 
 .boss-text {
@@ -571,21 +566,21 @@ body {
 
 .items-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .item-card {
-    aspect-ratio: 1;
+    aspect-ratio: 0.9;
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     border-radius: 10px;
-    padding: 10px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    border: 2px solid transparent;
+    border: 3px solid transparent;
     transition: all 0.3s;
 }
 
@@ -601,53 +596,69 @@ body {
 
 .item-count {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 8px;
+    right: 8px;
     background: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: 2px 6px;
+    padding: 3px 8px;
     border-radius: 10px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
 }
 
 .item-icon {
-    font-size: 32px;
-    margin-bottom: 5px;
+    width: 80px !important;
+    height: 80px !important;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    object-fit: contain;
+}
+
+.item-icon:hover {
+    transform: scale(1.1);
 }
 
 .item-name {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 2px;
+    margin-bottom: 5px;
 }
 
 .item-level {
-    font-size: 11px;
+    font-size: 12px;
     color: #666;
     margin-bottom: 5px;
 }
 
 .item-rarity {
-    padding: 2px 8px;
+    padding: 4px 10px;
     border-radius: 10px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    color: white;
 }
 
+.item-rarity.common { background: #888; }
+.item-rarity.rare { background: #2196F3; }
+.item-rarity.epic { background: #9C27B0; }
+.item-rarity.legendary { background: #FF9800; }
+.item-rarity.ultimate { background: #F44336; }
+.item-rarity.godly { background: #FFD700; color: #333; }
+
 .item-stats {
-    font-size: 10px;
+    font-size: 11px;
     text-align: left;
     width: 100%;
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
 .item-stat {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 
 .item-stat:last-child {
@@ -655,12 +666,12 @@ body {
 }
 
 .stat-label {
-    font-size: 9px;
+    font-size: 10px;
     color: #666;
 }
 
 .stat-value {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
     color: #333;
 }
@@ -669,24 +680,39 @@ body {
     background: linear-gradient(135deg, #43e97b, #38f9d7);
     color: white;
     border: none;
-    padding: 4px 8px;
+    padding: 6px 12px;
     border-radius: 5px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     width: 100%;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .item-upgrade:hover, .item-equip:hover {
     transform: scale(1.05);
 }
 
+.item-equip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .item-required {
-    font-size: 10px;
+    font-size: 11px;
     color: #999;
-    margin-top: 5px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.no-items {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    grid-column: 1/-1;
+    font-style: italic;
 }
 
 /* Shop Page */
@@ -838,21 +864,23 @@ body {
     transform: scale(1.05);
 }
 
-/* Crates */
+/* Crates - STORE BILDER */
 .crates-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 20px;
 }
 
 .crate-card {
     background: white;
     border-radius: 15px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     border: 3px solid transparent;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
 }
 
 .crate-card.basic { border-color: #888; }
@@ -867,13 +895,23 @@ body {
 
 .crate-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 10px;
 }
 
-.crate-icon {
-    font-size: 24px;
+.crate-main-image {
+    width: 80px !important;
+    height: 80px !important;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    object-fit: contain;
+}
+
+.crate-main-image:hover {
+    transform: scale(1.1);
 }
 
 .crate-name {
@@ -884,7 +922,8 @@ body {
 
 .crate-info {
     flex: 1;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .crate-desc {
@@ -894,9 +933,7 @@ body {
 }
 
 .crate-odds {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: none; /* Flyttet til modal */
 }
 
 .odd-row {
@@ -934,6 +971,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 5px;
+    width: 100%;
 }
 
 .crate-btn:hover {
@@ -943,6 +981,12 @@ body {
 .crate-btn.daily-btn {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     color: #333;
+}
+
+.crate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .crate-price {
@@ -1153,7 +1197,7 @@ body {
     100% { transform: scale(1); box-shadow: 0 0 15px gold; }
 }
 
-/* Achievements Page */
+/* Achievements Page - UTEN CHECKMARK EMOJI */
 .achievements-list {
     display: flex;
     flex-direction: column;
@@ -1259,7 +1303,7 @@ body {
     transition: all 0.3s;
 }
 
-.achievement-claim:hover {
+.achievement-claim:hover:not(:disabled) {
     transform: scale(1.05);
 }
 
@@ -1269,7 +1313,7 @@ body {
     transform: none;
 }
 
-/* Quests Page */
+/* Quests Page - UTEN CHECKMARK EMOJI */
 .quests-section {
     background: white;
     border-radius: 15px;
@@ -1494,16 +1538,90 @@ body {
     transform: scale(1.05);
 }
 
+/* Item Modal */
+.item-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.item-modal-content {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 350px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s;
+}
+
+/* Crate Info Modal */
+.crate-info-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.crate-info-modal-content {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    max-width: 350px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s;
+}
+
+.crate-odds-modal {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.crate-odds-modal .odd-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.crate-odds-modal .odd-row:last-child {
+    border-bottom: none;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .enemy {
-        width: 180px;
-        height: 180px;
+        width: 200px;
+        height: 200px;
     }
     
     .items-grid,
     .crates-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .crate-main-image,
+    .item-icon {
+        width: 64px !important;
+        height: 64px !important;
     }
     
     .stat-row {
@@ -1562,3 +1680,11 @@ body {
         opacity: 0;
     }
 }
+
+/* Rarity Colors */
+.common { color: #888; background-color: #f5f5f5; }
+.rare { color: #2196F3; background-color: #e3f2fd; }
+.epic { color: #9C27B0; background-color: #f3e5f5; }
+.legendary { color: #FF9800; background-color: #fff3e0; }
+.ultimate { color: #F44336; background-color: #ffebee; }
+.godly { color: #FFD700; background-color: #fffde7; }
