@@ -2,13 +2,13 @@
 // GAME STATE & DATA - MED OPPDATERINGER
 // ======================================================
 
-// LYDFILER - Vi bruker enkel Web Audio API for klikk og crit lyder
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+// LYDFILER - Oppdaterte lyder for clicker spill
 let soundsEnabled = true;
+let audioContext;
 
-// Funksjon for å spille klikklyd
+// Funksjon for å spille klikklyd (slash lyd)
 function playClickSound() {
-    if (!soundsEnabled) return;
+    if (!soundsEnabled || !audioContext) return;
     
     try {
         const oscillator = audioContext.createOscillator();
@@ -17,40 +17,46 @@ function playClickSound() {
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
         
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
+        // Slash lyd - kort og skarp
+        oscillator.frequency.value = 120;
+        oscillator.type = 'sawtooth';
         
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
         
         oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
+        oscillator.stop(audioContext.currentTime + 0.08);
     } catch (e) {
         console.log("Audio error:", e);
     }
 }
 
-// Funksjon for å spille crit-lyd
+// Funksjon for å spille crit-lyd (sterkere slash)
 function playCritSound() {
-    if (!soundsEnabled) return;
+    if (!soundsEnabled || !audioContext) return;
     
     try {
-        const oscillator = audioContext.createOscillator();
+        const oscillator1 = audioContext.createOscillator();
+        const oscillator2 = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
         
-        oscillator.connect(gainNode);
+        oscillator1.connect(gainNode);
+        oscillator2.connect(gainNode);
         gainNode.connect(audioContext.destination);
         
-        // Spill to toner samtidig for crit-effekt
-        oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
-        oscillator.type = 'sawtooth';
+        // Sterk crit lyd - to frekvenser
+        oscillator1.frequency.value = 200;
+        oscillator2.frequency.value = 300;
+        oscillator1.type = 'sawtooth';
+        oscillator2.type = 'square';
         
         gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.12);
         
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
+        oscillator1.start(audioContext.currentTime);
+        oscillator2.start(audioContext.currentTime);
+        oscillator1.stop(audioContext.currentTime + 0.12);
+        oscillator2.stop(audioContext.currentTime + 0.12);
     } catch (e) {
         console.log("Audio error:", e);
     }
@@ -60,8 +66,12 @@ function playCritSound() {
 let enemyHistory = {
     defeatedEnemies: [], // Liste over beseirede fiender
     currentHistoryIndex: -1, // Nåværende index i historikken
+    maxHistoryIndex: -1, // Maks index man har nådd
     canNavigateHistory: false // Om vi kan navigere i historikken
 };
+
+// Boss timer element
+let bossTimerElement = null;
 
 let gameState = {
     coins: 0,
@@ -95,7 +105,11 @@ let gameState = {
     totalCratesOpened: 0,
     difficultyMultiplier: 1.0,
     enteredCodes: [],
-    soundsEnabled: true
+    soundsEnabled: true,
+    inHistoryMode: false,
+    savedLevel: 1,
+    savedEnemyNumber: 1,
+    savedDifficultyMultiplier: 1.0
 };
 
 // DINE BILDE-URL-ER FOR GITHUB PAGES
@@ -188,7 +202,7 @@ const crateImages = {
     }
 };
 
-// Items Database - ENDRET: Defense -> Auto stat
+// Items Database
 const items = {
     weapons: [
         { 
@@ -240,13 +254,13 @@ const items = {
             required: 8 
         }
     ],
-    armor: [ // ENDRET: Defense -> Auto bonus
+    armor: [
         { 
             id: 'leather_armor', 
             name: 'Leather Armor', 
             icon: baseURL + 'Woodenarmour.png.PNG',
             rarity: 'common', 
-            auto: 1, // Endret fra defense: 1.1
+            auto: 1,
             required: 2 
         },
         { 
@@ -254,7 +268,7 @@ const items = {
             name: 'Chainmail', 
             icon: baseURL + 'Chainmail.png.PNG',
             rarity: 'rare', 
-            auto: 2, // Endret fra defense: 1.2
+            auto: 2,
             required: 3 
         },
         { 
@@ -262,7 +276,7 @@ const items = {
             name: 'Plate Armor', 
             icon: baseURL + 'Platearmour.png.PNG',
             rarity: 'epic', 
-            auto: 3, // Endret fra defense: 1.4
+            auto: 3,
             required: 4 
         },
         { 
@@ -270,7 +284,7 @@ const items = {
             name: 'Dragon Armor', 
             icon: baseURL + 'Dragonarmour.png.PNG',
             rarity: 'legendary', 
-            auto: 5, // Endret fra defense: 1.8
+            auto: 5,
             required: 5 
         }
     ],
@@ -364,7 +378,7 @@ const items = {
     ]
 };
 
-// Inventory System - OPPDATERT SIKKERHET
+// Inventory System
 let inventory = {
     weapons: {},
     armor: {},
@@ -668,10 +682,203 @@ const crateProbabilities = {
 };
 
 // ======================================================
-// NYE FUNKSJONER: FIENDE HISTORIKK OG LYDER
+// OPPDATERT LYDFUNKSJONER
 // ======================================================
 
-// Legg til fiende i historikken
+function initAudio() {
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        console.log("Audio context initialized");
+    } catch (e) {
+        console.log("Web Audio API not supported:", e);
+        soundsEnabled = false;
+    }
+}
+
+function toggleSounds() {
+    gameState.soundsEnabled = !gameState.soundsEnabled;
+    soundsEnabled = gameState.soundsEnabled;
+    
+    const soundBtn = document.getElementById('soundToggleBtn');
+    if (soundBtn) {
+        soundBtn.innerHTML = gameState.soundsEnabled ? 
+            '<i class="fas fa-volume-up"></i>' : 
+            '<i class="fas fa-volume-mute"></i>';
+        soundBtn.title = gameState.soundsEnabled ? 'Sound ON' : 'Sound OFF';
+        soundBtn.style.background = gameState.soundsEnabled ? 
+            'linear-gradient(135deg, #00ccff, #0099ff)' : 
+            'linear-gradient(135deg, #666, #888)';
+    }
+    
+    saveGame();
+}
+
+// ======================================================
+// OPPDATERT BOSS TIMER SYSTEM
+// ======================================================
+
+function createBossTimer() {
+    // Fjern eventuell eksisterende timer
+    if (bossTimerElement && bossTimerElement.parentNode) {
+        bossTimerElement.remove();
+    }
+    
+    // Opprett ny timer element
+    bossTimerElement = document.createElement('div');
+    bossTimerElement.className = 'boss-timer-overhead';
+    bossTimerElement.id = 'bossTimerOverhead';
+    bossTimerElement.style.display = 'none';
+    
+    // Legg til i enemy container
+    const enemyContainer = document.querySelector('.enemy-container');
+    if (enemyContainer) {
+        enemyContainer.appendChild(bossTimerElement);
+    }
+}
+
+function updateBossTimer() {
+    if (!bossTimerElement) return;
+    
+    bossTimerElement.textContent = `${gameState.bossTimer}s`;
+    
+    // Endre farge basert på tid
+    if (gameState.bossTimer <= 10) {
+        bossTimerElement.style.background = 'linear-gradient(135deg, #ff4444, #ff0000)';
+        bossTimerElement.style.borderColor = '#ff8800';
+    } else if (gameState.bossTimer <= 30) {
+        bossTimerElement.style.background = 'linear-gradient(135deg, #ff8800, #ff5500)';
+        bossTimerElement.style.borderColor = '#ffaa00';
+    } else {
+        bossTimerElement.style.background = 'linear-gradient(135deg, #ffaa00, #ff8800)';
+        bossTimerElement.style.borderColor = '#ffd700';
+    }
+}
+
+function startBossTimer() {
+    if (!bossTimerElement) return;
+    
+    // Vis timer
+    bossTimerElement.style.display = 'block';
+    updateBossTimer();
+    
+    // Fjern gammelt interval hvis det finnes
+    if (gameState.bossTimerInterval) {
+        clearInterval(gameState.bossTimerInterval);
+    }
+    
+    gameState.bossTimer = 60;
+    updateBossTimer();
+    
+    gameState.bossTimerInterval = setInterval(() => {
+        gameState.bossTimer--;
+        updateBossTimer();
+        
+        if (gameState.bossTimer <= 0) {
+            clearInterval(gameState.bossTimerInterval);
+            gameState.bossTimerInterval = null;
+            // Boss timed out - skjul timer og reset
+            if (bossTimerElement) {
+                bossTimerElement.style.display = 'none';
+            }
+            gameState.enemyNumber = 1;
+            spawnEnemy();
+            showMessage('TIME\'S UP! ⏰', 'The boss escaped! Try again next time.');
+        }
+    }, 1000);
+}
+
+function hideBossTimer() {
+    if (bossTimerElement) {
+        bossTimerElement.style.display = 'none';
+    }
+    if (gameState.bossTimerInterval) {
+        clearInterval(gameState.bossTimerInterval);
+        gameState.bossTimerInterval = null;
+    }
+}
+
+// ======================================================
+// OPPDATERT NAVIGASJONS PILER
+// ======================================================
+
+function addNavigationArrows() {
+    const fightPage = document.querySelector('.fight-page');
+    
+    // Fjern eksisterende piler
+    const existingArrows = document.querySelectorAll('.nav-arrow');
+    existingArrows.forEach(arrow => arrow.remove());
+    
+    // Venstre pil (forrige fiende)
+    const leftArrow = document.createElement('button');
+    leftArrow.className = 'nav-arrow nav-arrow-left';
+    leftArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    leftArrow.id = 'prevEnemyBtn';
+    leftArrow.onclick = goToPreviousEnemy;
+    
+    // Høyre pil (neste fiende)
+    const rightArrow = document.createElement('button');
+    rightArrow.className = 'nav-arrow nav-arrow-right';
+    rightArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    rightArrow.id = 'nextEnemyBtn';
+    rightArrow.onclick = goToNextEnemy;
+    
+    // Return to current knapp
+    const returnBtn = document.createElement('button');
+    returnBtn.className = 'return-current-btn';
+    returnBtn.id = 'returnToCurrentBtn';
+    returnBtn.innerHTML = '<i class="fas fa-home"></i> Return to Current';
+    returnBtn.onclick = returnToCurrentProgression;
+    returnBtn.style.display = 'none';
+    
+    fightPage.appendChild(leftArrow);
+    fightPage.appendChild(rightArrow);
+    fightPage.appendChild(returnBtn);
+    
+    // Oppdater pilene
+    updateArrowNavigation();
+}
+
+function updateArrowNavigation() {
+    const prevBtn = document.getElementById('prevEnemyBtn');
+    const nextBtn = document.getElementById('nextEnemyBtn');
+    const returnBtn = document.getElementById('returnToCurrentBtn');
+    
+    if (gameState.inHistoryMode) {
+        // I historikkmodus - vis return knapp
+        if (returnBtn) returnBtn.style.display = 'block';
+        
+        // Oppdater piler basert på historikk
+        if (prevBtn) {
+            prevBtn.disabled = enemyHistory.defeatedEnemies.length === 0 || 
+                (enemyHistory.currentHistoryIndex <= 0 && !enemyHistory.canNavigateHistory);
+        }
+        
+        if (nextBtn) {
+            nextBtn.disabled = enemyHistory.defeatedEnemies.length === 0 || 
+                enemyHistory.currentHistoryIndex >= enemyHistory.maxHistoryIndex;
+        }
+    } else {
+        // Ikke i historikkmodus - skjul return knapp
+        if (returnBtn) returnBtn.style.display = 'none';
+        
+        // Piler for å se tidligere fiender man har beseiret
+        if (prevBtn) {
+            prevBtn.disabled = enemyHistory.defeatedEnemies.length === 0;
+            prevBtn.title = 'View previous defeated enemies';
+        }
+        
+        if (nextBtn) {
+            // Neste pil skal bare gå frem til der man har kommet
+            nextBtn.disabled = enemyHistory.currentHistoryIndex >= enemyHistory.maxHistoryIndex;
+            nextBtn.title = 'View next defeated enemies (up to current progression)';
+        }
+    }
+}
+
+// ======================================================
+// OPPDATERT HISTORIKK FUNKSJONER
+// ======================================================
+
 function addToEnemyHistory() {
     const biomeIndex = (gameState.level - 1) % biomes.length;
     const biome = biomes[biomeIndex];
@@ -689,67 +896,101 @@ function addToEnemyHistory() {
     };
     
     // Sjekk om denne fienden allerede er i historikken
-    const alreadyExists = enemyHistory.defeatedEnemies.some(e => 
+    const existingIndex = enemyHistory.defeatedEnemies.findIndex(e => 
         e.level === enemyData.level && 
         e.enemyNumber === enemyData.enemyNumber && 
         e.biome === enemyData.biome
     );
     
-    if (!alreadyExists) {
+    if (existingIndex === -1) {
+        // Legg til ny fiende
         enemyHistory.defeatedEnemies.push(enemyData);
-        enemyHistory.currentHistoryIndex = enemyHistory.defeatedEnemies.length - 1;
+        enemyHistory.maxHistoryIndex = enemyHistory.defeatedEnemies.length - 1;
+        enemyHistory.currentHistoryIndex = enemyHistory.maxHistoryIndex;
         enemyHistory.canNavigateHistory = true;
         
         console.log("Added to enemy history:", enemyData);
+    } else {
+        // Oppdater eksisterende
+        enemyHistory.defeatedEnemies[existingIndex] = enemyData;
+        enemyHistory.currentHistoryIndex = existingIndex;
     }
     
-    // Oppdater navigasjonsknapper
-    updateHistoryNavigation();
+    updateArrowNavigation();
 }
 
-// Naviger til forrige fiende i historikken
 function goToPreviousEnemy() {
-    if (!enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0) {
+    if (enemyHistory.defeatedEnemies.length === 0) {
         showMessage("Enemy History", "No enemies in history yet!");
         return;
     }
     
-    enemyHistory.currentHistoryIndex--;
-    if (enemyHistory.currentHistoryIndex < 0) {
-        enemyHistory.currentHistoryIndex = enemyHistory.defeatedEnemies.length - 1;
-    }
-    
-    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
-    loadEnemyFromHistory(enemyData);
-    updateHistoryNavigation();
-}
-
-// Naviger til neste fiende i historikken
-function goToNextEnemy() {
-    if (!enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0) {
-        showMessage("Enemy History", "No enemies in history yet!");
-        return;
-    }
-    
-    enemyHistory.currentHistoryIndex++;
-    if (enemyHistory.currentHistoryIndex >= enemyHistory.defeatedEnemies.length) {
-        enemyHistory.currentHistoryIndex = 0;
-    }
-    
-    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
-    loadEnemyFromHistory(enemyData);
-    updateHistoryNavigation();
-}
-
-// Last inn fiende fra historikken
-function loadEnemyFromHistory(enemyData) {
-    // Lagre nåværende progresjon hvis vi går til historikkmodus
+    // Hvis vi ikke er i historikkmodus, lagre nåværende state
     if (!gameState.inHistoryMode) {
         gameState.savedLevel = gameState.level;
         gameState.savedEnemyNumber = gameState.enemyNumber;
         gameState.savedDifficultyMultiplier = gameState.difficultyMultiplier;
         gameState.inHistoryMode = true;
     }
+    
+    // Gå til forrige
+    enemyHistory.currentHistoryIndex--;
+    if (enemyHistory.currentHistoryIndex < 0) {
+        enemyHistory.currentHistoryIndex = enemyHistory.maxHistoryIndex;
+    }
+    
+    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
+    loadEnemyFromHistory(enemyData);
+    
+    // Vis history indicator
+    showHistoryIndicator();
+}
+
+function goToNextEnemy() {
+    if (enemyHistory.defeatedEnemies.length === 0) {
+        showMessage("Enemy History", "No enemies in history yet!");
+        return;
+    }
+    
+    // Gå til neste, men ikke lengre enn der man har kommet
+    enemyHistory.currentHistoryIndex++;
+    if (enemyHistory.currentHistoryIndex > enemyHistory.maxHistoryIndex) {
+        enemyHistory.currentHistoryIndex = 0;
+    }
+    
+    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
+    loadEnemyFromHistory(enemyData);
+    
+    // Vis history indicator
+    showHistoryIndicator();
+}
+
+function showHistoryIndicator() {
+    // Fjern gammel indicator hvis den finnes
+    const oldIndicator = document.querySelector('.history-indicator');
+    if (oldIndicator) oldIndicator.remove();
+    
+    if (gameState.inHistoryMode) {
+        const indicator = document.createElement('div');
+        indicator.className = 'history-indicator';
+        indicator.innerHTML = `History: ${enemyHistory.currentHistoryIndex + 1}/${enemyHistory.defeatedEnemies.length}`;
+        
+        const fightPage = document.querySelector('.fight-page');
+        if (fightPage) {
+            fightPage.appendChild(indicator);
+            
+            // Fjern etter 3 sekunder
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.remove();
+                }
+            }, 3000);
+        }
+    }
+}
+
+function loadEnemyFromHistory(enemyData) {
+    gameState.inHistoryMode = true;
     
     // Sett fienden fra historikken
     gameState.level = enemyData.level;
@@ -778,52 +1019,41 @@ function loadEnemyFromHistory(enemyData) {
             enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Boss`;
             enemy.classList.add('boss-indicator', 'boss-enhanced');
+            
+            // Start boss timer
+            gameState.bossTimer = 60;
+            startBossTimer();
         } else {
             enemyImage.src = enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Enemy`;
             enemy.classList.remove('boss-indicator', 'boss-enhanced');
+            
+            // Skjul boss timer
+            hideBossTimer();
         }
         
-        enemy.style.width = '250px';
-        enemy.style.height = '250px';
+        enemy.style.width = '180px';
+        enemy.style.height = '180px';
         enemyImage.style.width = '100%';
         enemyImage.style.height = '100%';
     }
     
     // Update UI
     const enemyTypeEl = document.getElementById('enemyType');
-    if (enemyTypeEl) enemyTypeEl.textContent = biome.enemyType + (enemyData.isBoss ? ' Boss' : '') + ' (History)';
+    if (enemyTypeEl) enemyTypeEl.textContent = `${biome.enemyType} ${enemyData.isBoss ? 'Boss' : ''}`;
     
     const enemyCountEl = document.getElementById('enemyCount');
-    if (enemyCountEl) enemyCountEl.textContent = `${enemyData.enemyNumber}/9`;
+    if (enemyCountEl) enemyCountEl.textContent = `${enemyData.enemyNumber}/9 [History]`;
     
     // Sett HP
     gameState.currentEnemyHP = enemyData.hp;
     gameState.maxEnemyHP = enemyData.hp;
     
-    // Oppdater boss timer hvis boss
-    if (enemyData.isBoss) {
-        gameState.bossTimer = 60;
-        const bossTimerContainer = document.getElementById('bossTimerContainer');
-        if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
-        startBossTimer();
-    } else {
-        const bossTimerContainer = document.getElementById('bossTimerContainer');
-        if (bossTimerContainer) bossTimerContainer.style.display = 'none';
-        if (gameState.bossTimerInterval) {
-            clearInterval(gameState.bossTimerInterval);
-            gameState.bossTimerInterval = null;
-        }
-    }
-    
     updateEnemyHP();
     updateDifficultyDisplay();
-    
-    // Vis melding om at vi er i historikkmodus
-    showMessage("Enemy History", `Loaded enemy from history:<br>Level ${enemyData.level}, ${biome.enemyType} ${enemyData.isBoss ? 'Boss' : 'Enemy'} ${enemyData.enemyNumber}`);
+    updateArrowNavigation();
 }
 
-// Gå tilbake til nåværende progresjon
 function returnToCurrentProgression() {
     if (!gameState.inHistoryMode) return;
     
@@ -837,44 +1067,9 @@ function returnToCurrentProgression() {
     spawnEnemy();
     
     // Oppdater navigasjon
-    updateHistoryNavigation();
+    updateArrowNavigation();
     
     showMessage("Returned to Progression", "You are now back to your current progression!");
-}
-
-// Oppdater navigasjonsknapper for historikk
-function updateHistoryNavigation() {
-    const prevBtn = document.getElementById('prevEnemyBtn');
-    const nextBtn = document.getElementById('nextEnemyBtn');
-    const returnBtn = document.getElementById('returnToCurrentBtn');
-    
-    if (prevBtn) {
-        prevBtn.disabled = !enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0;
-    }
-    
-    if (nextBtn) {
-        nextBtn.disabled = !enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0;
-    }
-    
-    if (returnBtn) {
-        returnBtn.style.display = gameState.inHistoryMode ? 'inline-block' : 'none';
-    }
-}
-
-// Toggle lyd på/av
-function toggleSounds() {
-    gameState.soundsEnabled = !gameState.soundsEnabled;
-    soundsEnabled = gameState.soundsEnabled;
-    
-    const soundBtn = document.getElementById('soundToggleBtn');
-    if (soundBtn) {
-        soundBtn.innerHTML = gameState.soundsEnabled ? 
-            '<i class="fas fa-volume-up"></i>' : 
-            '<i class="fas fa-volume-mute"></i>';
-        soundBtn.title = gameState.soundsEnabled ? 'Sound ON' : 'Sound OFF';
-    }
-    
-    saveGame();
 }
 
 // ======================================================
@@ -882,8 +1077,13 @@ function toggleSounds() {
 // ======================================================
 
 function init() {
+    // Start audio context
+    initAudio();
+    
     loadGame();
     setupEventListeners();
+    createBossTimer(); // Opprett boss timer element
+    addNavigationArrows(); // Legg til navigasjonspiler
     spawnEnemy();
     updateUI();
     startAutoSave();
@@ -895,16 +1095,13 @@ function init() {
     // Oppdater UI ikoner
     updateUIIcons();
     
+    // Legg til lyd toggle knapp
+    addSoundToggleButton();
+    
     // Start auto attack if enabled
     if (gameState.autoAttack) {
         startAutoAttack();
     }
-    
-    // Legg til lyd toggle knapp
-    addSoundToggleButton();
-    
-    // Legg til historikk navigasjonsknapper
-    addHistoryNavigationButtons();
 }
 
 function addSoundToggleButton() {
@@ -914,98 +1111,27 @@ function addSoundToggleButton() {
     const soundBtn = document.createElement('button');
     soundBtn.id = 'soundToggleBtn';
     soundBtn.className = 'resource';
-    soundBtn.style.position = 'absolute';
-    soundBtn.style.top = '10px';
-    soundBtn.style.right = '10px';
-    soundBtn.style.zIndex = '1001';
     soundBtn.style.background = gameState.soundsEnabled ? 
-        'linear-gradient(135deg, #43e97b, #38f9d7)' : 
+        'linear-gradient(135deg, #00ccff, #0099ff)' : 
         'linear-gradient(135deg, #666, #888)';
+    soundBtn.style.border = '2px solid #00ccff';
+    soundBtn.style.color = 'white';
+    soundBtn.style.padding = '4px 10px';
+    soundBtn.style.borderRadius = '15px';
+    soundBtn.style.fontWeight = '700';
+    soundBtn.style.cursor = 'pointer';
+    soundBtn.style.transition = 'all 0.3s';
     soundBtn.innerHTML = gameState.soundsEnabled ? 
         '<i class="fas fa-volume-up"></i>' : 
         '<i class="fas fa-volume-mute"></i>';
     soundBtn.title = gameState.soundsEnabled ? 'Sound ON' : 'Sound OFF';
     soundBtn.onclick = toggleSounds;
     
-    document.querySelector('.top-resources').appendChild(soundBtn);
-}
-
-function addHistoryNavigationButtons() {
-    // Legg til knapper i fight-siden
-    const fightPage = document.querySelector('.fight-page');
-    
-    // Forrige fiende knapp
-    const prevBtn = document.createElement('button');
-    prevBtn.id = 'prevEnemyBtn';
-    prevBtn.className = 'history-nav-btn';
-    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Previous Enemy';
-    prevBtn.onclick = goToPreviousEnemy;
-    prevBtn.style.position = 'absolute';
-    prevBtn.style.left = '10px';
-    prevBtn.style.bottom = '10px';
-    prevBtn.style.zIndex = '1000';
-    
-    // Neste fiende knapp
-    const nextBtn = document.createElement('button');
-    nextBtn.id = 'nextEnemyBtn';
-    nextBtn.className = 'history-nav-btn';
-    nextBtn.innerHTML = 'Next Enemy <i class="fas fa-chevron-right"></i>';
-    nextBtn.onclick = goToNextEnemy;
-    nextBtn.style.position = 'absolute';
-    nextBtn.style.right = '10px';
-    nextBtn.style.bottom = '10px';
-    nextBtn.style.zIndex = '1000';
-    
-    // Returner til nåværende progresjon knapp
-    const returnBtn = document.createElement('button');
-    returnBtn.id = 'returnToCurrentBtn';
-    returnBtn.className = 'history-nav-btn';
-    returnBtn.innerHTML = '<i class="fas fa-home"></i> Return to Current';
-    returnBtn.onclick = returnToCurrentProgression;
-    returnBtn.style.position = 'absolute';
-    returnBtn.style.left = '50%';
-    returnBtn.style.bottom = '10px';
-    returnBtn.style.transform = 'translateX(-50%)';
-    returnBtn.style.zIndex = '1000';
-    returnBtn.style.display = 'none'; // Skjult til vi er i historikkmodus
-    
-    // CSS for historikk knapper
-    const style = document.createElement('style');
-    style.textContent = `
-        .history-nav-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            font-size: 12px;
-        }
-        
-        .history-nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        
-        .history-nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-        
-        .history-nav-btn i {
-            margin: 0 5px;
-        }
-    `;
-    
-    document.head.appendChild(style);
-    fightPage.appendChild(prevBtn);
-    fightPage.appendChild(nextBtn);
-    fightPage.appendChild(returnBtn);
+    // Legg til i resource group
+    const resourceGroup = document.querySelector('.resource-group');
+    if (resourceGroup) {
+        resourceGroup.appendChild(soundBtn);
+    }
 }
 
 function updateUIIcons() {
@@ -1266,12 +1392,7 @@ function enemyDefeated() {
         }
         
         // Clear boss timer
-        if (gameState.bossTimerInterval) {
-            clearInterval(gameState.bossTimerInterval);
-            gameState.bossTimerInterval = null;
-        }
-        const bossTimerContainer = document.getElementById('bossTimerContainer');
-        if (bossTimerContainer) bossTimerContainer.style.display = 'none';
+        hideBossTimer();
         
         // Update quest progress
         updateQuestProgress('boss', 1);
@@ -1340,11 +1461,15 @@ function enemyDefeated() {
     saveGame();
 }
 
+// ======================================================
+// OPPDATERT SPAWN ENEMY FUNKSJON
+// ======================================================
+
 function spawnEnemy() {
     const biomeIndex = (gameState.level - 1) % biomes.length;
     const biome = biomes[biomeIndex];
     
-    // Update background - dekker hele skjermen
+    // Update background
     const backgroundContainer = document.querySelector('.fight-page');
     if (backgroundContainer) {
         backgroundContainer.style.backgroundImage = `url('${biome.bgImage}')`;
@@ -1353,7 +1478,7 @@ function spawnEnemy() {
         backgroundContainer.style.backgroundRepeat = 'no-repeat';
     }
     
-    // Update enemy - NYE FIENDE BILDER med STOR F
+    // Update enemy
     gameState.currentBiome = biome.name;
     const enemyImage = document.getElementById('enemyImage');
     const enemy = document.getElementById('enemy');
@@ -1362,36 +1487,23 @@ function spawnEnemy() {
         const isBoss = gameState.enemyNumber === 9;
         
         if (isBoss) {
-            // Bruk boss fiende bilde
             enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Boss`;
-            
-            // Legg til boss klasse
             enemy.classList.add('boss-indicator', 'boss-enhanced');
             
-            gameState.bossTimer = 60;
-            const bossTimerContainer = document.getElementById('bossTimerContainer');
-            if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
+            // Start boss timer
             startBossTimer();
         } else {
-            // Bruk vanlig fiende bilde
             enemyImage.src = enemyImages[biome.name];
             enemyImage.alt = `${biome.enemyType} Enemy`;
-            
-            // Fjern boss klasse
             enemy.classList.remove('boss-indicator', 'boss-enhanced');
             
-            const bossTimerContainer = document.getElementById('bossTimerContainer');
-            if (bossTimerContainer) bossTimerContainer.style.display = 'none';
-            if (gameState.bossTimerInterval) {
-                clearInterval(gameState.bossTimerInterval);
-                gameState.bossTimerInterval = null;
-            }
+            // Skjul boss timer
+            hideBossTimer();
         }
         
-        // Øk størrelsen på fienden
-        enemy.style.width = '250px';
-        enemy.style.height = '250px';
+        enemy.style.width = '180px';
+        enemy.style.height = '180px';
         enemyImage.style.width = '100%';
         enemyImage.style.height = '100%';
     }
@@ -1399,14 +1511,20 @@ function spawnEnemy() {
     const enemyTypeEl = document.getElementById('enemyType');
     if (enemyTypeEl) {
         if (gameState.inHistoryMode) {
-            enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '') + ' (History)';
+            enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '') + ' [History]';
         } else {
             enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '');
         }
     }
     
     const enemyCountEl = document.getElementById('enemyCount');
-    if (enemyCountEl) enemyCountEl.textContent = `${gameState.enemyNumber}/9`;
+    if (enemyCountEl) {
+        if (gameState.inHistoryMode) {
+            enemyCountEl.textContent = `${gameState.enemyNumber}/9 [History]`;
+        } else {
+            enemyCountEl.textContent = `${gameState.enemyNumber}/9`;
+        }
+    }
     
     // HP beregning
     const baseHP = Math.pow(1.8, gameState.level) * 50 * (1 + gameState.prestigePoints * 0.2);
@@ -1423,6 +1541,27 @@ function spawnEnemy() {
     
     updateEnemyHP();
     updateDifficultyDisplay();
+    updateArrowNavigation();
+}
+
+function updateEnemyHP() {
+    const hpPercent = (gameState.currentEnemyHP / gameState.maxEnemyHP) * 100;
+    const hpFill = document.getElementById('enemyHpFill');
+    const hpText = document.getElementById('enemyHpText');
+    
+    if (hpFill) hpFill.style.width = `${Math.max(0, hpPercent)}%`;
+    if (hpText) hpText.textContent = `${formatNumber(gameState.currentEnemyHP)}/${formatNumber(gameState.maxEnemyHP)} (${Math.floor(hpPercent)}%)`;
+    
+    // Endre farge basert på HP
+    if (hpFill) {
+        if (hpPercent > 50) {
+            hpFill.style.background = 'linear-gradient(90deg, #00ff88, #00ccff)';
+        } else if (hpPercent > 25) {
+            hpFill.style.background = 'linear-gradient(90deg, #FF9800, #FFB74D)';
+        } else {
+            hpFill.style.background = 'linear-gradient(90deg, #F44336, #EF5350)';
+        }
+    }
 }
 
 function updateDifficultyDisplay() {
@@ -1430,7 +1569,7 @@ function updateDifficultyDisplay() {
     let difficultyText = '';
     
     if (isBoss) {
-        difficultyText = `BOSS FIGHT (Level ${gameState.level}) - 60s TIMER`;
+        difficultyText = `BOSS FIGHT (Level ${gameState.level})`;
     } else {
         const difficultyLevel = Math.floor(gameState.difficultyMultiplier * 10);
         let difficultyName = 'Easy';
@@ -1451,67 +1590,6 @@ function updateDifficultyDisplay() {
         } else {
             diffTextEl.textContent = difficultyText;
         }
-    }
-}
-
-function updateEnemyHP() {
-    const hpPercent = (gameState.currentEnemyHP / gameState.maxEnemyHP) * 100;
-    const hpFill = document.getElementById('enemyHpFill');
-    const hpText = document.getElementById('enemyHpText');
-    
-    if (hpFill) hpFill.style.width = `${Math.max(0, hpPercent)}%`;
-    if (hpText) hpText.textContent = `${formatNumber(gameState.currentEnemyHP)}/${formatNumber(gameState.maxEnemyHP)} (${Math.floor(hpPercent)}%)`;
-    
-    // Endre farge basert på HP
-    if (hpFill) {
-        if (hpPercent > 50) {
-            hpFill.style.background = 'linear-gradient(90deg, #43e97b, #38f9d7)';
-        } else if (hpPercent > 25) {
-            hpFill.style.background = 'linear-gradient(90deg, #FF9800, #FFB74D)';
-        } else {
-            hpFill.style.background = 'linear-gradient(90deg, #F44336, #EF5350)';
-        }
-    }
-}
-
-function startBossTimer() {
-    if (gameState.bossTimerInterval) {
-        clearInterval(gameState.bossTimerInterval);
-    }
-    
-    updateBossTimer();
-    
-    gameState.bossTimerInterval = setInterval(() => {
-        gameState.bossTimer--;
-        updateBossTimer();
-        
-        if (gameState.bossTimer <= 0) {
-            clearInterval(gameState.bossTimerInterval);
-            gameState.bossTimerInterval = null;
-            // Boss timed out - reset to regular enemy
-            gameState.enemyNumber = 1;
-            spawnEnemy();
-            showMessage('TIME\'S UP! ⏰', 'The boss escaped! Try again next time.');
-        }
-    }, 1000);
-}
-
-function updateBossTimer() {
-    const timerElement = document.getElementById('bossTimer');
-    if (!timerElement) return;
-    
-    timerElement.textContent = `${gameState.bossTimer}s`;
-    
-    // Change color based on time
-    if (gameState.bossTimer <= 10) {
-        timerElement.style.color = '#ff4444';
-        timerElement.style.animation = 'pulse 0.5s infinite';
-    } else if (gameState.bossTimer <= 30) {
-        timerElement.style.color = '#ffaa00';
-        timerElement.style.animation = 'none';
-    } else {
-        timerElement.style.color = '#ffd700';
-        timerElement.style.animation = 'none';
     }
 }
 
@@ -1589,7 +1667,7 @@ function buyAutoUpgrade() {
 }
 
 // ======================================================
-// SHOP SYSTEM - OPPDATERET MED STORE KISTE BILDER
+## SHOP SYSTEM
 // ======================================================
 
 function updateShop() {
@@ -1684,7 +1762,7 @@ function renderCrates() {
         
         crateCard.innerHTML = `
             <div class="crate-header">
-                <img src="${crate.icon}" class="crate-main-image" style="width:80px;height:80px;cursor:pointer;" 
+                <img src="${crate.icon}" class="crate-main-image" style="width:70px;height:70px;cursor:pointer;" 
                      onclick="showCrateInfo('${crate.type}')">
                 <span class="crate-name">${crate.name}</span>
             </div>
@@ -1708,7 +1786,6 @@ function renderCrates() {
     });
 }
 
-// Funksjon for å vise crate info i modal
 function showCrateInfo(crateType) {
     const crateInfo = {
         basic: {
@@ -1780,7 +1857,7 @@ function showCrateInfo(crateType) {
                         OPEN FREE
                     </button>
                 ` : `
-                    <button onclick="buyCrate('${crateType}'); closeCrateInfoModal()" style="background:linear-gradient(135deg, #43e97b, #38f9d7);color:white;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-weight:bold;margin-right:10px;">
+                    <button onclick="buyCrate('${crateType}'); closeCrateInfoModal()" style="background:linear-gradient(135deg, #00cc66, #00aa55);color:white;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-weight:bold;margin-right:10px;">
                         BUY FOR ${crateType === 'basic' ? 10 : crateType === 'advanced' ? 25 : crateType === 'premium' ? 50 : crateType === 'pet' ? 30 : crateType === 'pet_godly' ? 75 : 500} GEMS
                     </button>
                 `}
@@ -1872,7 +1949,7 @@ function buyCrate(type) {
 }
 
 // ======================================================
-// ENKEL CRATE OPENING - SIKRERE SYSTEM
+## ENKEL CRATE OPENING
 // ======================================================
 
 function showSimpleCrateOpening(crateType, source = 'shop') {
@@ -1892,11 +1969,10 @@ function showSimpleCrateOpening(crateType, source = 'shop') {
         ).join('') : ''}`
     );
     
-    // Legg til i inventory med SIKRERE SYSTEM
+    // Legg til i inventory
     addItemToInventory(item);
 }
 
-// SIKRERE CRATE SYSTEM
 function getRandomItemFromCrate(crateType) {
     const probabilities = crateProbabilities[crateType];
     const roll = Math.random() * 100;
@@ -1923,13 +1999,13 @@ function getRandomItemFromCrate(crateType) {
         itemPool = allItems.filter(item => item.rarity === selectedRarity);
     }
     
-    // SIKKER FALLBACK: Hvis ingen items av den rarity, bruk vanlig item
+    // Fallback
     if (itemPool.length === 0) {
         console.warn(`No items found for rarity ${selectedRarity} in crate ${crateType}, using fallback`);
         if (crateType === 'pet' || crateType === 'pet_godly') {
-            itemPool = [items.pets[0]]; // Første pet som fallback
+            itemPool = [items.pets[0]];
         } else {
-            itemPool = [items.weapons[0]]; // Første våpen som fallback
+            itemPool = [items.weapons[0]];
         }
     }
     
@@ -1940,7 +2016,7 @@ function openCrate(type, isBossDrop = false) {
     let selectedRarity;
     
     if (isBossDrop && Math.random() < 0.3) {
-        // Boss drops har litt bedre odds - velg en høyere rarity
+        // Boss drops har litt bedre odds
         const rarities = ['common', 'rare', 'epic', 'legendary', 'ultimate', 'godly'];
         const baseRarity = getRandomRarityFromProbabilities(crateProbabilities[type] || crateProbabilities.premium);
         const baseIndex = rarities.indexOf(baseRarity);
@@ -1998,7 +2074,7 @@ function openDailyCrate() {
 }
 
 // ======================================================
-// PRESTIGE SYSTEM - OPPDATERT MED HISTORIKK RESET
+## PRESTIGE SYSTEM
 // ======================================================
 
 function showPrestigeModal() {
@@ -2052,9 +2128,10 @@ function prestige() {
     gameState.difficultyMultiplier = 1.0 + (gameState.prestigePoints * 0.1);
     gameState.bossCleared = {};
     
-    // RESET FIENDE HISTORIKK - Som du ba om
+    // RESET FIENDE HISTORIKK
     enemyHistory.defeatedEnemies = [];
     enemyHistory.currentHistoryIndex = -1;
+    enemyHistory.maxHistoryIndex = -1;
     enemyHistory.canNavigateHistory = false;
     gameState.inHistoryMode = false;
     gameState.savedLevel = 1;
@@ -2082,7 +2159,7 @@ function prestige() {
     
     spawnEnemy();
     updateUI();
-    updateHistoryNavigation(); // Oppdater navigasjonsknapper
+    updateArrowNavigation();
     saveGame();
 }
 
@@ -2096,7 +2173,7 @@ function updatePrestigeButton() {
         if (canPrestige) {
             prestigeBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
             prestigeBtn.style.animation = 'pulse 2s infinite';
-            prestigeBtn.style.boxShadow = '0 0 15px gold';
+            prestigeBtn.style.boxShadow = '0 0 15px rgba(255, 215, 0, 0.5)';
             prestigeBtn.innerHTML = `<img src="${uiIcons.star}" style="width:16px;height:16px;"> PRESTIGE!`;
         } else {
             prestigeBtn.style.background = 'linear-gradient(135deg, #888, #666)';
@@ -2140,7 +2217,7 @@ function updatePrestigeButton() {
 }
 
 // ======================================================
-// INVENTORY SYSTEM - SIKKERE SYSTEM
+## INVENTORY SYSTEM
 // ======================================================
 
 function addItemToInventory(item) {
@@ -2154,7 +2231,7 @@ function addItemToInventory(item) {
         inventory[category] = {};
     }
     
-    // SIKRERE SYSTEM: Sjekk om item allerede finnes
+    // Sjekk om item allerede finnes
     if (!inventory[category][item.id]) {
         inventory[category][item.id] = {
             item: item,
@@ -2246,7 +2323,7 @@ function renderInventory() {
         if (item.damage) {
             statsHtml += `<div class="item-stat"><span class="stat-label">Damage:</span> <span class="stat-value">${item.damage}x</span></div>`;
         }
-        if (item.auto) { // Endret fra defense til auto
+        if (item.auto) {
             statsHtml += `<div class="item-stat"><span class="stat-label">Auto:</span> <span class="stat-value">+${item.auto}</span></div>`;
         }
         if (item.bonus) {
@@ -2273,7 +2350,7 @@ function renderInventory() {
         
         div.innerHTML = `
             <div class="item-count">${itemData.count}/${itemData.level + 1}</div>
-            <img src="${item.icon}" class="item-icon" style="width:80px;height:80px;cursor:pointer;" 
+            <img src="${item.icon}" class="item-icon" style="width:70px;height:70px;cursor:pointer;" 
                  onclick="showItemModal('${item.id}', '${category}')">
             <div class="item-name">${item.name}</div>
             <div class="item-level">Level ${itemData.level}</div>
@@ -2317,7 +2394,7 @@ function showItemModal(itemId, category) {
                 </div>
                 <div style="display:flex;gap:10px;justify-content:center;">
                     ${category === 'pets' ? `
-                        <button onclick="equipPet('${item.id}'); closeItemModal()" style="background:linear-gradient(135deg, #43e97b, #38f9d7);color:white;border:none;padding:10px 15px;border-radius:10px;cursor:pointer;font-weight:bold;">
+                        <button onclick="equipPet('${item.id}'); closeItemModal()" style="background:linear-gradient(135deg, #00cc66, #00aa55);color:white;border:none;padding:10px 15px;border-radius:10px;cursor:pointer;font-weight:bold;">
                             ${inventory.activePet && inventory.activePet.id === item.id ? 'Equipped' : 'Equip'}
                         </button>
                     ` : itemData.count >= (itemData.level + 1) ? `
@@ -2439,9 +2516,6 @@ function upgradeItem(itemId) {
             itemData.count = 0;
         }
         
-        // Item skal fortsatt være i inventory selv med count 0
-        // Den kan få nye copies senere
-        
         renderInventory();
         updateUI();
         saveGame();
@@ -2458,7 +2532,7 @@ function upgradeItem(itemId) {
 }
 
 // ======================================================
-// ACHIEVEMENTS SYSTEM
+## ACHIEVEMENTS SYSTEM
 // ======================================================
 
 function renderAchievements() {
@@ -2560,7 +2634,7 @@ function claimAchievement(achievementId) {
 }
 
 // ======================================================
-// QUESTS SYSTEM
+## QUESTS SYSTEM
 // ======================================================
 
 function renderQuests() {
@@ -2737,7 +2811,7 @@ function claimQuest(questId) {
 }
 
 // ======================================================
-// UTILITY FUNCTIONS
+## UTILITY FUNCTIONS
 // ======================================================
 
 function updateUI() {
@@ -2846,7 +2920,7 @@ function startAutoSave() {
 }
 
 // ======================================================
-// SAVE SYSTEM - OPPDATERET MED HISTORIKK
+## SAVE SYSTEM - OPPDATERET MED HISTORIKK
 // ======================================================
 
 function saveGame() {
@@ -2880,7 +2954,7 @@ function loadGame() {
             // Load game state
             Object.assign(gameState, data.gameState || {});
             
-            // Load inventory - SIKRERE LADING
+            // Load inventory
             inventory = data.inventory || {
                 weapons: {},
                 armor: {},
@@ -2896,6 +2970,7 @@ function loadGame() {
                 enemyHistory = {
                     defeatedEnemies: [],
                     currentHistoryIndex: -1,
+                    maxHistoryIndex: -1,
                     canNavigateHistory: false
                 };
             }
@@ -2999,6 +3074,7 @@ function resetGame() {
         enemyHistory = {
             defeatedEnemies: [],
             currentHistoryIndex: -1,
+            maxHistoryIndex: -1,
             canNavigateHistory: false
         };
         
@@ -3018,7 +3094,7 @@ function resetGame() {
 }
 
 // ======================================================
-// MESSAGE OVERLAY FUNCTIONS
+## MESSAGE OVERLAY FUNCTIONS
 // ======================================================
 
 function showMessage(title, text) {
@@ -3041,11 +3117,20 @@ function closeMessage() {
 }
 
 // ======================================================
-// INITIALIZE GAME
+## INITIALIZE GAME
 // ======================================================
 
 // Start the game when page loads
-window.addEventListener('DOMContentLoaded', init);
+window.addEventListener('DOMContentLoaded', () => {
+    // Initialiser audio context når brukeren interagerer
+    document.addEventListener('click', () => {
+        if (!audioContext) {
+            initAudio();
+        }
+    }, { once: true });
+    
+    init();
+});
 
 // Export function for development
 window.debugGame = () => {
@@ -3056,7 +3141,7 @@ window.debugGame = () => {
     console.log('Quests:', quests);
 };
 
-// Legg til disse funksjonene i window scope
+// Legg til alle funksjoner i window scope
 window.attack = attack;
 window.buyCoins = buyCoins;
 window.buyCrate = buyCrate;
