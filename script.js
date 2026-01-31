@@ -2,67 +2,6 @@
 // GAME STATE & DATA - MED OPPDATERINGER
 // ======================================================
 
-// LYDFILER - Vi bruker enkel Web Audio API for klikk og crit lyder
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-let soundsEnabled = true;
-
-// Funksjon for å spille klikklyd
-function playClickSound() {
-    if (!soundsEnabled) return;
-    
-    try {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.value = 800;
-        oscillator.type = 'sine';
-        
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.1);
-    } catch (e) {
-        console.log("Audio error:", e);
-    }
-}
-
-// Funksjon for å spille crit-lyd
-function playCritSound() {
-    if (!soundsEnabled) return;
-    
-    try {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        // Spill to toner samtidig for crit-effekt
-        oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
-        oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
-        oscillator.type = 'sawtooth';
-        
-        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + 0.3);
-    } catch (e) {
-        console.log("Audio error:", e);
-    }
-}
-
-// Fiende historikk system
-let enemyHistory = {
-    defeatedEnemies: [], // Liste over beseirede fiender
-    currentHistoryIndex: -1, // Nåværende index i historikken
-    canNavigateHistory: false // Om vi kan navigere i historikken
-};
-
 let gameState = {
     coins: 0,
     gems: 0,
@@ -95,7 +34,12 @@ let gameState = {
     totalCratesOpened: 0,
     difficultyMultiplier: 1.0,
     enteredCodes: [],
-    soundsEnabled: true
+    // Ny: Historikk over beseirede fiender
+    enemyHistory: [],
+    // Ny: Nåværende indeks i historikken
+    currentHistoryIndex: 0,
+    // Ny: Prestige historikk reset
+    prestigeHistoryReset: false
 };
 
 // DINE BILDE-URL-ER FOR GITHUB PAGES
@@ -667,222 +611,59 @@ const crateProbabilities = {
     }
 };
 
-// ======================================================
-// NYE FUNKSJONER: FIENDE HISTORIKK OG LYDER
-// ======================================================
-
-// Legg til fiende i historikken
-function addToEnemyHistory() {
-    const biomeIndex = (gameState.level - 1) % biomes.length;
-    const biome = biomes[biomeIndex];
-    const isBoss = gameState.enemyNumber === 9;
+// Sound system
+const soundSystem = {
+    enabled: true,
+    slashSound: null,
+    clickSound: null,
     
-    const enemyData = {
-        level: gameState.level,
-        enemyNumber: gameState.enemyNumber,
-        biome: biome.name,
-        enemyType: biome.enemyType,
-        isBoss: isBoss,
-        timestamp: Date.now(),
-        hp: gameState.maxEnemyHP,
-        damageMultiplier: gameState.difficultyMultiplier
-    };
-    
-    // Sjekk om denne fienden allerede er i historikken
-    const alreadyExists = enemyHistory.defeatedEnemies.some(e => 
-        e.level === enemyData.level && 
-        e.enemyNumber === enemyData.enemyNumber && 
-        e.biome === enemyData.biome
-    );
-    
-    if (!alreadyExists) {
-        enemyHistory.defeatedEnemies.push(enemyData);
-        enemyHistory.currentHistoryIndex = enemyHistory.defeatedEnemies.length - 1;
-        enemyHistory.canNavigateHistory = true;
+    init: function() {
+        this.slashSound = document.getElementById('slashSound');
+        this.clickSound = document.getElementById('clickSound');
         
-        console.log("Added to enemy history:", enemyData);
-    }
-    
-    // Oppdater navigasjonsknapper
-    updateHistoryNavigation();
-}
-
-// Naviger til forrige fiende i historikken
-function goToPreviousEnemy() {
-    if (!enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0) {
-        showMessage("Enemy History", "No enemies in history yet!");
-        return;
-    }
-    
-    enemyHistory.currentHistoryIndex--;
-    if (enemyHistory.currentHistoryIndex < 0) {
-        enemyHistory.currentHistoryIndex = enemyHistory.defeatedEnemies.length - 1;
-    }
-    
-    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
-    loadEnemyFromHistory(enemyData);
-    updateHistoryNavigation();
-}
-
-// Naviger til neste fiende i historikken
-function goToNextEnemy() {
-    if (!enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0) {
-        showMessage("Enemy History", "No enemies in history yet!");
-        return;
-    }
-    
-    enemyHistory.currentHistoryIndex++;
-    if (enemyHistory.currentHistoryIndex >= enemyHistory.defeatedEnemies.length) {
-        enemyHistory.currentHistoryIndex = 0;
-    }
-    
-    const enemyData = enemyHistory.defeatedEnemies[enemyHistory.currentHistoryIndex];
-    loadEnemyFromHistory(enemyData);
-    updateHistoryNavigation();
-}
-
-// Last inn fiende fra historikken
-function loadEnemyFromHistory(enemyData) {
-    // Lagre nåværende progresjon hvis vi går til historikkmodus
-    if (!gameState.inHistoryMode) {
-        gameState.savedLevel = gameState.level;
-        gameState.savedEnemyNumber = gameState.enemyNumber;
-        gameState.savedDifficultyMultiplier = gameState.difficultyMultiplier;
-        gameState.inHistoryMode = true;
-    }
-    
-    // Sett fienden fra historikken
-    gameState.level = enemyData.level;
-    gameState.enemyNumber = enemyData.enemyNumber;
-    gameState.difficultyMultiplier = enemyData.damageMultiplier;
-    
-    // Last inn fienden
-    const biome = biomes.find(b => b.name === enemyData.biome) || biomes[0];
-    
-    // Update background
-    const backgroundContainer = document.querySelector('.fight-page');
-    if (backgroundContainer) {
-        backgroundContainer.style.backgroundImage = `url('${biome.bgImage}')`;
-        backgroundContainer.style.backgroundSize = 'cover';
-        backgroundContainer.style.backgroundPosition = 'center';
-        backgroundContainer.style.backgroundRepeat = 'no-repeat';
-    }
-    
-    // Update enemy
-    gameState.currentBiome = biome.name;
-    const enemyImage = document.getElementById('enemyImage');
-    const enemy = document.getElementById('enemy');
-    
-    if (enemyImage && enemy) {
-        if (enemyData.isBoss) {
-            enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
-            enemyImage.alt = `${biome.enemyType} Boss`;
-            enemy.classList.add('boss-indicator', 'boss-enhanced');
-        } else {
-            enemyImage.src = enemyImages[biome.name];
-            enemyImage.alt = `${biome.enemyType} Enemy`;
-            enemy.classList.remove('boss-indicator', 'boss-enhanced');
+        // Load sounds
+        if (this.slashSound) {
+            this.slashSound.load();
+        }
+        if (this.clickSound) {
+            this.clickSound.load();
         }
         
-        enemy.style.width = '250px';
-        enemy.style.height = '250px';
-        enemyImage.style.width = '100%';
-        enemyImage.style.height = '100%';
-    }
-    
-    // Update UI
-    const enemyTypeEl = document.getElementById('enemyType');
-    if (enemyTypeEl) enemyTypeEl.textContent = biome.enemyType + (enemyData.isBoss ? ' Boss' : '') + ' (History)';
-    
-    const enemyCountEl = document.getElementById('enemyCount');
-    if (enemyCountEl) enemyCountEl.textContent = `${enemyData.enemyNumber}/9`;
-    
-    // Sett HP
-    gameState.currentEnemyHP = enemyData.hp;
-    gameState.maxEnemyHP = enemyData.hp;
-    
-    // Oppdater boss timer hvis boss
-    if (enemyData.isBoss) {
-        gameState.bossTimer = 60;
-        const bossTimerContainer = document.getElementById('bossTimerContainer');
-        if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
-        startBossTimer();
-    } else {
-        const bossTimerContainer = document.getElementById('bossTimerContainer');
-        if (bossTimerContainer) bossTimerContainer.style.display = 'none';
-        if (gameState.bossTimerInterval) {
-            clearInterval(gameState.bossTimerInterval);
-            gameState.bossTimerInterval = null;
+        // Check if user has previously disabled sounds
+        const soundEnabled = localStorage.getItem('soundEnabled');
+        if (soundEnabled !== null) {
+            this.enabled = JSON.parse(soundEnabled);
         }
+    },
+    
+    playSlash: function() {
+        if (this.enabled && this.slashSound) {
+            this.slashSound.currentTime = 0;
+            this.slashSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+    },
+    
+    playClick: function() {
+        if (this.enabled && this.clickSound) {
+            this.clickSound.currentTime = 0;
+            this.clickSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+    },
+    
+    toggle: function() {
+        this.enabled = !this.enabled;
+        localStorage.setItem('soundEnabled', JSON.stringify(this.enabled));
+        return this.enabled;
     }
-    
-    updateEnemyHP();
-    updateDifficultyDisplay();
-    
-    // Vis melding om at vi er i historikkmodus
-    showMessage("Enemy History", `Loaded enemy from history:<br>Level ${enemyData.level}, ${biome.enemyType} ${enemyData.isBoss ? 'Boss' : 'Enemy'} ${enemyData.enemyNumber}`);
-}
-
-// Gå tilbake til nåværende progresjon
-function returnToCurrentProgression() {
-    if (!gameState.inHistoryMode) return;
-    
-    // Gjenopprett progresjon
-    gameState.level = gameState.savedLevel;
-    gameState.enemyNumber = gameState.savedEnemyNumber;
-    gameState.difficultyMultiplier = gameState.savedDifficultyMultiplier;
-    gameState.inHistoryMode = false;
-    
-    // Last inn fienden
-    spawnEnemy();
-    
-    // Oppdater navigasjon
-    updateHistoryNavigation();
-    
-    showMessage("Returned to Progression", "You are now back to your current progression!");
-}
-
-// Oppdater navigasjonsknapper for historikk
-function updateHistoryNavigation() {
-    const prevBtn = document.getElementById('prevEnemyBtn');
-    const nextBtn = document.getElementById('nextEnemyBtn');
-    const returnBtn = document.getElementById('returnToCurrentBtn');
-    
-    if (prevBtn) {
-        prevBtn.disabled = !enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0;
-    }
-    
-    if (nextBtn) {
-        nextBtn.disabled = !enemyHistory.canNavigateHistory || enemyHistory.defeatedEnemies.length === 0;
-    }
-    
-    if (returnBtn) {
-        returnBtn.style.display = gameState.inHistoryMode ? 'inline-block' : 'none';
-    }
-}
-
-// Toggle lyd på/av
-function toggleSounds() {
-    gameState.soundsEnabled = !gameState.soundsEnabled;
-    soundsEnabled = gameState.soundsEnabled;
-    
-    const soundBtn = document.getElementById('soundToggleBtn');
-    if (soundBtn) {
-        soundBtn.innerHTML = gameState.soundsEnabled ? 
-            '<i class="fas fa-volume-up"></i>' : 
-            '<i class="fas fa-volume-mute"></i>';
-        soundBtn.title = gameState.soundsEnabled ? 'Sound ON' : 'Sound OFF';
-    }
-    
-    saveGame();
-}
+};
 
 // ======================================================
-// GAME INITIALIZATION - OPPDATERT
+// GAME INITIALIZATION
 // ======================================================
 
 function init() {
     loadGame();
+    soundSystem.init();
     setupEventListeners();
     spawnEnemy();
     updateUI();
@@ -891,6 +672,7 @@ function init() {
     updateUpgradeCosts();
     renderCrates();
     updatePrestigeButton();
+    updateNavigationArrows();
     
     // Oppdater UI ikoner
     updateUIIcons();
@@ -900,112 +682,11 @@ function init() {
         startAutoAttack();
     }
     
-    // Legg til lyd toggle knapp
-    addSoundToggleButton();
-    
-    // Legg til historikk navigasjonsknapper
-    addHistoryNavigationButtons();
-}
-
-function addSoundToggleButton() {
-    // Sjekk om knappen allerede finnes
-    if (document.getElementById('soundToggleBtn')) return;
-    
-    const soundBtn = document.createElement('button');
-    soundBtn.id = 'soundToggleBtn';
-    soundBtn.className = 'resource';
-    soundBtn.style.position = 'absolute';
-    soundBtn.style.top = '10px';
-    soundBtn.style.right = '10px';
-    soundBtn.style.zIndex = '1001';
-    soundBtn.style.background = gameState.soundsEnabled ? 
-        'linear-gradient(135deg, #43e97b, #38f9d7)' : 
-        'linear-gradient(135deg, #666, #888)';
-    soundBtn.innerHTML = gameState.soundsEnabled ? 
-        '<i class="fas fa-volume-up"></i>' : 
-        '<i class="fas fa-volume-mute"></i>';
-    soundBtn.title = gameState.soundsEnabled ? 'Sound ON' : 'Sound OFF';
-    soundBtn.onclick = toggleSounds;
-    
-    document.querySelector('.top-resources').appendChild(soundBtn);
-}
-
-function addHistoryNavigationButtons() {
-    // Legg til knapper i fight-siden
-    const fightPage = document.querySelector('.fight-page');
-    
-    // Forrige fiende knapp
-    const prevBtn = document.createElement('button');
-    prevBtn.id = 'prevEnemyBtn';
-    prevBtn.className = 'history-nav-btn';
-    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Previous Enemy';
-    prevBtn.onclick = goToPreviousEnemy;
-    prevBtn.style.position = 'absolute';
-    prevBtn.style.left = '10px';
-    prevBtn.style.bottom = '10px';
-    prevBtn.style.zIndex = '1000';
-    
-    // Neste fiende knapp
-    const nextBtn = document.createElement('button');
-    nextBtn.id = 'nextEnemyBtn';
-    nextBtn.className = 'history-nav-btn';
-    nextBtn.innerHTML = 'Next Enemy <i class="fas fa-chevron-right"></i>';
-    nextBtn.onclick = goToNextEnemy;
-    nextBtn.style.position = 'absolute';
-    nextBtn.style.right = '10px';
-    nextBtn.style.bottom = '10px';
-    nextBtn.style.zIndex = '1000';
-    
-    // Returner til nåværende progresjon knapp
-    const returnBtn = document.createElement('button');
-    returnBtn.id = 'returnToCurrentBtn';
-    returnBtn.className = 'history-nav-btn';
-    returnBtn.innerHTML = '<i class="fas fa-home"></i> Return to Current';
-    returnBtn.onclick = returnToCurrentProgression;
-    returnBtn.style.position = 'absolute';
-    returnBtn.style.left = '50%';
-    returnBtn.style.bottom = '10px';
-    returnBtn.style.transform = 'translateX(-50%)';
-    returnBtn.style.zIndex = '1000';
-    returnBtn.style.display = 'none'; // Skjult til vi er i historikkmodus
-    
-    // CSS for historikk knapper
-    const style = document.createElement('style');
-    style.textContent = `
-        .history-nav-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            font-size: 12px;
-        }
-        
-        .history-nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        
-        .history-nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
-        
-        .history-nav-btn i {
-            margin: 0 5px;
-        }
-    `;
-    
-    document.head.appendChild(style);
-    fightPage.appendChild(prevBtn);
-    fightPage.appendChild(nextBtn);
-    fightPage.appendChild(returnBtn);
+    // Initialize enemy history
+    if (gameState.enemyHistory.length === 0) {
+        // Add current enemy to history
+        addEnemyToHistory();
+    }
 }
 
 function updateUIIcons() {
@@ -1027,6 +708,7 @@ function setupEventListeners() {
     // Navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            soundSystem.playClick();
             const page = btn.dataset.page;
             navigateToPage(page);
         });
@@ -1035,13 +717,19 @@ function setupEventListeners() {
     // Prestige button
     const prestigeBtn = document.getElementById('prestigeBtn');
     if (prestigeBtn) {
-        prestigeBtn.addEventListener('click', showPrestigeModal);
+        prestigeBtn.addEventListener('click', () => {
+            soundSystem.playClick();
+            showPrestigeModal();
+        });
     }
     
     // Shop prestige button
     const shopPrestigeBtn = document.getElementById('shopPrestigeBtn');
     if (shopPrestigeBtn) {
-        shopPrestigeBtn.addEventListener('click', showPrestigeModal);
+        shopPrestigeBtn.addEventListener('click', () => {
+            soundSystem.playClick();
+            showPrestigeModal();
+        });
     }
     
     // Enemy touch events for mobile
@@ -1056,6 +744,13 @@ function setupEventListeners() {
             e.preventDefault();
         }, { passive: false });
     }
+    
+    // Add click sound to all buttons
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            soundSystem.playClick();
+        }
+    });
 }
 
 function navigateToPage(page) {
@@ -1088,7 +783,145 @@ function navigateToPage(page) {
 }
 
 // ======================================================
-// COMBAT SYSTEM - OPPDATERET MED LYDER
+// ENEMY NAVIGATION SYSTEM - NY FUNKSJON
+// ======================================================
+
+function navigateEnemy(direction) {
+    if (gameState.enemyHistory.length === 0) return;
+    
+    // Update current index
+    gameState.currentHistoryIndex += direction;
+    
+    // Ensure index stays within bounds
+    if (gameState.currentHistoryIndex < 0) {
+        gameState.currentHistoryIndex = 0;
+        return;
+    }
+    
+    if (gameState.currentHistoryIndex >= gameState.enemyHistory.length) {
+        gameState.currentHistoryIndex = gameState.enemyHistory.length - 1;
+        return;
+    }
+    
+    // Load enemy from history
+    const historyEntry = gameState.enemyHistory[gameState.currentHistoryIndex];
+    
+    // Update game state
+    gameState.level = historyEntry.level;
+    gameState.enemyNumber = historyEntry.enemyNumber;
+    gameState.currentBiome = historyEntry.biome;
+    gameState.currentEnemyHP = historyEntry.currentHP;
+    gameState.maxEnemyHP = historyEntry.maxHP;
+    gameState.difficultyMultiplier = historyEntry.difficultyMultiplier;
+    
+    // Update display
+    updateEnemyDisplay(historyEntry);
+    updateNavigationArrows();
+    updateUI();
+}
+
+function addEnemyToHistory() {
+    // Don't add if prestige history should be reset
+    if (gameState.prestigeHistoryReset) {
+        gameState.enemyHistory = [];
+        gameState.prestigeHistoryReset = false;
+    }
+    
+    const historyEntry = {
+        level: gameState.level,
+        enemyNumber: gameState.enemyNumber,
+        biome: gameState.currentBiome,
+        currentHP: gameState.currentEnemyHP,
+        maxHP: gameState.maxEnemyHP,
+        difficultyMultiplier: gameState.difficultyMultiplier,
+        timestamp: Date.now(),
+        isBoss: gameState.enemyNumber === 9
+    };
+    
+    // Add to history
+    gameState.enemyHistory.push(historyEntry);
+    
+    // Limit history size to 100 entries
+    if (gameState.enemyHistory.length > 100) {
+        gameState.enemyHistory.shift();
+    }
+    
+    // Update current index to the last entry
+    gameState.currentHistoryIndex = gameState.enemyHistory.length - 1;
+    
+    updateNavigationArrows();
+}
+
+function updateEnemyDisplay(historyEntry) {
+    const biomeIndex = (historyEntry.level - 1) % biomes.length;
+    const biome = biomes[biomeIndex];
+    
+    // Update background
+    const backgroundContainer = document.querySelector('.fight-page');
+    if (backgroundContainer) {
+        backgroundContainer.style.backgroundImage = `url('${biome.bgImage}')`;
+        backgroundContainer.style.backgroundSize = 'cover';
+        backgroundContainer.style.backgroundPosition = 'center';
+        backgroundContainer.style.backgroundRepeat = 'no-repeat';
+    }
+    
+    // Update enemy image
+    const enemyImage = document.getElementById('enemyImage');
+    const enemy = document.getElementById('enemy');
+    
+    if (enemyImage && enemy) {
+        const isBoss = historyEntry.enemyNumber === 9;
+        
+        if (isBoss) {
+            enemyImage.src = bossImages[biome.name] || enemyImages[biome.name];
+            enemyImage.alt = `${biome.enemyType} Boss`;
+            enemy.classList.add('boss-indicator', 'boss-enhanced');
+            
+            // Show boss timer if it's a boss
+            const bossTimerContainer = document.getElementById('bossTimerContainer');
+            if (bossTimerContainer) bossTimerContainer.style.display = 'flex';
+        } else {
+            enemyImage.src = enemyImages[biome.name];
+            enemyImage.alt = `${biome.enemyType} Enemy`;
+            enemy.classList.remove('boss-indicator', 'boss-enhanced');
+            
+            // Hide boss timer
+            const bossTimerContainer = document.getElementById('bossTimerContainer');
+            if (bossTimerContainer) bossTimerContainer.style.display = 'none';
+        }
+        
+        enemy.style.width = '250px';
+        enemy.style.height = '250px';
+        enemyImage.style.width = '100%';
+        enemyImage.style.height = '100%';
+    }
+    
+    // Update enemy info
+    const enemyTypeEl = document.getElementById('enemyType');
+    if (enemyTypeEl) enemyTypeEl.textContent = biome.enemyType + (historyEntry.enemyNumber === 9 ? ' Boss' : '');
+    
+    const enemyCountEl = document.getElementById('enemyCount');
+    if (enemyCountEl) enemyCountEl.textContent = `${historyEntry.enemyNumber}/9`;
+    
+    updateEnemyHP();
+    updateDifficultyDisplay();
+}
+
+function updateNavigationArrows() {
+    const prevBtn = document.getElementById('prevEnemyBtn');
+    const nextBtn = document.getElementById('nextEnemyBtn');
+    
+    if (prevBtn) {
+        prevBtn.disabled = gameState.currentHistoryIndex <= 0;
+    }
+    
+    if (nextBtn) {
+        nextBtn.disabled = gameState.currentHistoryIndex >= gameState.enemyHistory.length - 1;
+    }
+}
+
+// ======================================================
+// COMBAT SYSTEM - OPPDATERET
 // ======================================================
 
 function calculateDamage() {
@@ -1144,15 +977,9 @@ function calculateDamage() {
 }
 
 function attack() {
-    // Spill klikklyd
-    playClickSound();
+    soundSystem.playSlash();
     
     const { damage, isCrit } = calculateDamage();
-    
-    // Spill crit-lyd hvis crit
-    if (isCrit) {
-        playCritSound();
-    }
     
     // Apply damage
     gameState.currentEnemyHP -= damage;
@@ -1224,9 +1051,6 @@ function showCritEffect() {
 
 function enemyDefeated() {
     const isBoss = gameState.enemyNumber === 9;
-    
-    // LEGG TIL FIENDE I HISTORIKK
-    addToEnemyHistory();
     
     // Calculate rewards
     const baseCoinReward = Math.floor(
@@ -1397,13 +1221,7 @@ function spawnEnemy() {
     }
     
     const enemyTypeEl = document.getElementById('enemyType');
-    if (enemyTypeEl) {
-        if (gameState.inHistoryMode) {
-            enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '') + ' (History)';
-        } else {
-            enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '');
-        }
-    }
+    if (enemyTypeEl) enemyTypeEl.textContent = biome.enemyType + (gameState.enemyNumber === 9 ? ' Boss' : '');
     
     const enemyCountEl = document.getElementById('enemyCount');
     if (enemyCountEl) enemyCountEl.textContent = `${gameState.enemyNumber}/9`;
@@ -1421,8 +1239,12 @@ function spawnEnemy() {
     gameState.currentEnemyHP = enemyHP;
     gameState.maxEnemyHP = enemyHP;
     
+    // Add to history
+    addEnemyToHistory();
+    
     updateEnemyHP();
     updateDifficultyDisplay();
+    updateNavigationArrows();
 }
 
 function updateDifficultyDisplay() {
@@ -1445,22 +1267,18 @@ function updateDifficultyDisplay() {
     }
     
     const diffTextEl = document.getElementById('difficultyText');
-    if (diffTextEl) {
-        if (gameState.inHistoryMode) {
-            diffTextEl.textContent = difficultyText + ' [HISTORY MODE]';
-        } else {
-            diffTextEl.textContent = difficultyText;
-        }
-    }
+    if (diffTextEl) diffTextEl.textContent = difficultyText;
 }
 
 function updateEnemyHP() {
     const hpPercent = (gameState.currentEnemyHP / gameState.maxEnemyHP) * 100;
     const hpFill = document.getElementById('enemyHpFill');
     const hpText = document.getElementById('enemyHpText');
+    const hpPercentEl = document.getElementById('enemyHpPercent');
     
     if (hpFill) hpFill.style.width = `${Math.max(0, hpPercent)}%`;
-    if (hpText) hpText.textContent = `${formatNumber(gameState.currentEnemyHP)}/${formatNumber(gameState.maxEnemyHP)} (${Math.floor(hpPercent)}%)`;
+    if (hpText) hpText.textContent = `${formatNumber(gameState.currentEnemyHP)}/${formatNumber(gameState.maxEnemyHP)}`;
+    if (hpPercentEl) hpPercentEl.textContent = `${Math.floor(hpPercent)}%`;
     
     // Endre farge basert på HP
     if (hpFill) {
@@ -1684,7 +1502,7 @@ function renderCrates() {
         
         crateCard.innerHTML = `
             <div class="crate-header">
-                <img src="${crate.icon}" class="crate-main-image" style="width:80px;height:80px;cursor:pointer;" 
+                <img src="${crate.icon}" class="crate-main-image" style="width:100px;height:100px;cursor:pointer;" 
                      onclick="showCrateInfo('${crate.type}')">
                 <span class="crate-name">${crate.name}</span>
             </div>
@@ -1998,7 +1816,7 @@ function openDailyCrate() {
 }
 
 // ======================================================
-// PRESTIGE SYSTEM - OPPDATERT MED HISTORIKK RESET
+// PRESTIGE SYSTEM - OPPDATERET MED HISTORIKK RESET
 // ======================================================
 
 function showPrestigeModal() {
@@ -2021,7 +1839,8 @@ function showPrestigeModal() {
                    <img src="${uiIcons.coin}" style="width:16px;height:16px;"> Keep Permanent Upgrades<br>
                    <img src="${items.weapons[0].icon}" style="width:16px;height:16px;"> Keep Items & Pets<br>
                    <img src="${uiIcons.gem}" style="width:16px;height:16px;"> Keep Gems<br><br>
-                   Reset: Coins to 1000, Enemies to 1, Enemy History cleared<br><br>
+                   Reset: Coins to 1000, Enemies to 1<br>
+                   <strong>Note: Enemy history will be reset</strong><br><br>
                    Prestige now?`;
     
     if (confirm(message.replace(/<br>/g, '\n'))) {
@@ -2052,14 +1871,10 @@ function prestige() {
     gameState.difficultyMultiplier = 1.0 + (gameState.prestigePoints * 0.1);
     gameState.bossCleared = {};
     
-    // RESET FIENDE HISTORIKK - Som du ba om
-    enemyHistory.defeatedEnemies = [];
-    enemyHistory.currentHistoryIndex = -1;
-    enemyHistory.canNavigateHistory = false;
-    gameState.inHistoryMode = false;
-    gameState.savedLevel = 1;
-    gameState.savedEnemyNumber = 1;
-    gameState.savedDifficultyMultiplier = 1.0;
+    // RESET ENEMY HISTORY
+    gameState.enemyHistory = [];
+    gameState.currentHistoryIndex = 0;
+    gameState.prestigeHistoryReset = true;
     
     // Behold permanent upgrades
     gameState.damageUpgrades = savedDamageUpgrades;
@@ -2076,13 +1891,13 @@ function prestige() {
         `You gained ${prestigePoints} Prestige Points!<br>
          <img src="${uiIcons.star}" style="width:24px;height:24px;"> Total Prestige: ${gameState.prestigePoints}<br>
          Global Multiplier: ${gameState.prestigeMultiplier.toFixed(1)}x<br><br>
-         Enemy history has been cleared!<br>
+         <strong>Enemy history has been reset</strong><br>
          Keep clicking to reach higher levels!`
     );
     
     spawnEnemy();
     updateUI();
-    updateHistoryNavigation(); // Oppdater navigasjonsknapper
+    updateNavigationArrows();
     saveGame();
 }
 
@@ -2196,7 +2011,7 @@ function renderInventory() {
             const pet = inventory.activePet;
             activePetElement.innerHTML = `
                 <div class="pet-display">
-                    <img src="${pet.icon}" style="width:64px;height:64px;cursor:pointer;" onclick="showItemModal('${pet.id}', 'pets')">
+                    <img src="${pet.icon}" class="item-icon" style="width:100px;height:100px;cursor:pointer;" onclick="showItemModal('${pet.id}', 'pets')">
                     <div class="pet-details">
                         <span class="pet-name">${pet.name}</span>
                         <span class="pet-rarity ${pet.rarity}">${pet.rarity.toUpperCase()}</span>
@@ -2273,7 +2088,7 @@ function renderInventory() {
         
         div.innerHTML = `
             <div class="item-count">${itemData.count}/${itemData.level + 1}</div>
-            <img src="${item.icon}" class="item-icon" style="width:80px;height:80px;cursor:pointer;" 
+            <img src="${item.icon}" class="item-icon" style="width:100px;height:100px;cursor:pointer;" 
                  onclick="showItemModal('${item.id}', '${category}')">
             <div class="item-name">${item.name}</div>
             <div class="item-level">Level ${itemData.level}</div>
@@ -2300,7 +2115,7 @@ function showItemModal(itemId, category) {
     const modalHTML = `
         <div class="item-modal-overlay">
             <div class="item-modal-content">
-                <img src="${item.icon}" style="width:128px;height:128px;margin-bottom:15px;">
+                <img src="${item.icon}" style="width:150px;height:150px;margin-bottom:15px;">
                 <h3 style="color:#333;margin-bottom:10px;">${item.name}</h3>
                 <div class="item-rarity ${item.rarity}" style="margin-bottom:15px;">${item.rarity.toUpperCase()}</div>
                 <div style="text-align:left;margin-bottom:15px;">
@@ -2744,6 +2559,7 @@ function updateUI() {
     updateResources();
     updateEnemyHP();
     updatePrestigeButton();
+    updateNavigationArrows();
     
     if (document.querySelector('.inventory-page.active')) {
         renderInventory();
@@ -2846,14 +2662,13 @@ function startAutoSave() {
 }
 
 // ======================================================
-// SAVE SYSTEM - OPPDATERET MED HISTORIKK
+// SAVE SYSTEM - OPPDATERET
 // ======================================================
 
 function saveGame() {
     const saveData = {
         gameState,
         inventory,
-        enemyHistory,
         achievements: achievements.map(a => ({ id: a.id, claimed: a.claimed })),
         quests: {
             daily: quests.daily.map(q => ({ id: q.id, progress: q.progress, completed: q.completed, claimed: q.claimed })),
@@ -2888,17 +2703,6 @@ function loadGame() {
                 artifacts: {},
                 activePet: null
             };
-            
-            // Load enemy history
-            if (data.enemyHistory) {
-                enemyHistory = data.enemyHistory;
-            } else {
-                enemyHistory = {
-                    defeatedEnemies: [],
-                    currentHistoryIndex: -1,
-                    canNavigateHistory: false
-                };
-            }
             
             // Sjekk at alle inventory items har riktig struktur
             for (const category in inventory) {
@@ -2936,9 +2740,6 @@ function loadGame() {
                     }
                 });
             }
-            
-            // Sett lyd tilstand
-            soundsEnabled = gameState.soundsEnabled !== false;
             
             console.log('Game loaded successfully');
         } catch (e) {
@@ -2981,11 +2782,9 @@ function resetGame() {
             totalCratesOpened: 0,
             difficultyMultiplier: 1.0,
             enteredCodes: [],
-            soundsEnabled: true,
-            inHistoryMode: false,
-            savedLevel: 1,
-            savedEnemyNumber: 1,
-            savedDifficultyMultiplier: 1.0
+            enemyHistory: [],
+            currentHistoryIndex: 0,
+            prestigeHistoryReset: false
         };
         
         inventory = {
@@ -2994,12 +2793,6 @@ function resetGame() {
             pets: {},
             artifacts: {},
             activePet: null
-        };
-        
-        enemyHistory = {
-            defeatedEnemies: [],
-            currentHistoryIndex: -1,
-            canNavigateHistory: false
         };
         
         achievements.forEach(a => a.claimed = false);
@@ -3051,9 +2844,9 @@ window.addEventListener('DOMContentLoaded', init);
 window.debugGame = () => {
     console.log('Game State:', gameState);
     console.log('Inventory:', inventory);
-    console.log('Enemy History:', enemyHistory);
     console.log('Achievements:', achievements);
     console.log('Quests:', quests);
+    console.log('Enemy History:', gameState.enemyHistory);
 };
 
 // Legg til disse funksjonene i window scope
@@ -3076,7 +2869,4 @@ window.showItemModal = showItemModal;
 window.closeItemModal = closeItemModal;
 window.showCrateInfo = showCrateInfo;
 window.closeCrateInfoModal = closeCrateInfoModal;
-window.toggleSounds = toggleSounds;
-window.goToPreviousEnemy = goToPreviousEnemy;
-window.goToNextEnemy = goToNextEnemy;
-window.returnToCurrentProgression = returnToCurrentProgression;
+window.navigateEnemy = navigateEnemy;
