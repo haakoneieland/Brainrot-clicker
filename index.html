@@ -49,32 +49,30 @@
                 
                 <!-- Player Stats -->
                 <div class="player-stats">
-                    <div class="stat-row">
-                        <div class="stat">
-                            <span class="stat-icon">⚔️</span>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">⚔️</div>
                             <div class="stat-info">
                                 <span class="stat-label">Damage</span>
                                 <span id="statDamage" class="stat-value">10</span>
                             </div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-icon">⚡</span>
+                        <div class="stat-card">
+                            <div class="stat-icon">⚡</div>
                             <div class="stat-info">
                                 <span class="stat-label">Auto/s</span>
                                 <span id="statAuto" class="stat-value">0</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="stat-row">
-                        <div class="stat">
-                            <span class="stat-icon">🎯</span>
+                        <div class="stat-card">
+                            <div class="stat-icon">🎯</div>
                             <div class="stat-info">
                                 <span class="stat-label">Crit</span>
                                 <span id="statCrit" class="stat-value">5%</span>
                             </div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-icon">✨</span>
+                        <div class="stat-card">
+                            <div class="stat-icon">✨</div>
                             <div class="stat-info">
                                 <span class="stat-label">Multi</span>
                                 <span id="statMulti" class="stat-value">1.0x</span>
@@ -102,29 +100,36 @@
 
             <!-- Fight Page (Center/Default) -->
             <div class="page fight-page active" data-page="fight">
-                <!-- Island Container -->
-                <div class="island-container" id="islandContainer">
-                    <!-- Island Background -->
-                    <div class="island-bg" id="islandBg">
-                        <!-- Background image will be set by JS -->
-                    </div>
+                <!-- Navigation Arrows -->
+                <div class="enemy-navigation">
+                    <button class="nav-arrow left-arrow" id="prevEnemyBtn" onclick="navigateEnemy(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
                     
-                    <!-- Island -->
-                    <div class="island" id="island">
-                        <!-- Enemy -->
+                    <!-- Enemy Container -->
+                    <div class="enemy-container">
+                        <div class="enemy-frame"></div>
                         <div class="enemy" id="enemy" onclick="attack()" ontouchstart="attack()">
                             <img class="enemy-image" id="enemyImage" src="" alt="Enemy">
                         </div>
                     </div>
+                    
+                    <button class="nav-arrow right-arrow" id="nextEnemyBtn" onclick="navigateEnemy(1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
 
                 <!-- Enemy Info -->
-                <div class="enemy-info">
+                <div class="enemy-info-panel">
                     <div class="enemy-hp-container">
+                        <div class="enemy-hp-label">
+                            <span>HEALTH</span>
+                            <span id="enemyHpPercent">100%</span>
+                        </div>
                         <div class="enemy-hp-bar">
                             <div class="enemy-hp-fill" id="enemyHpFill"></div>
                         </div>
-                        <div class="enemy-hp-text" id="enemyHpText">100%</div>
+                        <div class="enemy-hp-text" id="enemyHpText">100/100</div>
                     </div>
                     <div class="enemy-details">
                         <span class="enemy-type" id="enemyType">Grass</span>
@@ -340,30 +345,13 @@
         </div>
     </div>
 
-    <!-- Crate Opening Overlay -->
-    <div class="crate-overlay" id="crateOverlay">
-        <div class="crate-container">
-            <h3 id="crateTitle" style="color: white; margin-bottom: 20px;"></h3>
-            
-            <div class="crate-animation">
-                <div class="crate-items-scroll" id="crateItemsScroll">
-                    <!-- Items will be added here -->
-                </div>
-            </div>
-            
-            <div class="crate-result" id="crateResult">
-                <div id="resultIcon" style="font-size: 60px; margin-bottom: 10px;"></div>
-                <h4 id="resultName" style="color: white; margin-bottom: 10px;"></h4>
-                <div id="resultRarity" class="rarity-badge"></div>
-                <div id="resultDescription" style="color: #ccc; font-size: 14px; margin-top: 10px;"></div>
-            </div>
-            
-            <div class="crate-buttons">
-                <button class="open-crate-btn" id="openCrateBtn">OPEN</button>
-                <button class="skip-crate-btn" id="skipCrateBtn">SKIP</button>
-            </div>
-        </div>
-    </div>
+    <!-- Audio elements for sound effects -->
+    <audio id="slashSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-sword-slash-2768.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="clickSound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" type="audio/mpeg">
+    </audio>
 
     <script src="script.js"></script>
 </body>
